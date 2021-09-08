@@ -1,5 +1,6 @@
 package com.example.wallet
 
+import android.graphics.pdf.PdfDocument
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -9,6 +10,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.wallet.ui.theme.WalletTheme
 
@@ -23,6 +25,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     Greeting("Android")
+
                 }
             }
         }
@@ -39,5 +42,6 @@ fun Greeting(name: String) {
 fun DefaultPreview() {
     WalletTheme {
         Greeting("Android")
+
     }
 }
