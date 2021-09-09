@@ -5,18 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.model.AllExpansesResponse
 import com.example.wallet.model.Expanse
 import com.example.wallet.ui.theme.WalletTheme
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import kotlin.math.exp
 
 class MainActivity : ComponentActivity() {
@@ -36,11 +39,22 @@ class MainActivity : ComponentActivity() {
 fun ExpansesReportScreen() {
     val viewModel: ExpansesViewModel = viewModel() //ViewModel is bound to a composable
     val expanses_ = remember { mutableStateOf((emptyList<Expanse>()))}
-    viewModel.getMeals(){response ->
-        val expanses = response?._embedded.expanses
-        expanses_.value = expanses.orEmpty()
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = "GET_EXPANSES" ){
+        coroutineScope.launch(Dispatchers.IO){
+            val expanses = viewModel.getMeals()
+            expanses_.value = expanses
+        }
+
     }
-Text(text = expanses_.value.toString())
+
+    LazyColumn{
+        items(expanses_.value){expanse ->
+            Text(text = expanse.name)
+        }
+    }
+
 }
 
 @Preview(showBackground = true)

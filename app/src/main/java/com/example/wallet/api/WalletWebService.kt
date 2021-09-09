@@ -21,12 +21,12 @@ class WalletWebService {
     }
 
 
-    fun getExpanses(): Call<AllExpansesResponse> {
+   suspend fun getExpanses(): AllExpansesResponse {
      return api.getExpanses()
     }
 
     interface WalletAPI{
         @GET("expanses")
-        fun getExpanses(): Call<AllExpansesResponse>
+        suspend fun getExpanses(): AllExpansesResponse
     }
 }
