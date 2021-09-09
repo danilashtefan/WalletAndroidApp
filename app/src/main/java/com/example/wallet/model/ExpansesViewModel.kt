@@ -1,4 +1,4 @@
-package com.example.wallet.ui
+package com.example.wallet.model
 
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
