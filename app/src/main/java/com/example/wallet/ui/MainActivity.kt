@@ -38,22 +38,14 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun ExpansesReportScreen() {
     val viewModel: ExpansesViewModel = viewModel() //ViewModel is bound to a composable
-    val expanses_ = remember { mutableStateOf((emptyList<Expanse>()))}
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(key1 = "GET_EXPANSES" ){
-        coroutineScope.launch(Dispatchers.IO){
-            val expanses = viewModel.getMeals()
-            expanses_.value = expanses
-        }
-
-    }
-
+    val expanses = viewModel.expansesState.value
     LazyColumn{
-        items(expanses_.value){expanse ->
+        items(expanses){expanse->
             Text(text = expanse.name)
+            
         }
     }
+
 
 }
 
