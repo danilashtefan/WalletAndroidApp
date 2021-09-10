@@ -37,5 +37,8 @@ class WalletWebService {
         @GET("expanseCategories")
         suspend fun getExpanseCategories():ExpanseCategoriesResponse
 
+       // @GET("expanses/{id}/category")
+
+
     }
 }

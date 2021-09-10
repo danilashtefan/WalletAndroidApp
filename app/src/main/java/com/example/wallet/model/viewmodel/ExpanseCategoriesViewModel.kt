@@ -4,15 +4,13 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.wallet.model.Expanse
-import com.example.wallet.model.repository.ExpanseCategoryRepository
-import com.example.wallet.model.repository.ExpansesRepository
+import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.response.ExpanseCategory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ExpanseCategoriesViewModel(private val repository: ExpanseCategoryRepository = ExpanseCategoryRepository()): ViewModel() {
+class ExpanseCategoriesViewModel(private val repository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()): ViewModel() {
 
     val expanseCategoriesState = mutableStateOf((emptyList<ExpanseCategory>()))
     init{
