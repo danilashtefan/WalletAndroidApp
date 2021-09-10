@@ -1,6 +1,7 @@
 package com.example.wallet.api
 
 import com.example.wallet.model.AllExpansesResponse
+import com.example.wallet.model.response.ExpanseCategoriesResponse
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -25,8 +26,16 @@ class WalletWebService {
      return api.getExpanses()
     }
 
+    suspend fun getExpanseCategories():ExpanseCategoriesResponse{
+       return api.getExpanseCategories()
+    }
+
     interface WalletAPI{
         @GET("expanses")
         suspend fun getExpanses(): AllExpansesResponse
+
+        @GET("expanseCategories")
+        suspend fun getExpanseCategories():ExpanseCategoriesResponse
+
     }
 }

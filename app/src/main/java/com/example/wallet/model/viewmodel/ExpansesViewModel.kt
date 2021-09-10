@@ -1,14 +1,11 @@
-package com.example.wallet.model
+package com.example.wallet.model.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.wallet.model.*
+import com.example.wallet.model.Expanse
+import com.example.wallet.model.repository.ExpansesRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,6 +14,7 @@ class ExpansesViewModel (private val repository: ExpansesRepository = ExpansesRe
 
 
    val expansesState = mutableStateOf((emptyList<Expanse>()))
+
    init{
        val handler = CoroutineExceptionHandler { _, exception ->
            Log.d("EXCEPTION","Network exception")

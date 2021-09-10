@@ -1,12 +1,10 @@
-package com.example.wallet.model
+package com.example.wallet.model.repository
 
 import com.example.wallet.api.WalletWebService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.wallet.model.AllExpansesResponse
 
 class ExpansesRepository (private val service: WalletWebService = WalletWebService()){
-    suspend fun getExpanses(): AllExpansesResponse{
+    suspend fun getExpanses(): AllExpansesResponse {
         return service.getExpanses()
     }
 
