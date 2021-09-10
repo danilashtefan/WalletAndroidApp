@@ -1,7 +1,9 @@
 package com.example.wallet.ui.screens
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -13,12 +15,19 @@ import com.example.wallet.ui.theme.WalletTheme
 fun ExpansesScreen() {
     val viewModel: ExpansesViewModel = viewModel() //ViewModel is bound to a composable
     val expanses = viewModel.expansesState.value
-    LazyColumn{
-        items(expanses){expanse->
-            Text(text = expanse.name)
+    Column() {
+        LazyColumn{
+            items(expanses){expanse->
+                Text(text = expanse.name)
+
+            }
+        }
+        Button(onClick = { /*TODO*/ }) {
+            Text(text = "Something")
 
         }
     }
+
 
 
 }
