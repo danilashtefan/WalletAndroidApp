@@ -22,6 +22,7 @@ class ExpanseCategoriesViewModel(private val repository: ExpanseCategoriesReposi
             val expanseCategories = getExpanseCategories()
             expanseCategoriesState.value = expanseCategories
         }
+
     }
     suspend fun getExpanseCategories(): List<ExpanseCategory>{
         return repository.getExpanseCategories()._embedded.expanseCategories

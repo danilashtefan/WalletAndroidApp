@@ -8,6 +8,7 @@ import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.ExpansesRepository
 import com.example.wallet.model.response.ExpanseCategory
+import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,10 +27,10 @@ class ExpansesViewModel(
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
-            val expanses = getExpanses()
+            var expanses = getExpanses()
 
             for (expanse in expanses) {
-
+             expanse.categoryName = getAndSetCategoriesForExpanses(expanse.id)
             }
 
             expansesState.value = expanses
@@ -41,9 +42,9 @@ class ExpansesViewModel(
         return expansesRepository.getExpanses()._embedded.expanses
     }
 
-    //Method to get the category of particular expanse
-//    suspend fun getAndSetCategoriesForExpanses(expanseId : Int):ExpanseCategory{
-//      return expanseCategoriesRepository.getCategoryForExpanse(expanseId).
-//    }
+   // Method to get the category of particular expanse
+    suspend fun getAndSetCategoriesForExpanses(expanseId : Int):String{
+      return expanseCategoriesRepository.getCategoryForExpanse(expanseId).expanseCategoryName
+    }
 
 }

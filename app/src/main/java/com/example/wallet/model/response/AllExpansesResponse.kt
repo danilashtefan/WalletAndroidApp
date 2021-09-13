@@ -22,7 +22,8 @@ data class Expanse(
     val id: Int,
     val location: Any,
     val name: String,
-    val photoUrl: String
+    val photoUrl: String,
+    var categoryName: String
 )
 
 data class ExpanseX(

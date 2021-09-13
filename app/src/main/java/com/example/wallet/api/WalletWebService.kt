@@ -2,6 +2,7 @@ package com.example.wallet.api
 
 import com.example.wallet.model.AllExpansesResponse
 import com.example.wallet.model.response.AllExpanseCategoriesResponse
+import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -30,7 +31,7 @@ class WalletWebService {
        return api.getExpanseCategories()
     }
 
-    suspend fun getCategoryForExpanse(expanseId: Int): AllExpanseCategoriesResponse{
+    suspend fun getCategoryForExpanse(expanseId: Int): SingleExpanseCategoryResponse{
         return api.getCategoryForExpanse(expanseId)
     }
 
@@ -42,7 +43,7 @@ class WalletWebService {
         suspend fun getExpanseCategories():AllExpanseCategoriesResponse
 
         @GET("expanses/{id}/category")
-        suspend fun getCategoryForExpanse(@Path("id") expanseId: Int):AllExpanseCategoriesResponse
+        suspend fun getCategoryForExpanse(@Path("id") expanseId: Int):SingleExpanseCategoryResponse
 
 
     }

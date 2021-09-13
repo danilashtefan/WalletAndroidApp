@@ -17,7 +17,7 @@ fun ExpansesScreen() {
     Column() {
         LazyColumn{
             items(expanses){expanse->
-                Text(text = expanse._links.category.toString())
+                Text(text = expanse.categoryName)
 
             }
         }
