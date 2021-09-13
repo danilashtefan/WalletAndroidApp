@@ -7,35 +7,43 @@ import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.ExpansesRepository
+import com.example.wallet.model.response.ExpanseCategory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ExpansesViewModel (private val expansesRepository: ExpansesRepository = ExpansesRepository(), private val expanseCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()):ViewModel(){
+class ExpansesViewModel(
+    private val expansesRepository: ExpansesRepository = ExpansesRepository(),
+    private val expanseCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
+) : ViewModel() {
 
 
-   val expansesState = mutableStateOf((emptyList<Expanse>()))
+    val expansesState = mutableStateOf((emptyList<Expanse>()))
 
-   init{
-       val handler = CoroutineExceptionHandler { _, exception ->
-           Log.d("EXCEPTION","Network exception")
-       }
+    init {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Network exception")
+        }
 
-          viewModelScope.launch(handler+Dispatchers.IO){
-             val expanses = getExpanses()
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            val expanses = getExpanses()
 
-              for(expanse in expanses){
+            for (expanse in expanses) {
 
-              }
+            }
 
-             expansesState.value = expanses
-          }
-   }
+            expansesState.value = expanses
+        }
+    }
 
 
-suspend fun getExpanses():List<Expanse> {
-   return expansesRepository.getExpanses()._embedded.expanses
+    suspend fun getExpanses(): List<Expanse> {
+        return expansesRepository.getExpanses()._embedded.expanses
+    }
 
-}
+    //Method to get the category of particular expanse
+//    suspend fun getAndSetCategoriesForExpanses(expanseId : Int):ExpanseCategory{
+//      return expanseCategoriesRepository.getCategoryForExpanse(expanseId).
+//    }
 
 }

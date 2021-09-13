@@ -1,6 +1,6 @@
 package com.example.wallet.model.response
 
-data class ExpanseCategoriesResponse(
+data class AllExpanseCategoriesResponse(
     val _embedded: Embedded,
     val _links: LinksX,
     val page: Page

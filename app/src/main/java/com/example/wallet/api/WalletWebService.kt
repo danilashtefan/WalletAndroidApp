@@ -1,11 +1,11 @@
 package com.example.wallet.api
 
 import com.example.wallet.model.AllExpansesResponse
-import com.example.wallet.model.response.ExpanseCategoriesResponse
-import retrofit2.Call
+import com.example.wallet.model.response.AllExpanseCategoriesResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Path
 
 
 class WalletWebService {
@@ -26,8 +26,12 @@ class WalletWebService {
      return api.getExpanses()
     }
 
-    suspend fun getExpanseCategories():ExpanseCategoriesResponse{
+    suspend fun getExpanseCategories():AllExpanseCategoriesResponse{
        return api.getExpanseCategories()
+    }
+
+    suspend fun getCategoryForExpanse(expanseId: Int): AllExpanseCategoriesResponse{
+        return api.getCategoryForExpanse(expanseId)
     }
 
     interface WalletAPI{
@@ -35,9 +39,10 @@ class WalletWebService {
         suspend fun getExpanses(): AllExpansesResponse
 
         @GET("expanseCategories")
-        suspend fun getExpanseCategories():ExpanseCategoriesResponse
+        suspend fun getExpanseCategories():AllExpanseCategoriesResponse
 
-       // @GET("expanses/{id}/category")
+        @GET("expanses/{id}/category")
+        suspend fun getCategoryForExpanse(@Path("id") expanseId: Int):AllExpanseCategoriesResponse
 
 
     }
