@@ -29,11 +29,10 @@ fun ExpansesScreen(navHostController: NavHostController) {
     val expanses = viewModel.expansesState.value
     Column(
         modifier = Modifier
-            .background(Color(0xFF8C52FF))
+            .background(Color(0xFFBB87E4))
     ) {
         TransactionListSection()
         ExpanseSection(expanses)
-
     }
 
 }
@@ -43,7 +42,7 @@ fun TransactionListSection(){
     Column() {
         Row() {
             Image(
-                painter = painterResource(id = R.drawable.wallet),
+                painter = painterResource(id = R.drawable.wallet_pink),
                 contentDescription = "",
                 modifier = Modifier
                     .size(160.dp)

@@ -9,3 +9,4 @@ val Teal200 = Color(0xFF03DAC5)
 //rgba(140,82,255,255)
 
 val Purple1000 = Color(0xFF8C52FF)
+val Blue1000 = Color(0xFFBB87E4)
