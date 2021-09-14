@@ -17,20 +17,29 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.ExpansesViewModel
 import com.example.wallet.R
+import com.example.wallet.model.Expanse
 
 @Composable
 fun ExpansesScreen(navHostController: NavHostController) {
     val viewModel: ExpansesViewModel = viewModel() //ViewModel is bound to a composable
     val expanses = viewModel.expansesState.value
-    Column() {
-        LazyColumn {
-            items(expanses) { expanse ->
-                ReusableRow(categoryName = expanse.categoryName, date = "Date", location = "Location", amount = expanse.amount)
-            }
-        }
+    Column {
+        ExpanseSection(expanses)
+
     }
 
 }
+
+
+@Composable
+fun ExpanseSection(expanses: List<Expanse>){
+    LazyColumn {
+        items(expanses) { expanse ->
+            ReusableRow(categoryName = expanse.categoryName, date = "Date", location = "Location", amount = expanse.amount)
+        }
+    }
+}
+
 
 @Composable
 //Parameters: CategoryName, wallet, date, location,amount
@@ -62,8 +71,8 @@ Card() {
         Spacer(Modifier.weight(0.4f))
         Column(Modifier) {
             Text("Wallet")
-            Text(date)
-            Text(location)
+            Text("Date")
+            Text("Location")
 
         }
         Spacer(Modifier.weight(0.3f))
