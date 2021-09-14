@@ -4,12 +4,15 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,7 +26,11 @@ import com.example.wallet.model.Expanse
 fun ExpansesScreen(navHostController: NavHostController) {
     val viewModel: ExpansesViewModel = viewModel() //ViewModel is bound to a composable
     val expanses = viewModel.expansesState.value
-    Column {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+    ) {
+
         ExpanseSection(expanses)
 
     }
@@ -51,7 +58,8 @@ private fun ExpanseRow(categoryName: String, date: String, location: String, amo
 private fun ReusableRow(categoryName: String, date: String, location: String, amount: Int) {
     val amountSign = "$ "
 
-Card() {
+Card(backgroundColor = Color.LightGray,
+modifier = Modifier.padding(6.dp)) {
     Row(
         modifier = Modifier
             .height(68.dp),
