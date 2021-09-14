@@ -55,8 +55,7 @@ private fun BaseRow(/*TODO*/) {
 
 
     Row( modifier = Modifier
-        .height(68.dp)
-        ,
+        .height(68.dp),
         verticalAlignment =  Alignment.CenterVertically
     ){
         Spacer(Modifier.width(12.dp))
@@ -89,16 +88,16 @@ private fun BaseRow(/*TODO*/) {
             )
         }
         Spacer(Modifier.width(16.dp))
-
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+        IconButton({ println("Pressed") }) {
             Icon(
                 imageVector = Icons.Filled.ChevronRight,
                 contentDescription = null,
                 modifier = Modifier
                     .padding(end = 12.dp)
-                    .size(24.dp)
+                    .size(24.dp),
             )
         }
+
 
     }
 //    Card(
