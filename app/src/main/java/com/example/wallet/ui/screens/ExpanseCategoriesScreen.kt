@@ -6,11 +6,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.ExpanseCategoriesViewModel
 
 
 @Composable
-fun ExpanseCategoriesScreen() {
+fun ExpanseCategoriesScreen(navHostController: NavHostController) {
     val viewModel:ExpanseCategoriesViewModel = viewModel()
     val expanseCategories = viewModel.expanseCategoriesState.value
 
