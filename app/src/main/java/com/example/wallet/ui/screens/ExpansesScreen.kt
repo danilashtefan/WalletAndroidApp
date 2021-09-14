@@ -1,6 +1,7 @@
 package com.example.wallet.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -28,11 +29,27 @@ fun ExpansesScreen(navHostController: NavHostController) {
     val expanses = viewModel.expansesState.value
     Column(
         modifier = Modifier
-            .padding(16.dp)
+            .background(Color(0xFF8C52FF))
     ) {
-
+        TransactionListSection()
         ExpanseSection(expanses)
 
+    }
+
+}
+
+@Composable
+fun TransactionListSection(){
+    Column() {
+        Row() {
+            Image(
+                painter = painterResource(id = R.drawable.wallet),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(160.dp)
+                    .weight(1f)
+            )
+        }
     }
 
 }
@@ -40,7 +57,7 @@ fun ExpansesScreen(navHostController: NavHostController) {
 
 @Composable
 fun ExpanseSection(expanses: List<Expanse>){
-    LazyColumn {
+    LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(expanses) { expanse ->
             ReusableRow(categoryName = expanse.categoryName, date = "Date", location = "Location", amount = expanse.amount)
         }
@@ -58,7 +75,7 @@ private fun ExpanseRow(categoryName: String, date: String, location: String, amo
 private fun ReusableRow(categoryName: String, date: String, location: String, amount: Int) {
     val amountSign = "$ "
 
-Card(backgroundColor = Color.LightGray,
+Card(backgroundColor = Color.White,
 modifier = Modifier.padding(6.dp)) {
     Row(
         modifier = Modifier
@@ -81,7 +98,6 @@ modifier = Modifier.padding(6.dp)) {
             Text("Wallet")
             Text("Date")
             Text("Location")
-
         }
         Spacer(Modifier.weight(0.3f))
         Row(
