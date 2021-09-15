@@ -39,16 +39,18 @@ fun ExpansesScreen(navHostController: NavHostController) {
 
 @Composable
 fun TransactionListSection(){
-    Column() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Row() {
             Image(
-                painter = painterResource(id = R.drawable.wallet_pink),
+                painter = painterResource(id = R.drawable.wallet_no_background),
                 contentDescription = "",
                 modifier = Modifier
-                    .size(160.dp)
+                    .size(140.dp)
                     .weight(1f)
             )
         }
+        Text(text = "Transaction list", color = Color.White)
+
     }
 
 }
