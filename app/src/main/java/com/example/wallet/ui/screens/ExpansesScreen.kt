@@ -41,6 +41,10 @@ fun ExpansesScreen(navHostController: NavHostController) {
 
 }
 
+
+
+
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TransactionListSection(){
