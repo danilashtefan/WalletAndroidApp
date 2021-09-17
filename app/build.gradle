@@ -69,4 +69,5 @@ dependencies {
 
     //Calendar Library
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0-beta02"
+    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
 }

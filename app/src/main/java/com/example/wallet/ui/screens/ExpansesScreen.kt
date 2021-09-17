@@ -1,5 +1,7 @@
 package com.example.wallet.ui.screens
 
+import android.widget.CalendarView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
@@ -16,12 +18,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.ExpansesViewModel
 import com.example.wallet.R
-import com.example.wallet.components.DatePickerView
+import com.example.wallet.components.DatePickerview
 import com.example.wallet.model.Expanse
+import com.google.android.material.datepicker.MaterialDatePicker
+import java.time.Period
 
 @Composable
 fun ExpansesScreen(navHostController: NavHostController) {
@@ -37,10 +42,11 @@ fun ExpansesScreen(navHostController: NavHostController) {
 
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TransactionListSection(){
     Column() {
-
+        var datePicked : String? by remember { mutableStateOf("")}
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(modifier = Modifier.padding(5.dp))
             Row() {
@@ -59,27 +65,35 @@ fun TransactionListSection(){
                 style = MaterialTheme.typography.h6
             )
         }
+        var expandedCalendarMin by remember { mutableStateOf(false) }
+        var expandedCalendarMax by remember { mutableStateOf(false) }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(text = "Period: ",style =MaterialTheme.typography.h6, color = Color.White )
-//            var datePicked : String? by remember {
-//                mutableStateOf(null)
-//            }
-//
-//            val updatedDate = { date : Long? ->
-//                datePicked = date?.toString()?:""
-//            }
-//            Scaffold(
-//                modifier = Modifier
-//                    .fillMaxSize()
-//                    .padding(16.dp),
-//            ){
-//            DatePickerView(datePicked = datePicked, updatedDate = updatedDate )}
+            Button(onClick = {expandedCalendarMin = !expandedCalendarMin}) {
+                
+            }
         }
+        AnimatedVisibility(visible = expandedCalendarMin) {
+            AndroidView(
+                { CalendarView(it) },
+                modifier = Modifier.wrapContentWidth(),
+                update = { views ->
+                    views.setOnDateChangeListener { calendarView, year, month, day ->
+                        datePicked = day.toString()
+
+                    }
+                }
+            )
+        }
+
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(text = "Total expanses:",style =MaterialTheme.typography.h6, color = Color.White )
         }
     }
 }
+
+
+
 
 
 @Composable
@@ -109,7 +123,6 @@ private fun ReusableRow(categoryName: String, date: String, location: String, am
     ) {
         var expanded by remember { mutableStateOf(false) }
         Column(Modifier.clickable{expanded= !expanded}) {
-
             Row(
                 modifier = Modifier
                     .height(68.dp),
@@ -160,13 +173,9 @@ private fun ReusableRow(categoryName: String, date: String, location: String, am
 
                     )
             }
-
-
         }
     }
-
 }
-
 @Composable
 fun CategoryImage() {
     Image(
