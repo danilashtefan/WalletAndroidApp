@@ -26,8 +26,8 @@ class MainActivity : ComponentActivity() {
             WalletTheme {
                 Box(modifier = Modifier.fillMaxSize()
                     .background(Color(0xFFBB87E4))){
-                    //AddTransactionScreen()
-                    UsersApplication()
+                    AddTransactionScreen()
+                    //UsersApplication()
                 }
             }
 
