@@ -22,22 +22,22 @@ import com.google.android.material.datepicker.MaterialDatePicker
 
 
 @Composable
-fun DatePickerview(
+fun DatePickerView(
     datePicked : String?,
     updatedDate : ( date : Long? ) -> Unit,
 ) {
     val activity = LocalContext.current as AppCompatActivity
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .wrapContentSize(Alignment.TopStart)
             .padding(top = 10.dp)
             .border(0.5.dp, MaterialTheme.colors.onSurface.copy(alpha = 0.5f))
-            .clickable{
+            .clickable {
                 showDatePicker(activity, updatedDate)
             }
     ) {
+
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
@@ -47,7 +47,7 @@ fun DatePickerview(
             val (lable, iconView) = createRefs()
 
             Text(
-                text= datePicked?:"Date Picker",
+                text = datePicked ?: "Date Picker",
                 color = MaterialTheme.colors.onSurface,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -78,13 +78,15 @@ fun DatePickerview(
     }
 }
 
-private fun showDatePicker(
-    activity : AppCompatActivity,
-    updatedDate: (Long?) -> Unit)
-{
-    val picker = MaterialDatePicker.Builder.datePicker().build()
-    picker.show(activity.supportFragmentManager, picker.toString())
-    picker.addOnPositiveButtonClickListener {
-        updatedDate(it)
-    }
+fun showDatePicker(activity: AppCompatActivity, updatedDate: (date: Long?) -> Unit) {
+
+        val picker = MaterialDatePicker.Builder.datePicker().build()
+        picker.show(activity.supportFragmentManager, picker.toString())
+        picker.addOnPositiveButtonClickListener {
+            updatedDate(it)
+        }
+
 }
+    
+
+

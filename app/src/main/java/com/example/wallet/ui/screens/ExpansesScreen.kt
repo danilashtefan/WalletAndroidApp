@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.ExpansesViewModel
 import com.example.wallet.R
+import com.example.wallet.components.DatePickerView
 import com.example.wallet.model.Expanse
 
 @Composable
@@ -60,6 +61,19 @@ fun TransactionListSection(){
         }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(text = "Period: ",style =MaterialTheme.typography.h6, color = Color.White )
+//            var datePicked : String? by remember {
+//                mutableStateOf(null)
+//            }
+//
+//            val updatedDate = { date : Long? ->
+//                datePicked = date?.toString()?:""
+//            }
+//            Scaffold(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(16.dp),
+//            ){
+//            DatePickerView(datePicked = datePicked, updatedDate = updatedDate )}
         }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(text = "Total expanses:",style =MaterialTheme.typography.h6, color = Color.White )
