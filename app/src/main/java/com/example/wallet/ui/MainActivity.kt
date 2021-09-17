@@ -24,10 +24,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WalletTheme {
-                Box(modifier = Modifier.fillMaxSize()
+                Box(modifier = Modifier
+                    .fillMaxSize()
                     .background(Color(0xFFBB87E4))){
-                    AddTransactionScreen()
-                    //UsersApplication()
+                    UsersApplication()
                 }
             }
 
@@ -43,8 +43,8 @@ fun UsersApplication(){
             ExpansesScreen(navController)
         }
 
-        composable("expanseCategories"){
-            ExpanseCategoriesScreen(navController)
+        composable("transactionDetails"){
+            AddTransactionScreen()
         }
     }
 }

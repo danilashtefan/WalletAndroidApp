@@ -29,7 +29,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import java.time.Period
 
 @Composable
-fun ExpansesScreen(navHostController: NavHostController) {
+fun ExpansesScreen(navController: NavHostController) {
     val viewModel: ExpansesViewModel = viewModel() //ViewModel is bound to a composable
     val expanses = viewModel.expansesState.value
     Column(
@@ -37,7 +37,7 @@ fun ExpansesScreen(navHostController: NavHostController) {
             .background(Color(0xFFBB87E4))
     ) {
         TransactionListSection()
-        ExpanseSection(expanses)
+        ExpanseSection(expanses ,navController)
     }
 
 }
@@ -114,24 +114,20 @@ fun TransactionListSection(){
 
 
 @Composable
-fun ExpanseSection(expanses: List<Expanse>){
+fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController){
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(expanses) { expanse ->
-            ReusableRow(categoryName = expanse.categoryName, date = "Date", location = "Location", amount = expanse.amount)
+            ReusableRow(categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String){
+                navController.navigate("transactionDetails")
+            }
         }
     }
 }
 
 
-@Composable
-//Parameters: CategoryName, wallet, date, location,amount
-private fun ExpanseRow(categoryName: String, date: String, location: String, amount: Int) {
-    ReusableRow(categoryName,date, location, amount  )
-}
-
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun ReusableRow(categoryName: String, date: String, location: String, amount: Int) {
+private fun ReusableRow(categoryName: String, date: String, location: String, amount: Int, comments: String, clickAction:() -> Unit) {
     val amountSign = "$ "
 
     Card(
@@ -184,11 +180,14 @@ private fun ReusableRow(categoryName: String, date: String, location: String, am
             }
             //Spacer(Modifier.width(30.dp))
             AnimatedVisibility(visible = expanded) {
-                Text(
-                    text = "Animation",
-                    style = MaterialTheme.typography.body1,
-
-                    )
+                Column() {
+                    Text(text = "Location: " +location)
+                    Text(text= "Date: " + date)
+                    Text(text = "Comment: " + comments)
+                    OutlinedButton(onClick = {clickAction.invoke()}) {
+                        Text(text = "Edit")
+                    }
+                }
             }
         }
     }
@@ -205,7 +204,7 @@ fun CategoryImage() {
 @Preview
 @Composable
 fun ComposablePreview() {
-    ReusableRow("","","",1)
+    ReusableRow("","","",1, "comment"){}
 }
 
 
