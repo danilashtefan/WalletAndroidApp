@@ -46,7 +46,8 @@ fun ExpansesScreen(navHostController: NavHostController) {
 @Composable
 fun TransactionListSection(){
     Column() {
-        var datePicked : String? by remember { mutableStateOf("")}
+        var minDatePicked : String? by remember { mutableStateOf("Start Date")}
+        var maxDatePicked : String? by remember { mutableStateOf("End Date")}
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(modifier = Modifier.padding(5.dp))
             Row() {
@@ -69,8 +70,11 @@ fun TransactionListSection(){
         var expandedCalendarMax by remember { mutableStateOf(false) }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(text = "Period: ",style =MaterialTheme.typography.h6, color = Color.White )
-            Button(onClick = {expandedCalendarMin = !expandedCalendarMin}) {
-                
+            OutlinedButton(onClick = {expandedCalendarMin = !expandedCalendarMin}) {
+                Text(text = minDatePicked.toString())
+            }
+            OutlinedButton(onClick = {expandedCalendarMax = !expandedCalendarMax}) {
+                Text(text = maxDatePicked.toString())
             }
         }
         AnimatedVisibility(visible = expandedCalendarMin) {
@@ -79,7 +83,18 @@ fun TransactionListSection(){
                 modifier = Modifier.wrapContentWidth(),
                 update = { views ->
                     views.setOnDateChangeListener { calendarView, year, month, day ->
-                        datePicked = day.toString()
+                        minDatePicked = day.toString()
+                    }
+                }
+            )
+        }
+        AnimatedVisibility(visible = expandedCalendarMax) {
+            AndroidView(
+                { CalendarView(it) },
+                modifier = Modifier.wrapContentWidth(),
+                update = { views ->
+                    views.setOnDateChangeListener { calendarView, year, month, day ->
+                        maxDatePicked = day.toString()
 
                     }
                 }
