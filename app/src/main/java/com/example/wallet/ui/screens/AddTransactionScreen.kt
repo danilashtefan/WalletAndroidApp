@@ -57,7 +57,7 @@ fun AddTransactionScreen() {
    }
 
 @Composable
-private fun InfoRow(padding:Int, labelText:String) {
+private fun InfoRow(padding:Int, labelText:String, enabled: Boolean = true) {
    Row(
       modifier = Modifier
          .padding(top = padding.dp)
@@ -68,6 +68,7 @@ private fun InfoRow(padding:Int, labelText:String) {
       var text by rememberSaveable { mutableStateOf("") }
       TextField(
          value = text,
+         enabled=enabled,
          onValueChange = {
             text = it
          },
