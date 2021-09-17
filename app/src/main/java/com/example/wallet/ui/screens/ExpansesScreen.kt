@@ -23,7 +23,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.ExpansesViewModel
 import com.example.wallet.R
-import com.example.wallet.components.DatePickerview
 import com.example.wallet.model.Expanse
 import com.google.android.material.datepicker.MaterialDatePicker
 import java.time.Period
@@ -45,6 +44,7 @@ fun ExpansesScreen(navHostController: NavHostController) {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TransactionListSection(){
+
     Column() {
         var minDatePicked : String? by remember { mutableStateOf("Start Date")}
         var maxDatePicked : String? by remember { mutableStateOf("End Date")}
@@ -66,14 +66,17 @@ fun TransactionListSection(){
                 style = MaterialTheme.typography.h6
             )
         }
+
         var expandedCalendarMin by remember { mutableStateOf(false) }
         var expandedCalendarMax by remember { mutableStateOf(false) }
+
+
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(text = "Period: ",style =MaterialTheme.typography.h6, color = Color.White )
-            OutlinedButton(onClick = {expandedCalendarMin = !expandedCalendarMin}) {
+            OutlinedButton(onClick = {expandedCalendarMin = !expandedCalendarMin}, enabled = !expandedCalendarMax) {
                 Text(text = minDatePicked.toString())
             }
-            OutlinedButton(onClick = {expandedCalendarMax = !expandedCalendarMax}) {
+            OutlinedButton(onClick = {expandedCalendarMax = !expandedCalendarMax},enabled = !expandedCalendarMin) {
                 Text(text = maxDatePicked.toString())
             }
         }
@@ -95,7 +98,6 @@ fun TransactionListSection(){
                 update = { views ->
                     views.setOnDateChangeListener { calendarView, year, month, day ->
                         maxDatePicked = day.toString()
-
                     }
                 }
             )
