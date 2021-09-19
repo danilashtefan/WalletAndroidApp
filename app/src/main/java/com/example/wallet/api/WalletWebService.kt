@@ -14,8 +14,8 @@ class WalletWebService {
 
     init{
         val retrofit = Retrofit.Builder()
-            //.baseUrl("http://192.168.0.17:8080/api/")
-            .baseUrl("http://192.168.1.80:8080/api/")
+            .baseUrl("http://192.168.0.17:8080/api/")
+            //.baseUrl("http://192.168.1.80:8080/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

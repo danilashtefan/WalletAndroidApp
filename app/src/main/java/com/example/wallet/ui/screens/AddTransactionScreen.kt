@@ -53,11 +53,11 @@ fun AddTransactionScreen(transaction: Transaction) {
             CategoryImage()
          }
       }
-      var categoryLabelString : String by remember { mutableStateOf("Category")}
+      var categoryLabelString = transaction.categoryName
       InfoTextField(padding = 100, labelText = "Amount",value=transaction.amount.toString() )
       InfoTextField(padding = 20, labelText = "Type", value= transaction.type)
       //InfoRow(20,"Category")
-      InfoSelctor(padding = 20, labelText = categoryLabelString, transactionsCategories)
+      InfoSelctor(padding = 20, labelText = categoryLabelString, transactionsCategories, viewModel = viewModel)
       InfoTextField(20,labelText = "Date",transaction.date.toString())
       InfoTextField(20,labelText = "Comments",transaction.comments.toString())
       InfoTextField(20,labelText = "Location",transaction.location.toString())
@@ -67,7 +67,7 @@ fun AddTransactionScreen(transaction: Transaction) {
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-private fun InfoSelctor(padding:Int, labelText:String, optionsList: List<String>,  enabled: Boolean = true) {
+private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String>,  enabled: Boolean = true, viewModel: TransactionDetailsViewModel) {
    Column() {
       var expanded by remember { mutableStateOf(false) }
       Row(
@@ -85,9 +85,9 @@ private fun InfoSelctor(padding:Int, labelText:String, optionsList: List<String>
       AnimatedVisibility(visible = expanded ) {
       Row(modifier = Modifier.horizontalScroll(rememberScrollState())){
          for (option in optionsList) {
-            Card(onClick = {}, modifier = Modifier.padding(7.dp)) {
-               var value = option
-               Text(value)
+            Card(onClick = {
+               viewModel.chosenCategory = mutableStateOf(option) }, modifier = Modifier.padding(7.dp)) {
+               Text(option)
             }
          }
 
