@@ -47,4 +47,5 @@ class ExpansesViewModel(
       return expanseCategoriesRepository.getCategoryForExpanse(expanseId).expanseCategoryName
     }
 
+
 }

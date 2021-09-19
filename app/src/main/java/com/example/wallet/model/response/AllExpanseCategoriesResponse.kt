@@ -11,7 +11,8 @@ data class Embedded(
 data class ExpanseCategory(
     val _links: Links,
     val expanseCategoryName: String,
-    val id: Int
+    val id: Int,
+    val type: String
 )
 
 data class ExpanseCategoryX(

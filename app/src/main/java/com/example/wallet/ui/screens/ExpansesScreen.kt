@@ -119,7 +119,7 @@ fun TransactionListSection(){
 fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController){
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(expanses) { expanse ->
-            ReusableRow(categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String){
+            ReusableRow(categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type){
                 val transaction = Transaction(expanse.amount,expanse.comments,expanse.date,expanse.location)
                 val transactionJson= Gson().toJson(transaction)
                 navController.navigate("transactionDetails/$transactionJson")
@@ -131,7 +131,7 @@ fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController){
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun ReusableRow(categoryName: String, date: String, location: String, amount: Int, comments: String, clickAction:() -> Unit) {
+private fun ReusableRow(categoryName: String, date: String, location: String, amount: Int, comments: String, type: String,clickAction:() -> Unit) {
     val amountSign = "$ "
 
     Card(
@@ -166,7 +166,7 @@ private fun ReusableRow(categoryName: String, date: String, location: String, am
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
                     Text(
-                        text = "121",
+                        text = amount.toString(),
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
                 }
@@ -188,6 +188,7 @@ private fun ReusableRow(categoryName: String, date: String, location: String, am
                     Text(text = "Location: " +location)
                     Text(text= "Date: " + date)
                     Text(text = "Comment: " + comments)
+                    Text(text="Type: " +type )
                     OutlinedButton(onClick = {clickAction.invoke()}) {
                         Text(text = "Edit")
                     }
@@ -208,7 +209,7 @@ fun CategoryImage() {
 @Preview
 @Composable
 fun ComposablePreview() {
-    ReusableRow("","","",1, "comment"){}
+    ReusableRow("","","",1, "comment", "expanse"){}
 }
 
 

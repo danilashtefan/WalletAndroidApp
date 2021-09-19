@@ -7,7 +7,8 @@ data class SingleExpanseCategoryResponse(
     @SerializedName("_links")
     val _links: SingleLinks,
     val expanseCategoryName: String,
-    val id: Int
+    val id: Int,
+    val type: String
 )
 
 data class SingleLinks(
