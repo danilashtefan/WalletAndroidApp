@@ -19,7 +19,6 @@ fun ExpanseCategoriesScreen(navHostController: NavHostController) {
         LazyColumn{
             items(expanseCategories){expanse->
                 Text(text = expanse.expanseCategoryName)
-
             }
         }
     }

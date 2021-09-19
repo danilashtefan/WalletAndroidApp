@@ -28,15 +28,12 @@ class ExpansesViewModel(
 
         viewModelScope.launch(handler + Dispatchers.IO) {
             var expanses = getExpanses()
-
             for (expanse in expanses) {
              expanse.categoryName = getAndSetCategoriesForExpanses(expanse.id)
             }
-
             expansesState.value = expanses
         }
     }
-
 
     suspend fun getExpanses(): List<Expanse> {
         return expansesRepository.getExpanses()._embedded.expanses
@@ -45,6 +42,14 @@ class ExpansesViewModel(
    // Method to get the category of particular expanse
     suspend fun getAndSetCategoriesForExpanses(expanseId : Int):String{
       return expanseCategoriesRepository.getCategoryForExpanse(expanseId).expanseCategoryName
+    }
+
+    fun getCurrency(expanse: Expanse) {
+        
+    }
+
+    fun getSign(expanse: Expanse){
+
     }
 
 

@@ -1,7 +1,6 @@
 package com.example.wallet.ui.screens
 
 import android.widget.CalendarView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
@@ -15,7 +14,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,9 +24,7 @@ import com.example.wallet.model.viewmodel.ExpansesViewModel
 import com.example.wallet.R
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.classesFromResponse.Transaction
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.gson.Gson
-import java.time.Period
 
 @Composable
 fun ExpansesScreen(navController: NavHostController) {
@@ -39,7 +35,7 @@ fun ExpansesScreen(navController: NavHostController) {
             .background(Color(0xFFBB87E4))
     ) {
         TransactionListSection()
-        ExpanseSection(expanses ,navController)
+        ExpanseSection(expanses ,navController,viewModel)
     }
 
 }
@@ -116,7 +112,7 @@ fun TransactionListSection(){
 
 
 @Composable
-fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController){
+fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController,viewModel: ExpansesViewModel){
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(expanses) { expanse ->
             ReusableRow(categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type){
@@ -132,7 +128,11 @@ fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController){
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ReusableRow(categoryName: String, date: String, location: String, amount: Int, comments: String, type: String,clickAction:() -> Unit) {
-    val amountSign = "$ "
+    val currency = "$"
+    var sign = "+"
+    if(type == "expanse") {
+        sign = "-"
+    }
 
     Card(
         backgroundColor = Color.White,
@@ -162,11 +162,17 @@ private fun ReusableRow(categoryName: String, date: String, location: String, am
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = amountSign,
+                        text = sign,
+                        modifier = Modifier.align(Alignment.CenterVertically).
+                                padding(end = 3.dp)
+                    )
+
+                    Text(
+                        text = amount.toString(),
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
                     Text(
-                        text = amount.toString(),
+                        text = currency,
                         modifier = Modifier.align(Alignment.CenterVertically)
                     )
                 }
