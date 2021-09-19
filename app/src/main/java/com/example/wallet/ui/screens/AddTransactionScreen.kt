@@ -18,12 +18,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.classesFromResponse.Transaction
+import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
+import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 
 @Composable
 fun AddTransactionScreen(transaction: Transaction) {
+   val viewModel: TransactionDetailsViewModel = viewModel() //ViewModel is bound to a composable
+   val transactionsCategories = viewModel.transactionCetegoriesStateNames.value
+
+   for(transaction in transactionsCategories){
+
+   }
    Column(Modifier.verticalScroll(rememberScrollState())) {
       Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
          Image(
@@ -48,7 +57,7 @@ fun AddTransactionScreen(transaction: Transaction) {
       InfoTextField(padding = 100, labelText = "Amount",value=transaction.amount.toString() )
       InfoTextField(padding = 20, labelText = "Type", value= transaction.type)
       //InfoRow(20,"Category")
-      InfoSelctor(padding = 20, labelText = categoryLabelString, listOf("Shopping","Utilities","Grocery", "Travel", "Restaurants", "Hobby", "Studies", "Sport"))
+      InfoSelctor(padding = 20, labelText = categoryLabelString, transactionsCategories)
       InfoTextField(20,labelText = "Date",transaction.date.toString())
       InfoTextField(20,labelText = "Comments",transaction.comments.toString())
       InfoTextField(20,labelText = "Location",transaction.location.toString())
@@ -87,9 +96,6 @@ private fun InfoSelctor(padding:Int, labelText:String, optionsList: List<String>
    }
 
 }
-
-
-
 
 @Composable
 private fun InfoTextField(padding:Int, labelText:String, value: String ,enabled: Boolean = true) {

@@ -1,4 +1,4 @@
-package com.example.wallet.model.viewmodel
+package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 class ExpanseCategoriesViewModel(private val repository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()): ViewModel() {
 
     val expanseCategoriesState = mutableStateOf((emptyList<ExpanseCategory>()))
+
     init{
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION","Network exception")

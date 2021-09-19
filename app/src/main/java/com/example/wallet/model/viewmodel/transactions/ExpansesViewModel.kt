@@ -1,4 +1,4 @@
-package com.example.wallet.model.viewmodel
+package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
@@ -45,7 +45,7 @@ class ExpansesViewModel(
     }
 
     fun getCurrency(expanse: Expanse) {
-        
+
     }
 
     fun getSign(expanse: Expanse){

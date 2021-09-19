@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.wallet.model.viewmodel.ExpansesViewModel
+import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.R
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.classesFromResponse.Transaction
