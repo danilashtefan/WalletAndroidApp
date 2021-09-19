@@ -11,24 +11,28 @@ import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.response.ExpanseCategory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TransactionDetailsViewModel(private val repository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()):ViewModel() {
-
-
-
     var chosenCategory = mutableStateOf("")
-
+    var dataLoaded = mutableStateOf(false)
     val transactionCetegoriesStateNames = mutableStateOf((emptyList<String>()))
 
+    fun chooseCategory(category: String) {
+        this.chosenCategory.value = category;
+    }
+
     init{
+        transactionCetegoriesStateNames.value = listOf("")
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION","Network exception")
+            Log.d("EXCEPTION","Thread exception")
         }
 
-        viewModelScope.launch(handler+ Dispatchers.Default){
+        viewModelScope.launch(handler+ Dispatchers.IO){
            val expanseCategories = getTransactionCategoriesNames()
            transactionCetegoriesStateNames.value = expanseCategories
+            dataLoaded.value = true;
         }
 
     }

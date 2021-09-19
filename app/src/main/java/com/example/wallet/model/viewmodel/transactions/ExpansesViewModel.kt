@@ -20,10 +20,10 @@ class ExpansesViewModel(
 
 
     val expansesState = mutableStateOf((emptyList<Expanse>()))
-
+    var dataLoaded = mutableStateOf(false)
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Network exception")
+            Log.d("EXCEPTION", "Thread exception")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
@@ -32,6 +32,7 @@ class ExpansesViewModel(
              expanse.categoryName = getAndSetCategoriesForExpanses(expanse.id)
             }
             expansesState.value = expanses
+            dataLoaded.value = true
         }
     }
 

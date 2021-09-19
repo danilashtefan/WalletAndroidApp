@@ -26,13 +26,16 @@ import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 
 @Composable
-fun AddTransactionScreen(transaction: Transaction) {
+fun TransactionDetailsScreen(transaction: Transaction) {
    val viewModel: TransactionDetailsViewModel = viewModel() //ViewModel is bound to a composable
+   val expensesViewModel: ExpansesViewModel= viewModel();
+   var dataLoaded = viewModel.dataLoaded.value
+
+   if (!dataLoaded) {
+      return;
+   }
    val transactionsCategories = viewModel.transactionCetegoriesStateNames.value
 
-   for(transaction in transactionsCategories){
-
-   }
    Column(Modifier.verticalScroll(rememberScrollState())) {
       Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
          Image(
@@ -53,11 +56,10 @@ fun AddTransactionScreen(transaction: Transaction) {
             CategoryImage()
          }
       }
-      var categoryLabelString = transaction.categoryName
       InfoTextField(padding = 100, labelText = "Amount",value=transaction.amount.toString() )
       InfoTextField(padding = 20, labelText = "Type", value= transaction.type)
       //InfoRow(20,"Category")
-      InfoSelctor(padding = 20, labelText = categoryLabelString, transactionsCategories, viewModel = viewModel)
+      InfoSelctor(padding = 20, labelText = transaction.categoryName, transactionsCategories, viewModel = viewModel)
       InfoTextField(20,labelText = "Date",transaction.date.toString())
       InfoTextField(20,labelText = "Comments",transaction.comments.toString())
       InfoTextField(20,labelText = "Location",transaction.location.toString())
@@ -79,14 +81,18 @@ private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String
       ){
 
          OutlinedButton(onClick = {expanded = !expanded}, enabled = enabled) {
-            Text(text = labelText)
+            if (viewModel.chosenCategory.value === "") {
+               Text(text = labelText)
+            } else {
+               Text(text = viewModel.chosenCategory.value)
+            }
          }
       }
       AnimatedVisibility(visible = expanded ) {
       Row(modifier = Modifier.horizontalScroll(rememberScrollState())){
          for (option in optionsList) {
             Card(onClick = {
-               viewModel.chosenCategory = mutableStateOf(option) }, modifier = Modifier.padding(7.dp)) {
+               viewModel.chooseCategory(option)}, modifier = Modifier.padding(7.dp)) {
                Text(option)
             }
          }

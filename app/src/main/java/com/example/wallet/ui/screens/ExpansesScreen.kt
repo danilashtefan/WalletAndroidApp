@@ -30,6 +30,12 @@ import com.google.gson.Gson
 fun ExpansesScreen(navController: NavHostController) {
     val viewModel: ExpansesViewModel = viewModel() //ViewModel is bound to a composable
     val expanses = viewModel.expansesState.value
+    var dataLoaded = viewModel.dataLoaded.value
+
+    if (!dataLoaded) {
+        return;
+    }
+
     Column(
         modifier = Modifier
             .background(Color(0xFFBB87E4))
