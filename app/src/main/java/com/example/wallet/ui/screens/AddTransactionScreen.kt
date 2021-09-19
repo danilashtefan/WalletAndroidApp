@@ -3,12 +3,9 @@ package com.example.wallet.ui.screens
 import android.widget.CalendarView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
@@ -51,7 +48,7 @@ fun AddTransactionScreen(transaction: Transaction) {
       InfoTextField(padding = 100, labelText = "Amount",value=transaction.amount.toString() )
       InfoTextField(padding = 20, labelText = "Type", value= transaction.type)
       //InfoRow(20,"Category")
-      InfoSelctor(padding = 20, labelText = categoryLabelString)
+      InfoSelctor(padding = 20, labelText = categoryLabelString, listOf("Shopping","Utilities","Grocery", "Travel", "Restaurants", "Hobby", "Studies", "Sport"))
       InfoTextField(20,labelText = "Date",transaction.date.toString())
       InfoTextField(20,labelText = "Comments",transaction.comments.toString())
       InfoTextField(20,labelText = "Location",transaction.location.toString())
@@ -61,7 +58,7 @@ fun AddTransactionScreen(transaction: Transaction) {
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-private fun InfoSelctor(padding:Int, labelText:String, enabled: Boolean = true ) {
+private fun InfoSelctor(padding:Int, labelText:String, optionsList: List<String>,  enabled: Boolean = true) {
    Column() {
       var expanded by remember { mutableStateOf(false) }
       Row(
@@ -77,10 +74,12 @@ private fun InfoSelctor(padding:Int, labelText:String, enabled: Boolean = true )
          }
       }
       AnimatedVisibility(visible = expanded ) {
-      Row(){
-         Card(onClick ={} ) {
-            var value = "Shopping"
-            Text(value)
+      Row(modifier = Modifier.horizontalScroll(rememberScrollState())){
+         for (option in optionsList) {
+            Card(onClick = {}, modifier = Modifier.padding(7.dp)) {
+               var value = option
+               Text(value)
+            }
          }
 
       }
