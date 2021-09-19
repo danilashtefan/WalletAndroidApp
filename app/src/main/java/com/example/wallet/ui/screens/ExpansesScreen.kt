@@ -25,7 +25,9 @@ import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.ExpansesViewModel
 import com.example.wallet.R
 import com.example.wallet.model.Expanse
+import com.example.wallet.model.classesFromResponse.Transaction
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.gson.Gson
 import java.time.Period
 
 @Composable
@@ -118,7 +120,9 @@ fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController){
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(expanses) { expanse ->
             ReusableRow(categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String){
-                navController.navigate("transactionDetails")
+                val transaction = Transaction(expanse.amount,expanse.comments,expanse.date,expanse.location)
+                val transactionJson= Gson().toJson(transaction)
+                navController.navigate("transactionDetails/$transactionJson")
             }
         }
     }

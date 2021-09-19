@@ -10,7 +10,6 @@ data class SingleExpanseCategoryResponse(
     val id: Int
 )
 
-
 data class SingleLinks(
     @SerializedName("expanseCategory")
     val expanseCategory: SingleExpanseCategory,
@@ -21,7 +20,6 @@ data class SingleLinks(
     @SerializedName("self")
     val self: Self
 )
-
 
 data class SingleExpanseCategory(
     val href: String

@@ -22,9 +22,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.example.wallet.R
+import com.example.wallet.model.Expanse
+import com.example.wallet.model.classesFromResponse.Transaction
 
 @Composable
-fun AddTransactionScreen(transactionId:Int) {
+fun AddTransactionScreen(transaction: Transaction) {
    Column(Modifier.verticalScroll(rememberScrollState())) {
       Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
          Image(
@@ -46,13 +48,13 @@ fun AddTransactionScreen(transactionId:Int) {
          }
       }
       var categoryLabelString : String by remember { mutableStateOf("Category")}
-      InfoTextField(padding = 100, labelText = "Amount" )
+      InfoTextField(padding = 100, labelText = transaction.amount.toString() )
       InfoTextField(padding = 20, labelText = "Type" )
       //InfoRow(20,"Category")
       InfoSelctor(padding = 20, labelText = categoryLabelString)
-      InfoTextField(20,"Date")
-      InfoTextField(20,"Notes")
-      InfoTextField(20,"Location")
+      InfoTextField(20,transaction.date.toString())
+      InfoTextField(20,transaction.comments.toString())
+      InfoTextField(20,transaction.location.toString())
 
    }
    }

@@ -16,10 +16,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import com.example.wallet.model.Expanse
+import com.example.wallet.model.classesFromResponse.Transaction
 import com.example.wallet.ui.screens.AddTransactionScreen
 import com.example.wallet.ui.screens.ExpanseCategoriesScreen
 import com.example.wallet.ui.screens.ExpansesScreen
 import com.example.wallet.ui.theme.WalletTheme
+import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,12 +48,16 @@ fun UsersApplication(){
             ExpansesScreen(navController)
         }
 
-        composable("transactionDetails/{transactionId}",
-        arguments = listOf(navArgument("transactionId"){
-            type = NavType.IntType
+        composable("transactionDetails/{transaction}",
+        arguments = listOf(navArgument("transaction"){
+            type = NavType.StringType
         })){
             navBackStackEntry->
-            AddTransactionScreen(navBackStackEntry.arguments!!.getInt("transactionId"))
+            navBackStackEntry?.arguments?.getString("transaction")?.let {
+                json->
+                val transaction = Gson().fromJson(json, Transaction::class.java)
+                AddTransactionScreen(transaction = transaction)
+            }
         }
     }
 }
