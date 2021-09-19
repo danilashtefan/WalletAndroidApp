@@ -120,7 +120,7 @@ fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController){
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(expanses) { expanse ->
             ReusableRow(categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type){
-                val transaction = Transaction(expanse.amount,expanse.comments,expanse.date,expanse.location)
+                val transaction = Transaction(expanse.amount,expanse.comments,expanse.date,expanse.location, expanse.type)
                 val transactionJson= Gson().toJson(transaction)
                 navController.navigate("transactionDetails/$transactionJson")
             }

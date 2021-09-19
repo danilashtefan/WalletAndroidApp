@@ -48,20 +48,20 @@ fun AddTransactionScreen(transaction: Transaction) {
          }
       }
       var categoryLabelString : String by remember { mutableStateOf("Category")}
-      InfoTextField(padding = 100, labelText = transaction.amount.toString() )
-      InfoTextField(padding = 20, labelText = "Type" )
+      InfoTextField(padding = 100, labelText = "Amount",value=transaction.amount.toString() )
+      InfoTextField(padding = 20, labelText = "Type", value= transaction.type)
       //InfoRow(20,"Category")
       InfoSelctor(padding = 20, labelText = categoryLabelString)
-      InfoTextField(20,transaction.date.toString())
-      InfoTextField(20,transaction.comments.toString())
-      InfoTextField(20,transaction.location.toString())
+      InfoTextField(20,labelText = "Date",transaction.date.toString())
+      InfoTextField(20,labelText = "Comments",transaction.comments.toString())
+      InfoTextField(20,labelText = "Location",transaction.location.toString())
 
    }
    }
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-private fun InfoSelctor(padding:Int, labelText:String, enabled: Boolean = true, ) {
+private fun InfoSelctor(padding:Int, labelText:String, enabled: Boolean = true ) {
    Column() {
       var expanded by remember { mutableStateOf(false) }
       Row(
@@ -93,7 +93,7 @@ private fun InfoSelctor(padding:Int, labelText:String, enabled: Boolean = true, 
 
 
 @Composable
-private fun InfoTextField(padding:Int, labelText:String, enabled: Boolean = true) {
+private fun InfoTextField(padding:Int, labelText:String, value: String ,enabled: Boolean = true) {
    Row(
       modifier = Modifier
          .padding(top = padding.dp)
@@ -101,7 +101,8 @@ private fun InfoTextField(padding:Int, labelText:String, enabled: Boolean = true
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.Center
    ) {
-      var text by rememberSaveable { mutableStateOf("") }
+      //var text by rememberSaveable { mutableStateOf("") }
+      var text = value
       TextField(
          value = text,
          enabled=enabled,

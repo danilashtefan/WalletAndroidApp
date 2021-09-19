@@ -5,4 +5,5 @@ data class Transaction (
     val comments: Any?,
     val date: String?,
     val location: Any?,
+    val type: String
 )
