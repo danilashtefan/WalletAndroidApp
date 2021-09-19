@@ -1,33 +1,27 @@
 package com.example.wallet.ui.screens
 
+import android.widget.CalendarView
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import androidx.compose.ui.viewinterop.AndroidView
 import com.example.wallet.R
-import com.example.wallet.model.viewmodel.ExpanseCategoriesViewModel
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 @Composable
 fun AddTransactionScreen() {
@@ -51,18 +45,53 @@ fun AddTransactionScreen() {
             CategoryImage()
          }
       }
-      InfoRow(padding = 100, labelText = "Amount" )
-      InfoRow(padding = 20, labelText = "Type" )
-      InfoRow(20,"Category")
-      InfoRow(20,"Date")
-      InfoRow(20,"Notes")
-      InfoRow(20,"Location")
+      var categoryLabelString : String by remember { mutableStateOf("Category")}
+      InfoTextField(padding = 100, labelText = "Amount" )
+      InfoTextField(padding = 20, labelText = "Type" )
+      //InfoRow(20,"Category")
+      InfoSelctor(padding = 20, labelText = categoryLabelString)
+      InfoTextField(20,"Date")
+      InfoTextField(20,"Notes")
+      InfoTextField(20,"Location")
 
    }
    }
+
+@OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
+@Composable
+private fun InfoSelctor(padding:Int, labelText:String, enabled: Boolean = true, ) {
+   Column() {
+      var expanded by remember { mutableStateOf(false) }
+      Row(
+         modifier = Modifier
+            .padding(top = padding.dp)
+            .fillMaxWidth(),
+         verticalAlignment = Alignment.CenterVertically,
+         horizontalArrangement = Arrangement.Center
+      ){
+
+         OutlinedButton(onClick = {expanded = !expanded}, enabled = enabled) {
+            Text(text = labelText)
+         }
+      }
+      AnimatedVisibility(visible = expanded ) {
+      Row(){
+         Card(onClick ={} ) {
+            var value = "Shopping"
+            Text(value)
+         }
+
+      }
+      }
+   }
+
+}
+
+
+
 
 @Composable
-private fun InfoRow(padding:Int, labelText:String, enabled: Boolean = true) {
+private fun InfoTextField(padding:Int, labelText:String, enabled: Boolean = true) {
    Row(
       modifier = Modifier
          .padding(top = padding.dp)
