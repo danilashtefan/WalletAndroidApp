@@ -24,7 +24,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.example.wallet.R
 
 @Composable
-fun AddTransactionScreen() {
+fun AddTransactionScreen(transactionId:Int) {
    Column(Modifier.verticalScroll(rememberScrollState())) {
       Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
          Image(

@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.example.wallet.ui.screens.AddTransactionScreen
 import com.example.wallet.ui.screens.ExpanseCategoriesScreen
@@ -43,8 +45,12 @@ fun UsersApplication(){
             ExpansesScreen(navController)
         }
 
-        composable("transactionDetails"){
-            AddTransactionScreen()
+        composable("transactionDetails/{transactionId}",
+        arguments = listOf(navArgument("transactionId"){
+            type = NavType.IntType
+        })){
+            navBackStackEntry->
+            AddTransactionScreen(navBackStackEntry.arguments!!.getInt("transactionId"))
         }
     }
 }
