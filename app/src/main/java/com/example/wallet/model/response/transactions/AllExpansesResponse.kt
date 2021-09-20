@@ -16,15 +16,15 @@ data class Embedded(
 
 data class Expanse(
     val _links: Links? = null,
-    val amount: Int = 0,
-    val comments: String = "",
-    val date: String = "",
-    val id: Int = 0,
-    val location: String = "",
-    val name: String = "",
-    val photoUrl: String = "",
+    var amount: Int = 0,
+    var comments: String = "",
+    var date: String = "",
+    var id: Int = 0,
+    var location: String = "",
+    var name: String = "",
+    var photoUrl: String = "",
     var categoryName: String = "",
-    val type: String = ""
+    var type: String = ""
 )
 
 data class ExpanseX(

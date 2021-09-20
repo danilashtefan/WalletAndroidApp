@@ -34,12 +34,26 @@ class TransactionDetailsViewModel(): ViewModel() {
         )
     }
 
+    fun updateField(field: String, value: String) {
+        val transaction = ExpansesRepository.updateField(field, value, this.transactionId);
+        expense.value = Transaction(
+            transaction.amount,
+            transaction.comments,
+            transaction.date,
+            transaction.location,
+            transaction.type,
+            transaction.categoryName
+        )
+    }
+
+
     init {
     }
 
-    suspend fun getExpanseCategories(): List<ExpanseCategory>{
-        return repository.getExpanseCategories()._embedded.expanseCategories
-    }
+//    suspend fun getExpanseCategories(): List<ExpanseCategory>{
+//        return repository.getExpanseCategories()._embedded.expanseCategories
+//    }
+
 
     suspend fun getTransactionCategoriesNames(): List<String>{
         var listOfCategories =  repository.getExpanseCategories()._embedded.expanseCategories

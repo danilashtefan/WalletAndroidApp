@@ -57,13 +57,13 @@ fun TransactionDetailsScreen(transactionId: Int) {
             CategoryImage()
          }
       }
-      InfoTextField(padding = 100, labelText = "Amount",value=transaction.amount.toString() )
-      InfoTextField(padding = 20, labelText = "Type", value= transaction.type)
+      InfoTextField(padding = 100, field = "amount",labelText = "Amount",value=transaction.amount.toString(), viewModel = viewModel )
+      InfoTextField(padding = 20, field = "type",labelText = "Type", value= transaction.type, viewModel = viewModel)
       //InfoRow(20,"Category")
-      InfoSelctor(padding = 20, labelText = transaction.categoryName, transactionsCategories, viewModel = viewModel, transactionId = transaction.id)
-      InfoTextField(20,labelText = "Date",transaction.date.toString())
-      InfoTextField(20,labelText = "Comments", transaction.comments.toString())
-      InfoTextField(20,labelText = "Location", transaction.location.toString())
+      InfoSelctor(padding = 20,labelText = transaction.categoryName, transactionsCategories, viewModel = viewModel, transactionId = transaction.id)
+      InfoTextField(20,field = "date",labelText = "Date",transaction.date.toString(), viewModel = viewModel)
+      InfoTextField(20,field = "comments",labelText = "Comments", transaction.comments.toString(), viewModel = viewModel)
+      InfoTextField(20,field = "location",labelText = "Location", transaction.location.toString(), viewModel = viewModel)
 
    }
    }
@@ -101,7 +101,7 @@ private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String
 }
 
 @Composable
-private fun InfoTextField(padding:Int, labelText: String, value: String ,enabled: Boolean = true) {
+private fun InfoTextField(padding:Int, field:String, labelText: String, value: String, viewModel: TransactionDetailsViewModel ,enabled: Boolean = true) {
    if (labelText === null || value === null) {
       return;
    }
@@ -119,7 +119,8 @@ private fun InfoTextField(padding:Int, labelText: String, value: String ,enabled
          value = text,
          enabled=enabled,
          onValueChange = {
-            text = it
+            print(it);
+            viewModel.updateField(field, it)
          },
          label = { Text(labelText) }
       )

@@ -8,7 +8,6 @@ import java.lang.Exception
 object ExpansesRepository {
     private val service: WalletWebService = WalletWebService()
     var expense = AllExpansesResponse()
-    init {}
 
     suspend fun getExpanses(): AllExpansesResponse {
         expense = service.getExpanses()
@@ -25,9 +24,34 @@ object ExpansesRepository {
     }
 
     fun updateExpenseCategory(category: String, transactionId: Int): Expanse {
+        return updateField("categoryName", category, transactionId)
+    }
+
+    fun updateField(field: String, value: String, transactionId: Int): Expanse {
         for(expense in expense._embedded.expanses) {
             if (expense.id === transactionId) {
-                expense.categoryName = category;
+                when (field) {
+                    "comments" -> expense.comments = value
+                    "date" -> expense.date = value
+                    "location" -> expense.location = value
+                    "name" -> expense.name = value
+                    "photoUrl" -> expense.photoUrl = value
+                    "categoryName" -> expense.categoryName = value
+                    "type" -> expense.type = value
+                }
+                return expense;
+            }
+        }
+        throw Exception("No expense found!");
+    }
+
+    fun updateField(field: String, value: Int, transactionId: Int): Expanse {
+        for(expense in expense._embedded.expanses) {
+            if (expense.id === transactionId) {
+                when (field) {
+                    "amount" -> expense.amount = value
+                    "id" -> expense.id = value
+                }
                 return expense;
             }
         }
