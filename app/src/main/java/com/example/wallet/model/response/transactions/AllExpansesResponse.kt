@@ -1,13 +1,13 @@
 package com.example.wallet.model
 
 data class AllExpansesResponse(
-    val _embedded: Embedded,
-    val _links: LinksX,
-    val page: Page
+    val _embedded: Embedded = Embedded(expanses = emptyList()),
+    val _links: LinksX = LinksX(),
+    val page: Page = Page()
 )
 
 data class Category(
-    val href: String
+    val href: String = ""
 )
 
 data class Embedded(
@@ -15,20 +15,20 @@ data class Embedded(
 )
 
 data class Expanse(
-    val _links: Links,
-    val amount: Int,
-    val comments: Any,
-    val date: String,
-    val id: Int,
-    val location: Any,
-    val name: String,
-    val photoUrl: String,
-    var categoryName: String,
-    val type: String
+    val _links: Links? = null,
+    val amount: Int = 0,
+    val comments: String = "",
+    val date: String = "",
+    val id: Int = 0,
+    val location: String = "",
+    val name: String = "",
+    val photoUrl: String = "",
+    var categoryName: String = "",
+    val type: String = ""
 )
 
 data class ExpanseX(
-    val href: String
+    val href: String = ""
 )
 data class Links(
     val category: Category,
@@ -38,34 +38,34 @@ data class Links(
 )
 
 data class LinksX(
-    val profile: Profile,
-    val search: Search,
-    val self: SelfX
+    val profile: Profile = Profile(),
+    val search: Search = Search(),
+    val self: SelfX = SelfX()
 )
 
 data class Page(
-    val number: Int,
-    val size: Int,
-    val totalElements: Int,
-    val totalPages: Int
+    val number: Int = 0,
+    val size: Int = 0,
+    val totalElements: Int = 0,
+    val totalPages: Int = 0
 )
 
 data class Profile(
-    val href: String
+    val href: String = ""
 )
 
 data class Search(
-    val href: String
+    val href: String = ""
 )
 
 data class Self(
-    val href: String
+    val href: String = ""
 )
 
 data class SelfX(
-    val href: String
+    val href: String = ""
 )
 
 data class Wallet(
-    val href: String
+    val href: String = ""
 )

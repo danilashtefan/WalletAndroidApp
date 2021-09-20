@@ -5,16 +5,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.Expanse
+import com.example.wallet.model.classesFromResponse.Transaction
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.ExpansesRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ExpansesViewModel(
-    private val expansesRepository: ExpansesRepository = ExpansesRepository(),
+    private val expansesRepository: ExpansesRepository = ExpansesRepository,
     private val expanseCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
 ) : ViewModel() {
 
@@ -43,6 +45,15 @@ class ExpansesViewModel(
    // Method to get the category of particular expanse
     suspend fun getAndSetCategoriesForExpanses(expanseId : Int):String{
       return expanseCategoriesRepository.getCategoryForExpanse(expanseId).expanseCategoryName
+    }
+
+    fun getTransaction(transactionId: Int): Expanse {
+        for(tx in expansesState.value) {
+            if (tx.id === transactionId) {
+                return tx;
+            }
+        }
+        throw Exception("No transaction found!");
     }
 
     fun getCurrency(expanse: Expanse) {

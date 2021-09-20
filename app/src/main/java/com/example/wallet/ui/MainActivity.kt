@@ -44,17 +44,16 @@ fun UsersApplication(){
             ExpansesScreen(navController)
         }
 
-        composable("transactionDetails/{transaction}",
-        arguments = listOf(navArgument("transaction"){
-            type = NavType.StringType
+        composable("transactionDetails/{transactionId}",
+        arguments = listOf(navArgument("transactionId"){
+            type = NavType.IntType
         })){
             navBackStackEntry->
-            navBackStackEntry?.arguments?.getString("transaction")?.let {
-                json->
-                val transaction = Gson().fromJson(json, Transaction::class.java)
-                TransactionDetailsScreen(transaction = transaction)
+            navBackStackEntry.arguments?.let {
+                TransactionDetailsScreen(transactionId = it.getInt("transactionId"))
             }
         }
     }
 }
+
 

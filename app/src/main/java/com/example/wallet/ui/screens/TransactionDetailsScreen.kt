@@ -26,15 +26,16 @@ import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 
 @Composable
-fun TransactionDetailsScreen(transaction: Transaction) {
+fun TransactionDetailsScreen(transactionId: Int) {
    val viewModel: TransactionDetailsViewModel = viewModel() //ViewModel is bound to a composable
-   val expensesViewModel: ExpansesViewModel= viewModel();
+   viewModel.setTransactionId(transactionId)
    var dataLoaded = viewModel.dataLoaded.value
+   var transaction = viewModel.expense.value
+   val transactionsCategories = viewModel.transactionCetegoriesStateNames.value
 
-   if (!dataLoaded) {
+   if (dataLoaded === false) {
       return;
    }
-   val transactionsCategories = viewModel.transactionCetegoriesStateNames.value
 
    Column(Modifier.verticalScroll(rememberScrollState())) {
       Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
@@ -59,17 +60,17 @@ fun TransactionDetailsScreen(transaction: Transaction) {
       InfoTextField(padding = 100, labelText = "Amount",value=transaction.amount.toString() )
       InfoTextField(padding = 20, labelText = "Type", value= transaction.type)
       //InfoRow(20,"Category")
-      InfoSelctor(padding = 20, labelText = transaction.categoryName, transactionsCategories, viewModel = viewModel)
+      InfoSelctor(padding = 20, labelText = transaction.categoryName, transactionsCategories, viewModel = viewModel, transactionId = transaction.id)
       InfoTextField(20,labelText = "Date",transaction.date.toString())
-      InfoTextField(20,labelText = "Comments",transaction.comments.toString())
-      InfoTextField(20,labelText = "Location",transaction.location.toString())
+      InfoTextField(20,labelText = "Comments", transaction.comments.toString())
+      InfoTextField(20,labelText = "Location", transaction.location.toString())
 
    }
    }
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String>,  enabled: Boolean = true, viewModel: TransactionDetailsViewModel) {
+private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String>,  enabled: Boolean = true, viewModel: TransactionDetailsViewModel, transactionId: Int) {
    Column() {
       var expanded by remember { mutableStateOf(false) }
       Row(
@@ -81,11 +82,7 @@ private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String
       ){
 
          OutlinedButton(onClick = {expanded = !expanded}, enabled = enabled) {
-            if (viewModel.chosenCategory.value === "") {
-               Text(text = labelText)
-            } else {
-               Text(text = viewModel.chosenCategory.value)
-            }
+            Text(text = labelText)
          }
       }
       AnimatedVisibility(visible = expanded ) {
@@ -104,7 +101,11 @@ private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String
 }
 
 @Composable
-private fun InfoTextField(padding:Int, labelText:String, value: String ,enabled: Boolean = true) {
+private fun InfoTextField(padding:Int, labelText: String, value: String ,enabled: Boolean = true) {
+   if (labelText === null || value === null) {
+      return;
+   }
+
    Row(
       modifier = Modifier
          .padding(top = padding.dp)
