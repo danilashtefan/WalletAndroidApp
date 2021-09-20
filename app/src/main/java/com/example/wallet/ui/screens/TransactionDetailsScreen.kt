@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
@@ -54,7 +55,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
             CategoryImage()
          }
       }
-      EditableField(padding = 100, field = "amount",labelText = "Amount",value=transaction.amount.toString(), viewModel = viewModel )
+      EditableField(padding = 100, field = "amount",labelText = "Amount",value=transaction.amount, viewModel = viewModel )
       EditableField(padding = 20, field = "type",labelText = "Type", value= transaction.type, viewModel = viewModel)
       //InfoRow(20,"Category")
       InfoSelctor(padding = 20,labelText = transaction.categoryName, transactionsCategories, viewModel = viewModel, transactionId = transaction.id)
@@ -99,8 +100,7 @@ private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String
 
 
 @Composable
-private fun EditableField(padding:Int, field:String, labelText: String, value: String?, viewModel: TransactionDetailsViewModel, enabled: Boolean = true) {
-
+private fun EditableField(padding:Int, field:String, labelText: String, value: Any?, viewModel: TransactionDetailsViewModel, enabled: Boolean = true) {
    Row(
       modifier = Modifier
          .padding(top = padding.dp)
@@ -108,16 +108,18 @@ private fun EditableField(padding:Int, field:String, labelText: String, value: S
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.Center
    ) {
-      var text = value
+
+      var keyboardOptions =  KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
+
+      when (value){
+        is Int-> keyboardOptions =  KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+      }
+
+      var text = value.toString()
       if (text === null) {
          text = ""
       }
       val textState = remember { mutableStateOf(TextFieldValue(text)) }
-      var keyboardOptions =  KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
-
-      if(field =="amount"){
-         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
-      }
 
       TextField(
          value = textState.value,
