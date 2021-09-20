@@ -1,30 +1,25 @@
 package com.example.wallet.ui.screens
 
-import android.util.Log
-import android.widget.CalendarView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
-import com.example.wallet.model.Expanse
-import com.example.wallet.model.classesFromResponse.Transaction
-import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 
 @Composable
@@ -59,13 +54,13 @@ fun TransactionDetailsScreen(transactionId: Int) {
             CategoryImage()
          }
       }
-      InfoTextField(padding = 100, field = "amount",labelText = "Amount",value=transaction.amount.toString(), viewModel = viewModel )
-      InfoTextField(padding = 20, field = "type",labelText = "Type", value= transaction.type, viewModel = viewModel)
+      EditableField(padding = 100, field = "amount",labelText = "Amount",value=transaction.amount.toString(), viewModel = viewModel )
+      EditableField(padding = 20, field = "type",labelText = "Type", value= transaction.type, viewModel = viewModel)
       //InfoRow(20,"Category")
       InfoSelctor(padding = 20,labelText = transaction.categoryName, transactionsCategories, viewModel = viewModel, transactionId = transaction.id)
-      InfoTextField(20,field = "date",labelText = "Date",transaction.date, viewModel = viewModel)
-      InfoTextField(20,field = "comments",labelText = "Comments", transaction.comments, viewModel = viewModel)
-      InfoTextField(20,field = "location",labelText = "Location", transaction.location, viewModel = viewModel)
+      EditableField(20,field = "date",labelText = "Date",transaction.date, viewModel = viewModel)
+      EditableField(20,field = "comments",labelText = "Comments", transaction.comments, viewModel = viewModel)
+      EditableField(20,field = "location",labelText = "Location", transaction.location, viewModel = viewModel)
 
    }
    }
@@ -102,11 +97,9 @@ private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String
 
 }
 
+
 @Composable
-private fun InfoTextField(padding:Int, field:String, labelText: String, value: String?, viewModel: TransactionDetailsViewModel ,enabled: Boolean = true) {
-//   if (labelText === null || value === null) {
-//      return;
-//   }
+private fun EditableField(padding:Int, field:String, labelText: String, value: String?, viewModel: TransactionDetailsViewModel, enabled: Boolean = true) {
 
    Row(
       modifier = Modifier
@@ -115,12 +108,17 @@ private fun InfoTextField(padding:Int, field:String, labelText: String, value: S
       verticalAlignment = Alignment.CenterVertically,
       horizontalArrangement = Arrangement.Center
    ) {
-      //var text by rememberSaveable { mutableStateOf("") }
       var text = value
       if (text === null) {
          text = ""
       }
       val textState = remember { mutableStateOf(TextFieldValue(text)) }
+      var keyboardOptions =  KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
+
+      if(field =="amount"){
+         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+      }
+
       TextField(
          value = textState.value,
          enabled=enabled,
@@ -129,7 +127,8 @@ private fun InfoTextField(padding:Int, field:String, labelText: String, value: S
                viewModel.updateField(field, textState.value.text)
 
          },
-         label = { Text(labelText) }
+         label = { Text(labelText) },
+         keyboardOptions = keyboardOptions
       )
    }
 }

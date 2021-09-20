@@ -31,6 +31,7 @@ object ExpansesRepository {
         for(expense in expense._embedded.expanses) {
             if (expense.id === transactionId) {
                 when (field) {
+                    "amount" -> expense.amount = value.toInt()
                     "comments" -> expense.comments = value
                     "date" -> expense.date = value
                     "location" -> expense.location = value
@@ -38,19 +39,6 @@ object ExpansesRepository {
                     "photoUrl" -> expense.photoUrl = value
                     "categoryName" -> expense.categoryName = value
                     "type" -> expense.type = value
-                }
-                return expense;
-            }
-        }
-        throw Exception("No expense found!");
-    }
-
-    fun updateField(field: String, value: Int, transactionId: Int): Expanse {
-        for(expense in expense._embedded.expanses) {
-            if (expense.id === transactionId) {
-                when (field) {
-                    "amount" -> expense.amount = value
-                    "id" -> expense.id = value
                 }
                 return expense;
             }
