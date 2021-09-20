@@ -1,5 +1,6 @@
 package com.example.wallet.ui.screens
 
+import android.util.Log
 import android.widget.CalendarView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -61,9 +63,9 @@ fun TransactionDetailsScreen(transactionId: Int) {
       InfoTextField(padding = 20, field = "type",labelText = "Type", value= transaction.type, viewModel = viewModel)
       //InfoRow(20,"Category")
       InfoSelctor(padding = 20,labelText = transaction.categoryName, transactionsCategories, viewModel = viewModel, transactionId = transaction.id)
-      InfoTextField(20,field = "date",labelText = "Date",transaction.date.toString(), viewModel = viewModel)
-      InfoTextField(20,field = "comments",labelText = "Comments", transaction.comments.toString(), viewModel = viewModel)
-      InfoTextField(20,field = "location",labelText = "Location", transaction.location.toString(), viewModel = viewModel)
+      InfoTextField(20,field = "date",labelText = "Date",transaction.date, viewModel = viewModel)
+      InfoTextField(20,field = "comments",labelText = "Comments", transaction.comments, viewModel = viewModel)
+      InfoTextField(20,field = "location",labelText = "Location", transaction.location, viewModel = viewModel)
 
    }
    }
@@ -101,10 +103,10 @@ private fun InfoSelctor(padding:Int, labelText: String, optionsList: List<String
 }
 
 @Composable
-private fun InfoTextField(padding:Int, field:String, labelText: String, value: String, viewModel: TransactionDetailsViewModel ,enabled: Boolean = true) {
-   if (labelText === null || value === null) {
-      return;
-   }
+private fun InfoTextField(padding:Int, field:String, labelText: String, value: String?, viewModel: TransactionDetailsViewModel ,enabled: Boolean = true) {
+//   if (labelText === null || value === null) {
+//      return;
+//   }
 
    Row(
       modifier = Modifier
@@ -115,12 +117,17 @@ private fun InfoTextField(padding:Int, field:String, labelText: String, value: S
    ) {
       //var text by rememberSaveable { mutableStateOf("") }
       var text = value
+      if (text === null) {
+         text = ""
+      }
+      val textState = remember { mutableStateOf(TextFieldValue(text)) }
       TextField(
-         value = text,
+         value = textState.value,
          enabled=enabled,
          onValueChange = {
-            print(it);
-            viewModel.updateField(field, it)
+            textState.value = it
+               viewModel.updateField(field, textState.value.text)
+
          },
          label = { Text(labelText) }
       )

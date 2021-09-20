@@ -20,32 +20,17 @@ class TransactionDetailsViewModel(): ViewModel() {
     private var transactionId: Int = 0;
     var dataLoaded = mutableStateOf(false)
     val transactionCetegoriesStateNames = mutableStateOf((listOf("")))
-    var expense = mutableStateOf<Transaction>(Transaction())
+    var expense = mutableStateOf(Expanse())
 
     fun chooseCategory(category: String) {
         val transaction = ExpansesRepository.updateExpenseCategory(category, this.transactionId);
-        expense.value = Transaction(
-            transaction.amount,
-            transaction.comments,
-            transaction.date,
-            transaction.location,
-            transaction.type,
-            transaction.categoryName
-        )
+        expense.value = transaction
     }
 
     fun updateField(field: String, value: String) {
         val transaction = ExpansesRepository.updateField(field, value, this.transactionId);
-        expense.value = Transaction(
-            transaction.amount,
-            transaction.comments,
-            transaction.date,
-            transaction.location,
-            transaction.type,
-            transaction.categoryName
-        )
+        expense.value = transaction
     }
-
 
     init {
     }
@@ -70,14 +55,7 @@ class TransactionDetailsViewModel(): ViewModel() {
         }
         this.transactionId = transactionId
         val transaction = ExpansesRepository.getExpense(this.transactionId)
-        expense.value = Transaction(
-            transaction.amount,
-            transaction.comments,
-            transaction.date,
-            transaction.location,
-            transaction.type,
-            transaction.categoryName
-        )
+        expense.value = transaction
 
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception")
