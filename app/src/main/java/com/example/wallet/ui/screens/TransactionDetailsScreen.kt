@@ -18,7 +18,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
@@ -28,7 +27,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
    val viewModel: TransactionDetailsViewModel = viewModel() //ViewModel is bound to a composable
    viewModel.setTransactionId(transactionId)
    var dataLoaded = viewModel.dataLoaded.value
-   var transaction = viewModel.expense.value
+   var transaction = viewModel.transaction.value
    val transactionsCategories = viewModel.transactionCetegoriesStateNames.value
 
    if (dataLoaded === false) {

@@ -1,7 +1,10 @@
 package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.Expanse
@@ -20,6 +23,10 @@ class ExpansesViewModel(
     private val expanseCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
 ) : ViewModel() {
 
+    var minDatePicked = mutableStateOf("Start Date")
+    var maxDatePicked = mutableStateOf("End Date")
+    var expandedCalendarMin = mutableStateOf(false)
+    var expandedCalendarMax = mutableStateOf(false)
 
     val expansesState = mutableStateOf((emptyList<Expanse>()))
     var dataLoaded = mutableStateOf(false)

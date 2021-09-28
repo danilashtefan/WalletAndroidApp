@@ -5,14 +5,10 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.Expanse
-import com.example.wallet.model.classesFromResponse.Transaction
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.ExpansesRepository
-import com.example.wallet.model.response.ExpanseCategory
-import com.example.wallet.model.response.Expanses
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class TransactionDetailsViewModel(): ViewModel() {
@@ -20,16 +16,16 @@ class TransactionDetailsViewModel(): ViewModel() {
     private var transactionId: Int = 0;
     var dataLoaded = mutableStateOf(false)
     val transactionCetegoriesStateNames = mutableStateOf((listOf("")))
-    var expense = mutableStateOf(Expanse())
+    var transaction = mutableStateOf(Expanse())
 
     fun chooseCategory(category: String) {
         val transaction = ExpansesRepository.updateExpenseCategory(category, this.transactionId);
-        expense.value = transaction
+        this.transaction.value = transaction
     }
 
     fun updateField(field: String, value: String) {
         val transaction = ExpansesRepository.updateField(field, value, this.transactionId);
-        expense.value = transaction
+        this.transaction.value = transaction
     }
 
     init {
@@ -55,10 +51,10 @@ class TransactionDetailsViewModel(): ViewModel() {
         }
         this.transactionId = transactionId
         val transaction = ExpansesRepository.getExpense(this.transactionId)
-        expense.value = transaction
+        this.transaction.value = transaction
 
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception")
+            Log.d("EXCEPTION", "Thread exception setTransactionId")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {

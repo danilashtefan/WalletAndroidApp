@@ -23,8 +23,6 @@ import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.R
 import com.example.wallet.model.Expanse
-import com.example.wallet.model.classesFromResponse.Transaction
-import com.google.gson.Gson
 
 @Composable
 fun ExpansesScreen(navController: NavHostController) {
@@ -40,18 +38,18 @@ fun ExpansesScreen(navController: NavHostController) {
         modifier = Modifier
             .background(Color(0xFFBB87E4))
     ) {
-        TransactionListSection()
+        TransactionListSection(viewModel)
         ExpanseSection(expanses ,navController,viewModel)
     }
 
 }
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TransactionListSection(){
+fun TransactionListSection(
+    viewModel: ExpansesViewModel
+){
 
     Column() {
-        var minDatePicked : String? by remember { mutableStateOf("Start Date")}
-        var maxDatePicked : String? by remember { mutableStateOf("End Date")}
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Spacer(modifier = Modifier.padding(5.dp))
             Row() {
@@ -71,40 +69,20 @@ fun TransactionListSection(){
             )
         }
 
-        var expandedCalendarMin by remember { mutableStateOf(false) }
-        var expandedCalendarMax by remember { mutableStateOf(false) }
-
-
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(text = "Period: ",style =MaterialTheme.typography.h6, color = Color.White )
-            OutlinedButton(onClick = {expandedCalendarMin = !expandedCalendarMin}, enabled = !expandedCalendarMax) {
-                Text(text = minDatePicked.toString())
+            OutlinedButton(onClick = {viewModel.expandedCalendarMin.value = !viewModel.expandedCalendarMin.value}, enabled = !viewModel.expandedCalendarMax.value) {
+                Text(text = viewModel.minDatePicked.value.toString())
             }
-            OutlinedButton(onClick = {expandedCalendarMax = !expandedCalendarMax},enabled = !expandedCalendarMin) {
-                Text(text = maxDatePicked.toString())
+            OutlinedButton(onClick = {viewModel.expandedCalendarMax.value = !viewModel.expandedCalendarMax.value},enabled = !viewModel.expandedCalendarMin.value) {
+                Text(text = viewModel.maxDatePicked.value.toString())
             }
         }
-        AnimatedVisibility(visible = expandedCalendarMin) {
-            AndroidView(
-                { CalendarView(it) },
-                modifier = Modifier.wrapContentWidth(),
-                update = { views ->
-                    views.setOnDateChangeListener { calendarView, year, month, day ->
-                        minDatePicked = day.toString()
-                    }
-                }
-            )
+        AnimatedVisibility(visible = viewModel.expandedCalendarMin.value) {
+            CalendarDatePicker(viewModel, "minimum")
         }
-        AnimatedVisibility(visible = expandedCalendarMax) {
-            AndroidView(
-                { CalendarView(it) },
-                modifier = Modifier.wrapContentWidth(),
-                update = { views ->
-                    views.setOnDateChangeListener { calendarView, year, month, day ->
-                        maxDatePicked = day.toString()
-                    }
-                }
-            )
+        AnimatedVisibility(visible = viewModel.expandedCalendarMax.value) {
+            CalendarDatePicker(viewModel,"maximum")
         }
 
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
@@ -113,8 +91,24 @@ fun TransactionListSection(){
     }
 }
 
-
-
+@Composable
+private fun CalendarDatePicker(viewModel: ExpansesViewModel,
+                               dateType:String) {
+    AndroidView(
+        { CalendarView(it) },
+        modifier = Modifier.wrapContentWidth(),
+        update = { views ->
+            views.setOnDateChangeListener { calendarView, year, month, day ->
+                if(dateType == "minimum") {
+                    viewModel.minDatePicked.value = day.toString()
+                }
+                else{
+                    viewModel.maxDatePicked.value = day.toString()
+                }
+            }
+        }
+    )
+}
 
 
 @Composable
