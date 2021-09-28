@@ -1,25 +1,18 @@
 package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.Expanse
-import com.example.wallet.model.classesFromResponse.Transaction
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
-import com.example.wallet.model.repository.ExpansesRepository
-import com.example.wallet.model.response.ExpanseCategory
-import com.example.wallet.model.response.SingleExpanseCategoryResponse
-import com.google.gson.Gson
+import com.example.wallet.model.repository.TransactionsRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ExpansesViewModel(
-    private val expansesRepository: ExpansesRepository = ExpansesRepository,
+    private val expansesRepository: TransactionsRepository = TransactionsRepository,
     private val expanseCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
 ) : ViewModel() {
 
@@ -27,7 +20,6 @@ class ExpansesViewModel(
     var maxDatePicked = mutableStateOf("End Date")
     var expandedCalendarMin = mutableStateOf(false)
     var expandedCalendarMax = mutableStateOf(false)
-
     val expansesState = mutableStateOf((emptyList<Expanse>()))
     var dataLoaded = mutableStateOf(false)
     init {

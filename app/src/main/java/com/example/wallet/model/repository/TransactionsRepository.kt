@@ -1,13 +1,15 @@
 package com.example.wallet.model.repository
 
 import com.example.wallet.api.WalletWebService
+import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.AllExpansesResponse
 import com.example.wallet.model.Expanse
 import java.lang.Exception
 
-object ExpansesRepository {
+object TransactionsRepository {
     private val service: WalletWebService = WalletWebService()
     var expense = AllExpansesResponse()
+    var linkBuilder= LinkBuilder()
 
     suspend fun getExpanses(): AllExpansesResponse {
         expense = service.getExpanses()
@@ -26,24 +28,28 @@ object ExpansesRepository {
     fun updateExpenseCategory(category: String, transactionId: Int): Expanse {
         return updateField("categoryName", category, transactionId)
     }
-
-    fun updateField(field: String, value: String, transactionId: Int): Expanse {
+    fun updateField(field: String, value: String?, transactionId: Int): Expanse {
         for(expense in expense._embedded.expanses) {
             if (expense.id === transactionId) {
                 when (field) {
-                    "amount" -> expense.amount = value.toInt()
-                    "comments" -> expense.comments = value
-                    "date" -> expense.date = value
-                    "location" -> expense.location = value
-                    "name" -> expense.name = value
-                    "photoUrl" -> expense.photoUrl = value
-                    "categoryName" -> expense.categoryName = value
-                    "type" -> expense.type = value
+                    "amount" -> if (value != null) {
+                        expense.amount = value.toInt()
+                    }
+                    "comments" -> expense.comments = value.toString()
+                    "date" -> expense.date = value.toString()
+                    "location" -> expense.location = value.toString()
+                    "name" -> expense.name = value.toString()
+                    "photoUrl" -> expense.photoUrl = value.toString()
+                    "categoryName" -> expense.categoryName = value.toString()
+                    "type" -> expense.type = value.toString()
                 }
                 return expense;
             }
         }
         throw Exception("No expense found!");
     }
+
+
+
 
 }
