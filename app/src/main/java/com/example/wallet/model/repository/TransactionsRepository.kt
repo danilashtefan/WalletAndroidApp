@@ -10,7 +10,7 @@ import java.lang.Exception
 object TransactionsRepository {
     private val service: WalletWebService = WalletWebService()
     var expense = AllExpansesResponse()
-    var linkBuilder= LinkBuilder()
+    //var linkBuilder= LinkBuilder()
 
     suspend fun getExpanses(): AllExpansesResponse {
         expense = service.getExpanses()
