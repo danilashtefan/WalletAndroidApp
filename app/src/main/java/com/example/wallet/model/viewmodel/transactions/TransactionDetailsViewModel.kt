@@ -4,20 +4,23 @@ import android.util.Log
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
+import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.requests.EditExpenseRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class TransactionDetailsViewModel() : ViewModel() {
-    private val repository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
+    private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private var transactionId: Int = 0;
     var dataLoaded = mutableStateOf(false)
-    val transactionCetegoriesStateNames = mutableStateOf((listOf("")))
+    var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
     var transaction = mutableStateOf(Expanse())
+    val expanseCategoriesObjects = ""
 
 
     var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
@@ -26,8 +29,12 @@ class TransactionDetailsViewModel() : ViewModel() {
     var dateFieldTemporaryValueBeforeSavingtoDB: String? = null
     var commentsFieldTemporaryValueBeforeSavingtoDB: String? = null
     var locationFieldTemporaryValueBeforeSavingtoDB: String? = null
+
+    //This is only Category Name Displayed, not the actual Category name!!
     var categoryNameFieldTemporaryValueBeforeSavingtoDB: String? = null
     var typeFieldTemporaryValueBeforeSavingtoDB: String? = null
+
+    var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
     var walletFieldTemporaryValueBeforeSavingtoDB: String? = null
 
 
@@ -42,40 +49,39 @@ class TransactionDetailsViewModel() : ViewModel() {
         this.transaction.value = transaction
     }
 
-    fun updateTransactionInDb(){
+    fun updateTransactionInDb() {
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception when saving to DB")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
-            updateTransactionInDb(transactionId =transactionId, transactionData = EditExpenseRequest(
-                name = nameFieldTemporaryValueBeforeSavingtoDB,
-                amount = amountFieldTemporaryValueBeforeSavingtoDB?.toInt(),
-                date = dateFieldTemporaryValueBeforeSavingtoDB,
-                comments = commentsFieldTemporaryValueBeforeSavingtoDB,
-                location = locationFieldTemporaryValueBeforeSavingtoDB,
-                type = typeFieldTemporaryValueBeforeSavingtoDB
-            ))
+            updateTransactionInDb(
+                transactionId = transactionId, transactionData = EditExpenseRequest(
+                    name = nameFieldTemporaryValueBeforeSavingtoDB,
+                    amount = amountFieldTemporaryValueBeforeSavingtoDB?.toInt(),
+                    date = dateFieldTemporaryValueBeforeSavingtoDB,
+                    comments = commentsFieldTemporaryValueBeforeSavingtoDB,
+                    location = locationFieldTemporaryValueBeforeSavingtoDB,
+                    type = typeFieldTemporaryValueBeforeSavingtoDB,
+                    category = categoryLinkTemporaryValueBeforeSavingtoDB
+                )
+            )
         }
 
     }
 
 
     suspend fun updateTransactionInDb(transactionId: Int, transactionData: EditExpenseRequest) {
-        val transactionAfterUpdate =
-            TransactionsRepository.updateTransactionInDb(transactionId,transactionData)
+        val transactionAfterUpdate = TransactionsRepository.updateTransactionInDb(transactionId, transactionData)
     }
 
     init {
     }
 
-    suspend fun getTransactionCategoriesNames(): List<String> {
-        var listOfCategories = repository.getExpanseCategories()._embedded.expanseCategories
-        var transactionCategoriesStrings = mutableListOf<String>()
-        for (category in listOfCategories) {
-            transactionCategoriesStrings.add(category.expanseCategoryName)
-        }
-        return transactionCategoriesStrings
+    suspend fun getTransactionCategories(): List<ExpanseCategory> {
+        var listOfCategories =
+            categoriesRepository.getExpanseCategories()._embedded.expanseCategories
+        return listOfCategories
     }
 
     fun setTransactionId(transactionId: Int) {
@@ -97,16 +103,24 @@ class TransactionDetailsViewModel() : ViewModel() {
         this.photoUrlFieldTemporaryValueBeforeSavingtoDB = transaction.photoUrl
         /*TODO: Decide what to do with the walllet and category themselves... How to get category and wallet ID, Name etc...*/
 
+        this.categoryLinkTemporaryValueBeforeSavingtoDB = transaction._links?.category?.href
+        this.walletFieldTemporaryValueBeforeSavingtoDB = transaction._links?.wallet?.href
+
 
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception setTransactionId")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
-            val expanseCategories = getTransactionCategoriesNames()
-            transactionCetegoriesStateNames.value = expanseCategories
+            val expanseCategories = getTransactionCategories()
+            transactionCetegoriesState.value = expanseCategories
             dataLoaded.value = true;
         }
+    }
+
+    fun updateCategoryLinkValueBeforeSavingToDB(category: ExpanseCategory) {
+        this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
+        updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
     }
 
     fun updateTemporaryFieldValueBeforeSavingToDB(field: String, value: String) {

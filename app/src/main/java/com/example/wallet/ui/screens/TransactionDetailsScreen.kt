@@ -3,7 +3,6 @@ package com.example.wallet.ui.screens
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
+import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 
 @Composable
@@ -29,7 +29,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
     viewModel.setTransactionId(transactionId)
     var dataLoaded = viewModel.dataLoaded.value
     var transaction = viewModel.transaction.value
-    val transactionsCategories = viewModel.transactionCetegoriesStateNames.value
+    val transactionsCategories = viewModel.transactionCetegoriesState.value
     val nameFieldName = "name"
     val amountFieldName = "amount"
     val typeFieldName = "type"
@@ -142,7 +142,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
 private fun InfoSelctor(
     padding: Int,
     labelText: String,
-    optionsList: List<String>,
+    optionsList: List<ExpanseCategory>,
     enabled: Boolean = true,
     viewModel: TransactionDetailsViewModel,
     transactionId: Int
@@ -166,9 +166,9 @@ private fun InfoSelctor(
                 for (option in optionsList) {
                     Card(onClick = {
                         //viewModel.chooseCategory(option)
-                        viewModel.updateTemporaryFieldValueBeforeSavingToDB("categoryName",option)
+                        viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option)
+                        Text(option.expanseCategoryName)
                     }
                 }
 
