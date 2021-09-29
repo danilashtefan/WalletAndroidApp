@@ -28,7 +28,7 @@ import com.example.wallet.model.Expanse
 @Composable
 fun ExpansesScreen(navController: NavHostController) {
     val viewModel: ExpansesViewModel = viewModel() //ViewModel is bound to a composable
-    val expanses = viewModel.expansesState.value
+    val expanses = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
 
     if (!dataLoaded) {

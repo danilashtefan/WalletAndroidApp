@@ -20,8 +20,9 @@ class ExpansesViewModel(
     var maxDatePicked = mutableStateOf("End Date")
     var expandedCalendarMin = mutableStateOf(false)
     var expandedCalendarMax = mutableStateOf(false)
-    val expansesState = mutableStateOf((emptyList<Expanse>()))
+    val transactionState = mutableStateOf((emptyList<Expanse>()))
     var dataLoaded = mutableStateOf(false)
+
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception")
@@ -29,10 +30,12 @@ class ExpansesViewModel(
 
         viewModelScope.launch(handler + Dispatchers.IO) {
             var expanses = getExpanses()
-            for (expanse in expanses) {
-             expanse.categoryName = getAndSetCategoriesForExpanses(expanse.id)
+            for (transaction in expanses) {
+                val transactionCategoryNameAndId = getAndSetCategoriesForExpanses(transaction.id)
+                transaction.categoryName = transactionCategoryNameAndId.first
+                transaction.categoryId = transactionCategoryNameAndId.second
             }
-            expansesState.value = expanses
+            transactionState.value = expanses
             dataLoaded.value = true
         }
     }
@@ -41,13 +44,14 @@ class ExpansesViewModel(
         return expansesRepository.getExpanses()._embedded.expanses
     }
 
-   // Method to get the category of particular expanse
-    suspend fun getAndSetCategoriesForExpanses(expanseId : Int):String{
-      return expanseCategoriesRepository.getCategoryForExpanse(expanseId).expanseCategoryName
+    // Method to get the category of particular expanse
+    suspend fun getAndSetCategoriesForExpanses(expanseId: Int): Pair<String,Int> {
+        val categoryResponse = expanseCategoriesRepository.getCategoryForExpanse(expanseId)
+        return Pair(categoryResponse.expanseCategoryName, categoryResponse.id)
     }
 
     fun getTransaction(transactionId: Int): Expanse {
-        for(tx in expansesState.value) {
+        for (tx in transactionState.value) {
             if (tx.id === transactionId) {
                 return tx;
             }
@@ -59,7 +63,7 @@ class ExpansesViewModel(
 
     }
 
-    fun getSign(expanse: Expanse){
+    fun getSign(expanse: Expanse) {
 
     }
 

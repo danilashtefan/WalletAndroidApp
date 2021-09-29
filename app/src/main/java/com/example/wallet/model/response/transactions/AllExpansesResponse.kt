@@ -24,6 +24,7 @@ data class Expanse(
     var name: String = "",
     var photoUrl: String = "",
     var categoryName: String = "",
+    var categoryId: Int = 0,
     var type: String = ""
 )
 

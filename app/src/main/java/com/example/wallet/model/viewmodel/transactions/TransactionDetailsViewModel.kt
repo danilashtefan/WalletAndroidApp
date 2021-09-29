@@ -20,7 +20,7 @@ class TransactionDetailsViewModel() : ViewModel() {
     var dataLoaded = mutableStateOf(false)
     var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
     var transaction = mutableStateOf(Expanse())
-    val expanseCategoriesObjects = ""
+    var chosenCategory= ExpanseCategory()
 
 
     var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
@@ -103,7 +103,7 @@ class TransactionDetailsViewModel() : ViewModel() {
         this.photoUrlFieldTemporaryValueBeforeSavingtoDB = transaction.photoUrl
         /*TODO: Decide what to do with the walllet and category themselves... How to get category and wallet ID, Name etc...*/
 
-        this.categoryLinkTemporaryValueBeforeSavingtoDB = transaction._links?.category?.href
+        this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
         this.walletFieldTemporaryValueBeforeSavingtoDB = transaction._links?.wallet?.href
 
 
