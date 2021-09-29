@@ -1,11 +1,15 @@
 package com.example.wallet.api
 
 import com.example.wallet.model.AllExpansesResponse
+import com.example.wallet.model.Expanse
 import com.example.wallet.model.response.AllExpanseCategoriesResponse
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
+import com.example.wallet.requests.EditExpenseRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.Path
 
 
@@ -36,6 +40,10 @@ class WalletWebService {
         return api.getCategoryForExpanse(expanseId)
     }
 
+    suspend fun updateTransactionInDb(transactionId: Int, transactionData: EditExpenseRequest):Expanse{
+        return api.updateTransactionInDb(transactionId,transactionData)
+    }
+
     interface WalletAPI{
         @GET("expanses")
         suspend fun getExpanses(): AllExpansesResponse
@@ -46,6 +54,8 @@ class WalletWebService {
         @GET("expanses/{id}/category")
         suspend fun getCategoryForExpanse(@Path("id") expanseId: Int):SingleExpanseCategoryResponse
 
+        @PATCH("expanses/{id}")
+        suspend fun updateTransactionInDb(@Path("id") transactionId: Int, @Body transactionData: EditExpenseRequest):Expanse
 
     }
 }

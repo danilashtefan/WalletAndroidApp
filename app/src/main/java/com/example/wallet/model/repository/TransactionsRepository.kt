@@ -4,6 +4,7 @@ import com.example.wallet.api.WalletWebService
 import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.AllExpansesResponse
 import com.example.wallet.model.Expanse
+import com.example.wallet.requests.EditExpenseRequest
 import java.lang.Exception
 
 object TransactionsRepository {
@@ -43,11 +44,18 @@ object TransactionsRepository {
                     "categoryName" -> expense.categoryName = value.toString()
                     "type" -> expense.type = value.toString()
                 }
+
+                //PATCH All the changes to the Database when user wants them to be saved
                 return expense;
             }
         }
         throw Exception("No expense found!");
     }
+
+    suspend fun updateTransactionInDb(transactionId: Int, transactionData: EditExpenseRequest):Expanse{
+        return service.updateTransactionInDb(transactionId,transactionData)
+    }
+
 
 
 

@@ -125,10 +125,10 @@ fun TransactionDetailsScreen(transactionId: Int) {
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
             OutlinedButton(modifier = Modifier.padding(bottom = 20.dp),onClick = {
                 for(field in fieldsOnTheScreen){
-                   /*TODO ADD VIEWMODEL UPDATE FIELD METHOD*/
+                   /*TODO ADD VIEWMODEL UPDATE FIELD METHOD FINISH FOR WALLET AND CATEGORY*/
                     viewModel.updateField(field,viewModel.getFieldToUpdateInDB(field))
-
                 }
+                 viewModel.updateTransactionInDb()
             }) {
                 Text(text = "Save the changes")
             }
