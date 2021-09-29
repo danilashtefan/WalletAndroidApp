@@ -1,5 +1,6 @@
 package com.example.wallet.ui.screens
 
+import android.util.Log
 import android.widget.CalendarView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -117,6 +118,7 @@ fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController,vie
         items(expanses) { expanse ->
             ReusableRow(categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type){
                 val expanseId = expanse.id
+                expanse._links?.category?.let { Log.d("Expanse Category Link", it.href) }
                 navController.navigate("transactionDetails/$expanseId")
             }
         }
