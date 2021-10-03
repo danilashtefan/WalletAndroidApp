@@ -25,7 +25,7 @@ class TransactionDetailsViewModel() : ViewModel() {
     var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
     var transactionWalletsState = mutableStateOf((listOf(Wallet())))
     var transaction = mutableStateOf(Expanse())
-    var chosenCategory= ExpanseCategory()
+   // var chosenCategory= ExpanseCategory()
 
 
     var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
@@ -38,9 +38,10 @@ class TransactionDetailsViewModel() : ViewModel() {
     //This is only Category Name Displayed, not the actual Category name!!
     var categoryNameFieldTemporaryValueBeforeSavingtoDB: String? = null
     var typeFieldTemporaryValueBeforeSavingtoDB: String? = null
+    var walletNameFieldTemporaryValueBeforeSavingtoDB: String? = null
 
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
-    var walletFieldTemporaryValueBeforeSavingtoDB: String? = null
+    var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
 
 
     fun chooseCategory(category: String) {
@@ -68,7 +69,8 @@ class TransactionDetailsViewModel() : ViewModel() {
                     comments = commentsFieldTemporaryValueBeforeSavingtoDB,
                     location = locationFieldTemporaryValueBeforeSavingtoDB,
                     type = typeFieldTemporaryValueBeforeSavingtoDB,
-                    category = categoryLinkTemporaryValueBeforeSavingtoDB
+                    category = categoryLinkTemporaryValueBeforeSavingtoDB,
+                    wallet = walletLinkTemporaryValueBeforeSavingtoDB
                 )
             )
         }
@@ -106,12 +108,13 @@ class TransactionDetailsViewModel() : ViewModel() {
         this.amountFieldTemporaryValueBeforeSavingtoDB = transaction.amount.toString()
         this.typeFieldTemporaryValueBeforeSavingtoDB = transaction.type
         this.categoryNameFieldTemporaryValueBeforeSavingtoDB = transaction.categoryName
+        this.walletNameFieldTemporaryValueBeforeSavingtoDB = transaction.walletName
         this.dateFieldTemporaryValueBeforeSavingtoDB = transaction.date
         this.commentsFieldTemporaryValueBeforeSavingtoDB = transaction.comments
         this.locationFieldTemporaryValueBeforeSavingtoDB = transaction.location
         this.photoUrlFieldTemporaryValueBeforeSavingtoDB = transaction.photoUrl
         this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
-        this.walletFieldTemporaryValueBeforeSavingtoDB = transaction._links?.wallet?.href
+        this.walletLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildWalletLinkForAddingToExpanse(transaction.walletId)
 
 
         val handler = CoroutineExceptionHandler { _, exception ->
@@ -132,6 +135,11 @@ class TransactionDetailsViewModel() : ViewModel() {
         updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
     }
 
+    fun updateWalletLinkValueBeforeSavingToDB(wallet: Wallet){
+        this.walletLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
+        updateTemporaryFieldValueBeforeSavingToDB("walletName", wallet.walletName)
+    }
+
     fun updateTemporaryFieldValueBeforeSavingToDB(field: String, value: String) {
         when (field) {
             "amount" -> amountFieldTemporaryValueBeforeSavingtoDB = value
@@ -140,6 +148,7 @@ class TransactionDetailsViewModel() : ViewModel() {
             "location" -> locationFieldTemporaryValueBeforeSavingtoDB = value
             "name" -> nameFieldTemporaryValueBeforeSavingtoDB = value
             "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB = value
+            "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB = value
             "type" -> typeFieldTemporaryValueBeforeSavingtoDB = value
         }
 
@@ -153,6 +162,7 @@ class TransactionDetailsViewModel() : ViewModel() {
             "location" -> return locationFieldTemporaryValueBeforeSavingtoDB
             "name" -> return nameFieldTemporaryValueBeforeSavingtoDB
             "categoryName" -> return categoryNameFieldTemporaryValueBeforeSavingtoDB
+            "walletName" -> return walletNameFieldTemporaryValueBeforeSavingtoDB
             "type" -> return typeFieldTemporaryValueBeforeSavingtoDB
         }
         return null

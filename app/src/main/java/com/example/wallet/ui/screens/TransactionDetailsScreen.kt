@@ -226,8 +226,7 @@ private fun WalletSelctor(
             Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
                 for (option in optionsList) {
                     Card(onClick = {
-                        //viewModel.chooseCategory(option)
-                        //viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
+                        viewModel.updateWalletLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
                         Text(option.walletName)
                     }

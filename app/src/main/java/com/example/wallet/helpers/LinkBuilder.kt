@@ -9,5 +9,10 @@ object LinkBuilder {
         return categoryUrl
     }
 
+    fun buildWalletLinkForAddingToExpanse(walletId: Int): String{
+        val walletBaseUrl = "http://localhost:8080/api/wallet/"
+        var walletUrl = walletBaseUrl + walletId.toString()
+        return walletUrl
+    }
 
 }
