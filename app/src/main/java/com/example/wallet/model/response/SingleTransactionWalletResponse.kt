@@ -1,6 +1,6 @@
 package com.example.wallet.model.response
 
-data class SingleExpenseWalletResponse(
+data class SingleTransactionWalletResponse(
     val _links: Links,
     val id: Int,
     val walletName: String

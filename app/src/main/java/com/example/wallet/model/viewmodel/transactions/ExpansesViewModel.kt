@@ -31,7 +31,7 @@ class ExpansesViewModel(
         viewModelScope.launch(handler + Dispatchers.IO) {
             var expanses = getExpanses()
             for (transaction in expanses) {
-                val transactionCategoryNameAndId = getAndSetCategoriesForExpanses(transaction.id)
+                val transactionCategoryNameAndId = getAndSetCategoriesForTransactions(transaction.id)
                 transaction.categoryName = transactionCategoryNameAndId.first
                 transaction.categoryId = transactionCategoryNameAndId.second
             }
@@ -45,10 +45,12 @@ class ExpansesViewModel(
     }
 
     // Method to get the category of particular expanse
-    suspend fun getAndSetCategoriesForExpanses(expanseId: Int): Pair<String,Int> {
+    suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Pair<String,Int> {
         val categoryResponse = expanseCategoriesRepository.getCategoryForExpanse(expanseId)
         return Pair(categoryResponse.expanseCategoryName, categoryResponse.id)
     }
+
+    //suspend fun getAndSet
 
     fun getTransaction(transactionId: Int): Expanse {
         for (tx in transactionState.value) {

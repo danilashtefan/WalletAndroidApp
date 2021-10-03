@@ -8,6 +8,7 @@ import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
+import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.requests.EditExpenseRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class TransactionDetailsViewModel() : ViewModel() {
     private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
+    private val walletRepository: WalletRepository = WalletRepository()
    // private val walletRepository: WalletRepository = WalletRepository()
     private var transactionId: Int = 0;
     var dataLoaded = mutableStateOf(false)
