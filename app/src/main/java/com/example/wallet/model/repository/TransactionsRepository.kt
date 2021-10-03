@@ -43,6 +43,7 @@ object TransactionsRepository {
                     "photoUrl" -> expense.photoUrl = value.toString()
                     "categoryName" -> expense.categoryName = value.toString()
                     "type" -> expense.type = value.toString()
+                    "walletName"->expense.walletName = value.toString()
                 }
 
                 //PATCH All the changes to the Database when user wants them to be saved

@@ -39,6 +39,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
     val commentsFieldName = "comments"
     val locationFieldName = "location"
     val categoryFieldName = "categoryName"
+    val walletFieldName = "walletName"
     val fieldsOnTheScreen = arrayListOf<String>(
         nameFieldName,
         amountFieldName,
@@ -46,7 +47,8 @@ fun TransactionDetailsScreen(transactionId: Int) {
         dateFieldName,
         commentsFieldName,
         locationFieldName,
-        categoryFieldName
+        categoryFieldName,
+        walletFieldName
     )
 
     if (dataLoaded === false) {
@@ -184,7 +186,6 @@ private fun CategorySelctor(
             Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
                 for (option in optionsList) {
                     Card(onClick = {
-                        //viewModel.chooseCategory(option)
                         viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
                         Text(option.expanseCategoryName)

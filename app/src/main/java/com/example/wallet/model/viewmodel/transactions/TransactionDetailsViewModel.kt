@@ -45,8 +45,7 @@ class TransactionDetailsViewModel() : ViewModel() {
 
 
     fun chooseCategory(category: String) {
-        val transaction =
-            TransactionsRepository.updateExpenseCategory(category, this.transactionId);
+        val transaction = TransactionsRepository.updateExpenseCategory(category, this.transactionId);
         this.transaction.value = transaction
     }
 
