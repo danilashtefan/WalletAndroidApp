@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 
 class TransactionDetailsViewModel() : ViewModel() {
     private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
+   // private val walletRepository: WalletRepository = WalletRepository()
     private var transactionId: Int = 0;
     var dataLoaded = mutableStateOf(false)
     var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
@@ -79,8 +80,7 @@ class TransactionDetailsViewModel() : ViewModel() {
     }
 
     suspend fun getTransactionCategories(): List<ExpanseCategory> {
-        var listOfCategories =
-            categoriesRepository.getExpanseCategories()._embedded.expanseCategories
+        var listOfCategories = categoriesRepository.getExpanseCategories()._embedded.expanseCategories
         return listOfCategories
     }
 

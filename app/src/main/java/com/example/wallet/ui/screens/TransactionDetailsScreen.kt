@@ -57,8 +57,8 @@ fun TransactionDetailsScreen(transactionId: Int) {
                 painter = painterResource(id = R.drawable.wallet_no_background_cropped),
                 contentDescription = "",
                 modifier = Modifier
-                   .size(70.dp)
-                   .padding(top = 10.dp, end = 10.dp)
+                    .size(70.dp)
+                    .padding(top = 10.dp, end = 10.dp)
             )
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -93,13 +93,23 @@ fun TransactionDetailsScreen(transactionId: Int) {
             viewModel = viewModel
         )
         //InfoRow(20,"Category")
-        InfoSelctor(
-            padding = 20,
-            labelText = transaction.categoryName,
-            transactionsCategories,
-            viewModel = viewModel,
-            transactionId = transaction.id
-        )
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Category: ")
+            CategorySelctor(
+                padding = 20,
+                labelText = transaction.categoryName,
+                transactionsCategories,
+                viewModel = viewModel,
+                transactionId = transaction.id
+            )
+        }
+
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Text(text = "Wallet: ")
+
+         /*TODO: Add wallet selector*/
+
+        }
         EditableField(
             20,
             field = dateFieldName,
@@ -139,7 +149,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-private fun InfoSelctor(
+private fun CategorySelctor(
     padding: Int,
     labelText: String,
     optionsList: List<ExpanseCategory>,
@@ -151,8 +161,8 @@ private fun InfoSelctor(
         var expanded by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
-               .padding(top = padding.dp)
-               .fillMaxWidth(),
+                .padding(top = padding.dp)
+                .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -179,6 +189,49 @@ private fun InfoSelctor(
 }
 
 
+@OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
+@Composable
+private fun WalletSelctor(
+    padding: Int,
+    labelText: String,
+    optionsList: List<ExpanseCategory>,
+    enabled: Boolean = true,
+    viewModel: TransactionDetailsViewModel,
+    transactionId: Int
+) {
+    Column() {
+        var expanded by remember { mutableStateOf(false) }
+        Row(
+            modifier = Modifier
+                .padding(top = padding.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled) {
+                Text(text = labelText)
+            }
+        }
+        AnimatedVisibility(visible = expanded) {
+            Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
+                for (option in optionsList) {
+                    Card(onClick = {
+                        //viewModel.chooseCategory(option)
+                        viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
+                    }, modifier = Modifier.padding(7.dp)) {
+                        Text(option.expanseCategoryName)
+                    }
+                }
+
+            }
+        }
+    }
+
+}
+
+
+
 @Composable
 private fun EditableField(
     padding: Int,
@@ -190,8 +243,8 @@ private fun EditableField(
 ) {
     Row(
         modifier = Modifier
-           .padding(top = padding.dp)
-           .fillMaxWidth(),
+            .padding(top = padding.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
