@@ -7,13 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
+import com.example.wallet.model.repository.WalletRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ExpansesViewModel(
     private val expansesRepository: TransactionsRepository = TransactionsRepository,
-    private val expanseCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
+    private val transactionCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository(),
+    private val transactionWalletsRepository: WalletRepository = WalletRepository()
 ) : ViewModel() {
 
     var minDatePicked = mutableStateOf("Start Date")
@@ -34,6 +36,9 @@ class ExpansesViewModel(
                 val transactionCategoryNameAndId = getAndSetCategoriesForTransactions(transaction.id)
                 transaction.categoryName = transactionCategoryNameAndId.first
                 transaction.categoryId = transactionCategoryNameAndId.second
+                val transactionWalletNameAndId = getAndSetWalletForTransactions(transaction.id)
+                transaction.walletName = transactionWalletNameAndId.first
+                transaction.walletId = transactionWalletNameAndId.second
             }
             transactionState.value = expanses
             dataLoaded.value = true
@@ -45,12 +50,15 @@ class ExpansesViewModel(
     }
 
     // Method to get the category of particular expanse
-    suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Pair<String,Int> {
-        val categoryResponse = expanseCategoriesRepository.getCategoryForExpanse(expanseId)
+    suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Pair<String, Int> {
+        val categoryResponse = transactionCategoriesRepository.getCategoryForExpanse(expanseId)
         return Pair(categoryResponse.expanseCategoryName, categoryResponse.id)
     }
 
-    //suspend fun getAndSet
+    suspend fun getAndSetWalletForTransactions(expanseId: Int): Pair<String, Int> {
+        val walletResponse = transactionWalletsRepository.getWalletForExpanse(expanseId)
+        return Pair(walletResponse.walletName, walletResponse.id)
+    }
 
     fun getTransaction(transactionId: Int): Expanse {
         for (tx in transactionState.value) {

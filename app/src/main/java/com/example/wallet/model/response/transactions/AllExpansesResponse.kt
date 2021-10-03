@@ -24,8 +24,9 @@ data class Expanse(
     var name: String = "",
     var photoUrl: String = "",
     var categoryName: String = "",
-    var walletName: String = "",
     var categoryId: Int = 0,
+    var walletName: String = "",
+    var walletId: Int = 0,
     var type: String = ""
 )
 
