@@ -6,7 +6,7 @@ data class SingleTransactionWalletResponse(
     val walletName: String
 )
 
-data class Wallet(
+data class SingleWallet(
     val href: String
 )
 data class SingleWalletSelf(
@@ -17,7 +17,7 @@ data class SingleWalletLinks(
     val currency: Currency,
     val expanses: Expanses,
     val self: Self,
-    val wallet: Wallet
+    val wallet: SingleWallet
 )
 
 data class SingleWalletExpanses(

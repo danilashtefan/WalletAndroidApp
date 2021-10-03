@@ -5,6 +5,7 @@ import com.example.wallet.model.Expanse
 import com.example.wallet.model.response.AllExpanseCategoriesResponse
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.SingleTransactionWalletResponse
+import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
 import com.example.wallet.requests.EditExpenseRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -37,14 +38,17 @@ class WalletWebService {
        return api.getExpanseCategories()
     }
 
-    suspend fun getCategoryForExpanse(expanseId: Int): SingleExpanseCategoryResponse{
-        return api.getCategoryForExpanse(expanseId)
+    suspend fun getCategoryForExpanse(expenseId: Int): SingleExpanseCategoryResponse{
+        return api.getCategoryForExpanse(expenseId)
     }
 
-    suspend fun getWalletForExpanse(expanseId: Int): SingleTransactionWalletResponse {
-        return api.getWalletForExpanse(expanseId)
+    suspend fun getWalletForExpanse(expenseId: Int): SingleTransactionWalletResponse {
+        return api.getWalletForExpanse(expenseId)
     }
 
+    suspend fun getWallets(): AllTransactionWalletsResponse{
+        return api.getWallets()
+    }
     suspend fun updateTransactionInDb(transactionId: Int, transactionData: EditExpenseRequest):Expanse{
         return api.updateTransactionInDb(transactionId,transactionData)
     }
@@ -64,6 +68,10 @@ class WalletWebService {
 
         @GET("expanses/{id}/wallet")
         suspend fun getWalletForExpanse(@Path("id") expanseId: Int):SingleTransactionWalletResponse
+
+        @GET("wallets")
+        suspend fun getWallets():AllTransactionWalletsResponse
+
 
     }
 }

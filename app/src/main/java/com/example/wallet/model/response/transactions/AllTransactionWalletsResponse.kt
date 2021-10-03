@@ -11,9 +11,9 @@ data class WalletX(
 )
 
 data class Wallet(
-    val _links: Links,
-    val id: Int,
-    val walletName: String
+    val _links: Links? = null,
+    val id: Int = 0,
+    val walletName: String = ""
 )
 
 data class SelfX(

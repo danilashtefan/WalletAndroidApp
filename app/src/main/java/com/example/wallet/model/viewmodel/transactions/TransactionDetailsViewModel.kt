@@ -10,6 +10,7 @@ import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.ExpanseCategory
+import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.requests.EditExpenseRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +23,7 @@ class TransactionDetailsViewModel() : ViewModel() {
     private var transactionId: Int = 0;
     var dataLoaded = mutableStateOf(false)
     var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
+    var transactionWalletsState = mutableStateOf((listOf(Wallet())))
     var transaction = mutableStateOf(Expanse())
     var chosenCategory= ExpanseCategory()
 
@@ -86,6 +88,11 @@ class TransactionDetailsViewModel() : ViewModel() {
         return listOfCategories
     }
 
+    suspend fun getTransactionWallets(): List<Wallet>{
+        var listOfWallets = walletRepository.getWallets()._embedded.wallets
+        return listOfWallets
+    }
+
     fun setTransactionId(transactionId: Int) {
         if (transactionId === this.transactionId) {
             return;
@@ -103,8 +110,6 @@ class TransactionDetailsViewModel() : ViewModel() {
         this.commentsFieldTemporaryValueBeforeSavingtoDB = transaction.comments
         this.locationFieldTemporaryValueBeforeSavingtoDB = transaction.location
         this.photoUrlFieldTemporaryValueBeforeSavingtoDB = transaction.photoUrl
-        /*TODO: Decide what to do with the walllet and category themselves... How to get category and wallet ID, Name etc...*/
-
         this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
         this.walletFieldTemporaryValueBeforeSavingtoDB = transaction._links?.wallet?.href
 
@@ -114,8 +119,10 @@ class TransactionDetailsViewModel() : ViewModel() {
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
-            val expanseCategories = getTransactionCategories()
-            transactionCetegoriesState.value = expanseCategories
+            val transactionCategories = getTransactionCategories()
+            val transactionWallets = getTransactionWallets()
+            transactionCetegoriesState.value = transactionCategories
+            transactionWalletsState.value = transactionWallets
             dataLoaded.value = true;
         }
     }

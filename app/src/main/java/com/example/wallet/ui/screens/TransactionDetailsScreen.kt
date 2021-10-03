@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
 import com.example.wallet.model.response.ExpanseCategory
+import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 
 @Composable
@@ -30,6 +31,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
     var dataLoaded = viewModel.dataLoaded.value
     var transaction = viewModel.transaction.value
     val transactionsCategories = viewModel.transactionCetegoriesState.value
+    val transactionsWallet = viewModel.transactionWalletsState.value
     val nameFieldName = "name"
     val amountFieldName = "amount"
     val typeFieldName = "type"
@@ -98,7 +100,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
             CategorySelctor(
                 padding = 20,
                 labelText = transaction.categoryName,
-                transactionsCategories,
+                optionsList = transactionsCategories,
                 viewModel = viewModel,
                 transactionId = transaction.id
             )
@@ -108,6 +110,13 @@ fun TransactionDetailsScreen(transactionId: Int) {
             Text(text = "Wallet: ")
 
          /*TODO: Add wallet selector*/
+            WalletSelctor(
+                padding = 20,
+                labelText = transaction.walletName,
+                optionsList = transactionsWallet,
+                viewModel = viewModel,
+                transactionId =transactionId
+            )
 
         }
         EditableField(
@@ -194,7 +203,7 @@ private fun CategorySelctor(
 private fun WalletSelctor(
     padding: Int,
     labelText: String,
-    optionsList: List<ExpanseCategory>,
+    optionsList: List<Wallet>,
     enabled: Boolean = true,
     viewModel: TransactionDetailsViewModel,
     transactionId: Int
@@ -218,9 +227,9 @@ private fun WalletSelctor(
                 for (option in optionsList) {
                     Card(onClick = {
                         //viewModel.chooseCategory(option)
-                        viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
+                        //viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option.expanseCategoryName)
+                        Text(option.walletName)
                     }
                 }
 
