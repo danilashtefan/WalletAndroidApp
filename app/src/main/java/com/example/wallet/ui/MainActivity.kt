@@ -51,7 +51,7 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate(it.route)
                             }
                         )}
-                    ) {innerPadding->innerPadding.calculateBottomPadding()
+                    ) {innerPadding->innerPadding.calculateTopPadding()
                         Box(modifier = Modifier
                             .fillMaxSize()
                             .background(Color(0xFFBB87E4))
