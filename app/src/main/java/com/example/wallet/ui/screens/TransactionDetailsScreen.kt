@@ -56,40 +56,23 @@ fun TransactionDetailsScreen(transactionId: Int) {
     }
 
     Column(Modifier.verticalScroll(rememberScrollState())) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            Image(
-                painter = painterResource(id = R.drawable.wallet_no_background_cropped),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(70.dp)
-                    .padding(top = 10.dp, end = 10.dp)
-            )
-        }
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            Card(
-                shape = CircleShape,
-                border = BorderStroke(width = 2.dp, color = Color.White),
-                modifier = Modifier.size(150.dp),
-                elevation = 5.dp
-            ) {
-                CategoryImage()
-            }
-        }
-        EditableField(
+        LogoTransactionDetailsSection()
+        ImageSection()
+        EditableFieldTransactionDetails(
             padding = 100,
             field = nameFieldName,
             labelText = "Name",
             value = transaction.name,
             viewModel = viewModel
         )
-        EditableField(
+        EditableFieldTransactionDetails(
             padding = 20,
             field = amountFieldName,
             labelText = "Amount",
             value = transaction.amount,
             viewModel = viewModel
         )
-        EditableField(
+        EditableFieldTransactionDetails(
             padding = 20,
             field = typeFieldName,
             labelText = "Type",
@@ -111,50 +94,76 @@ fun TransactionDetailsScreen(transactionId: Int) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(text = "Wallet: ")
 
-         /*TODO: Add wallet selector*/
+            /*TODO: Add wallet selector*/
             WalletSelctor(
                 padding = 20,
                 labelText = transaction.walletName,
                 optionsList = transactionsWallet,
                 viewModel = viewModel,
-                transactionId =transactionId
+                transactionId = transactionId
             )
 
         }
-        EditableField(
+        EditableFieldTransactionDetails(
             20,
             field = dateFieldName,
             labelText = "Date",
-            value=transaction.date,
+            value = transaction.date,
             viewModel = viewModel
         )
-        EditableField(
+        EditableFieldTransactionDetails(
             20,
             field = commentsFieldName,
             labelText = "Comments",
             value = transaction.comments,
             viewModel = viewModel
         )
-        EditableField(
+        EditableFieldTransactionDetails(
             20,
             field = locationFieldName,
             labelText = "Location",
-           value=transaction.location,
+            value = transaction.location,
             viewModel = viewModel
         )
         Spacer(modifier = Modifier.size(20.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            OutlinedButton(modifier = Modifier.padding(bottom = 20.dp),onClick = {
-                for(field in fieldsOnTheScreen){
-                   /*TODO ADD VIEWMODEL UPDATE FIELD METHOD FINISH FOR WALLET AND CATEGORY*/
-                    viewModel.updateField(field,viewModel.getFieldToUpdateInDB(field))
+            OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
+                for (field in fieldsOnTheScreen) {
+                    viewModel.updateField(field, viewModel.getFieldToUpdateInDB(field))
                 }
-                 viewModel.updateTransactionInDb()
+                viewModel.updateTransactionInDb()
             }) {
                 Text(text = "Save the changes")
             }
         }
 
+    }
+}
+
+@Composable
+private fun LogoTransactionDetailsSection() {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+        Image(
+            painter = painterResource(id = R.drawable.wallet_no_background_cropped),
+            contentDescription = "",
+            modifier = Modifier
+                .size(70.dp)
+                .padding(top = 10.dp, end = 10.dp)
+        )
+    }
+}
+
+@Composable
+fun ImageSection() {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        Card(
+            shape = CircleShape,
+            border = BorderStroke(width = 2.dp, color = Color.White),
+            modifier = Modifier.size(150.dp),
+            elevation = 5.dp
+        ) {
+            CategoryImage()
+        }
     }
 }
 
@@ -240,9 +249,8 @@ private fun WalletSelctor(
 }
 
 
-
 @Composable
-private fun EditableField(
+private fun EditableFieldTransactionDetails(
     padding: Int,
     field: String,
     labelText: String,
@@ -276,7 +284,7 @@ private fun EditableField(
             enabled = enabled,
             onValueChange = {
                 textState.value = it
-              //  viewModel.updateField(field, textState.value.text)
+                //  viewModel.updateField(field, textState.value.text)
                 viewModel.updateTemporaryFieldValueBeforeSavingToDB(field, textState.value.text)
 
             },

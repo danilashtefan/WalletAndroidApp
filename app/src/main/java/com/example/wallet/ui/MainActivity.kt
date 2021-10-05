@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Money
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.wallet.model.classesFromResponse.Transaction
 import com.example.wallet.ui.navigationBar.BottomNavigationBar
 import com.example.wallet.ui.navigationBar.BottomNavigationItem
+import com.example.wallet.ui.screens.AddScreen
 import com.example.wallet.ui.screens.ExpanseCategoriesScreen
 import com.example.wallet.ui.screens.TransactionDetailsScreen
 import com.example.wallet.ui.screens.ExpansesScreen
@@ -42,9 +44,14 @@ class MainActivity : ComponentActivity() {
                                 BottomNavigationItem("Expenses",
                                 route = "expanses",
                                 icon = Icons.Default.Money),
+                                BottomNavigationItem("Add",
+                                    route = "add",
+                                    icon = Icons.Default.Add
+                                ),
                                 BottomNavigationItem("Categories",
                                     route = "categories",
                                     icon = Icons.Default.Book)
+
                             ),
                             navController = navController ,
                             onItemClick = {
@@ -77,6 +84,9 @@ fun UsersApplication(navController: NavHostController){
             ExpanseCategoriesScreen(navHostController = navController)
         }
 
+        composable("add"){
+          AddScreen(navController = navController)
+        }
         composable("transactionDetails/{transactionId}",
         arguments = listOf(navArgument("transactionId"){
             type = NavType.IntType

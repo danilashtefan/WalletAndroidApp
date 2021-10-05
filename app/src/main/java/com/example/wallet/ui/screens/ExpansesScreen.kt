@@ -52,16 +52,7 @@ fun TransactionListSection(
 
     Column() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Spacer(modifier = Modifier.padding(5.dp))
-            Row() {
-                Image(
-                    painter = painterResource(id = R.drawable.wallet_no_background_cropped),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .size(120.dp)
-                        .weight(1f)
-                )
-            }
+            LogoSection()
             Spacer(modifier = Modifier.padding(5.dp))
             Text(
                 text = "Transaction list",
@@ -89,6 +80,20 @@ fun TransactionListSection(
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(text = "Total expanses:",style =MaterialTheme.typography.h6, color = Color.White )
         }
+    }
+}
+
+@Composable
+fun LogoSection() {
+    Spacer(modifier = Modifier.padding(5.dp))
+    Row() {
+        Image(
+            painter = painterResource(id = R.drawable.wallet_no_background_cropped),
+            contentDescription = "",
+            modifier = Modifier
+                .size(120.dp)
+                .weight(1f)
+        )
     }
 }
 
