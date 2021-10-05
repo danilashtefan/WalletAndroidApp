@@ -16,7 +16,7 @@ class AddViewModel: ViewModel() {
 
     //This is only Category Name Displayed, not the actual Category name!!
     var categoryNameFieldTemporaryValueBeforeSavingtoDB: String? = null
-    var typeFieldTemporaryValueBeforeSavingtoDB: String? = null
+    var typeFieldTemporaryValueBeforeSavingtoDB: String? = "Type of transaction"
     var walletNameFieldTemporaryValueBeforeSavingtoDB: String? = null
 
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null

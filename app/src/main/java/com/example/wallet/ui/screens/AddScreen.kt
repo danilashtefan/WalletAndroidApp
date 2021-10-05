@@ -1,21 +1,18 @@
 package com.example.wallet.ui.screens
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,6 +44,7 @@ fun AddScreen(navController: NavHostController) {
 @Composable
 fun AddingSection(viewModel: AddViewModel) {
     when (viewModel.whatToAddstate.value) {
+        "" -> TransactionAddSection(viewModel)
         "transaction" -> TransactionAddSection(viewModel)
         "category" -> CategoryAddSection()
         "wallet" -> WalletAddSection()
@@ -94,16 +92,60 @@ fun TransactionAddSection(viewModel: AddViewModel) {
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
         )
 
-        TypeSelectorTransactionAdd()
+
+        viewModel.typeFieldTemporaryValueBeforeSavingtoDB?.let {
+            TypeSelectorTransactionAdd(
+                padding = 20,
+                labelText = it,
+                optionsList = listOf("Expense", "Income"),
+                viewModel = viewModel
+            )
+        }
+
+
+
 
 
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 fun TypeSelectorTransactionAdd(
-
+    padding: Int,
+    labelText: String,
+    optionsList: List<String>,
+    enabled: Boolean = true,
+    viewModel: AddViewModel,
 ) {
+
+    Column() {
+        var expanded by remember { mutableStateOf(false) }
+        Row(
+            modifier = Modifier
+                .padding(top = padding.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled) {
+                Text(text = labelText)
+            }
+        }
+        AnimatedVisibility(visible = expanded) {
+            Row(modifier = Modifier.horizontalScroll(rememberScrollState()) .fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                for (option in optionsList) {
+                    Card(onClick = {
+                        viewModel.updateTemporaryFieldValueBeforeSavingToDB("type", option)
+                    }, modifier = Modifier.padding(7.dp)) {
+                        Text(option)
+                    }
+                }
+
+            }
+        }
+    }
 
 }
 

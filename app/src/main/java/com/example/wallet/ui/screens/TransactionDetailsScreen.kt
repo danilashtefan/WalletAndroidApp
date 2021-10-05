@@ -82,7 +82,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
         //InfoRow(20,"Category")
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(text = "Category: ")
-            CategorySelctor(
+            CategorySelctorTransactionDetails(
                 padding = 20,
                 labelText = transaction.categoryName,
                 optionsList = transactionsCategories,
@@ -95,7 +95,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
             Text(text = "Wallet: ")
 
             /*TODO: Add wallet selector*/
-            WalletSelctor(
+            WalletSelctorTransactionDetails(
                 padding = 20,
                 labelText = transaction.walletName,
                 optionsList = transactionsWallet,
@@ -169,7 +169,7 @@ fun ImageSection() {
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-private fun CategorySelctor(
+private fun CategorySelctorTransactionDetails(
     padding: Int,
     labelText: String,
     optionsList: List<ExpanseCategory>,
@@ -210,7 +210,7 @@ private fun CategorySelctor(
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
-private fun WalletSelctor(
+private fun WalletSelctorTransactionDetails(
     padding: Int,
     labelText: String,
     optionsList: List<Wallet>,
