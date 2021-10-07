@@ -126,17 +126,25 @@ fun TransactionDetailsScreen(transactionId: Int) {
             viewModel = viewModel
         )
         Spacer(modifier = Modifier.size(20.dp))
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-            OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
-                for (field in fieldsOnTheScreen) {
-                    viewModel.updateField(field, viewModel.getFieldToUpdateInDB(field))
-                }
-                viewModel.updateTransactionInDb()
-            }) {
-                Text(text = "Save the changes")
-            }
-        }
+        SaveButtonTransactionDetails(fieldsOnTheScreen, viewModel)
 
+    }
+}
+
+@Composable
+private fun SaveButtonTransactionDetails(
+    fieldsOnTheScreen: ArrayList<String>,
+    viewModel: TransactionDetailsViewModel
+) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
+            for (field in fieldsOnTheScreen) {
+                viewModel.updateField(field, viewModel.getFieldToUpdateInDB(field))
+            }
+            viewModel.updateTransactionInDb()
+        }) {
+            Text(text = "Save the changes")
+        }
     }
 }
 

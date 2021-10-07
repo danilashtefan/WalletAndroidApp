@@ -52,7 +52,7 @@ fun TransactionListSection(
 
     Column() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            LogoSection()
+            LogoSection(pictureSize = 120)
             Spacer(modifier = Modifier.padding(5.dp))
             Text(
                 text = "Transaction list",
@@ -84,14 +84,14 @@ fun TransactionListSection(
 }
 
 @Composable
-fun LogoSection() {
+fun LogoSection(pictureSize: Int) {
     Spacer(modifier = Modifier.padding(5.dp))
     Row() {
         Image(
             painter = painterResource(id = R.drawable.wallet_no_background_cropped),
             contentDescription = "",
             modifier = Modifier
-                .size(120.dp)
+                .size(pictureSize.dp)
                 .weight(1f)
         )
     }

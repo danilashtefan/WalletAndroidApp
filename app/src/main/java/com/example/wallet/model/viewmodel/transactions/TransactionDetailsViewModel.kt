@@ -11,7 +11,7 @@ import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.Wallet
-import com.example.wallet.requests.EditExpenseRequest
+import com.example.wallet.requests.AddOrEditTransactionRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -61,7 +61,7 @@ class TransactionDetailsViewModel() : ViewModel() {
 
         viewModelScope.launch(handler + Dispatchers.IO) {
             updateTransactionInDb(
-                transactionId = transactionId, transactionData = EditExpenseRequest(
+                transactionId = transactionId, transactionData = AddOrEditTransactionRequest(
                     name = nameFieldTemporaryValueBeforeSavingtoDB,
                     amount = amountFieldTemporaryValueBeforeSavingtoDB?.toInt(),
                     date = dateFieldTemporaryValueBeforeSavingtoDB,
@@ -77,8 +77,8 @@ class TransactionDetailsViewModel() : ViewModel() {
     }
 
 
-    suspend fun updateTransactionInDb(transactionId: Int, transactionData: EditExpenseRequest) {
-        val transactionAfterUpdate = TransactionsRepository.updateTransactionInDb(transactionId, transactionData)
+    suspend fun updateTransactionInDb(transactionId: Int, transactionData: AddOrEditTransactionRequest) {
+         TransactionsRepository.updateTransactionInDb(transactionId, transactionData)
     }
 
     init {

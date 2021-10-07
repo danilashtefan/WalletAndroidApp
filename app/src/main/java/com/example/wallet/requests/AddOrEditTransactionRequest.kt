@@ -1,6 +1,6 @@
 package com.example.wallet.requests
 
-data class EditExpenseRequest (
+data class AddOrEditTransactionRequest (
     var name: String? = null,
     var amount: Int? = 0,
     var type:String? = null,

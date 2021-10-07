@@ -1,10 +1,9 @@
 package com.example.wallet.model.repository
 
 import com.example.wallet.api.WalletWebService
-import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.AllExpansesResponse
 import com.example.wallet.model.Expanse
-import com.example.wallet.requests.EditExpenseRequest
+import com.example.wallet.requests.AddOrEditTransactionRequest
 import java.lang.Exception
 
 object TransactionsRepository {
@@ -53,12 +52,15 @@ object TransactionsRepository {
         throw Exception("No expense found!");
     }
 
-    suspend fun updateTransactionInDb(transactionId: Int, transactionData: EditExpenseRequest):Expanse{
+
+    suspend fun updateTransactionInDb(transactionId: Int, transactionData: AddOrEditTransactionRequest):Expanse{
         return service.updateTransactionInDb(transactionId,transactionData)
     }
 
+    suspend fun addTransactionToDb(transactionData:AddOrEditTransactionRequest) {
+        return service.addTransactionToDb(transactionData)
 
-
+    }
 
 
 }
