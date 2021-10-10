@@ -1,6 +1,7 @@
 package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -20,9 +21,10 @@ class AddViewModel: ViewModel() {
     private val walletRepository: WalletRepository = WalletRepository()
 
 
-
+//RELATED TO TRANSACTION ADD
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
     var whatToAddstate = mutableStateOf("")
-
     var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
     var amountFieldTemporaryValueBeforeSavingtoDB: String? = null
     var dateFieldTemporaryValueBeforeSavingtoDB: String? = null
@@ -34,11 +36,15 @@ class AddViewModel: ViewModel() {
     var categoryNameFieldTemporaryValueBeforeSavingtoDB: String? = "Category of transaction"
     var typeFieldTemporaryValueBeforeSavingtoDB: String? = "Type of transaction"
     var walletNameFieldTemporaryValueBeforeSavingtoDB: String? = "Wallet"
-
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
-
     var dataLoaded = mutableStateOf(false)
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+    var emojiCategory: String? = ""
+    var nameCategory: String? = ""
+    var typeCategory: String? = ""
+
 
 
 init{
@@ -75,6 +81,8 @@ init{
             "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB = value
             "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB = value
             "type" -> typeFieldTemporaryValueBeforeSavingtoDB = value
+          //  "nameCategory" -> nameCategory = value
+
         }
 
     }

@@ -27,7 +27,8 @@ data class Expanse(
     var categoryId: Int = 0,
     var walletName: String = "",
     var walletId: Int = 0,
-    var type: String = ""
+    var type: String = "",
+    var categoryIcon: String = ""
 )
 
 data class ExpanseX(

@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.sp
 
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.wallet.ui.theme.Blue1000
 import com.example.wallet.ui.theme.Purple1000
+import com.example.wallet.ui.theme.PurpleBasic
 
 @Composable
 fun BottomNavigationBar(
@@ -27,7 +27,7 @@ fun BottomNavigationBar(
     onItemClick: (BottomNavigationItem) -> Unit
 ) {
     val backStackEntry = navController.currentBackStackEntryAsState()
-    BottomNavigation(modifier = modifier, backgroundColor = Blue1000, elevation = 50.dp) {
+    BottomNavigation(modifier = modifier, backgroundColor = PurpleBasic, elevation = 50.dp) {
         val navShape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
         Row(
             modifier = Modifier
@@ -49,7 +49,7 @@ fun BottomNavigationBar(
 
                     }
 
-                }, selectedContentColor =Blue1000, unselectedContentColor = Color.Gray)
+                }, selectedContentColor = PurpleBasic, unselectedContentColor = Color.Gray)
             }
         }
     }

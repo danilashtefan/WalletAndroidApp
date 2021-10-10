@@ -13,7 +13,8 @@ data class WalletX(
 data class Wallet(
     val _links: Links? = null,
     val id: Int = 0,
-    val walletName: String = ""
+    val walletName: String = "",
+    val currency: String = ""
 )
 
 data class SelfX(

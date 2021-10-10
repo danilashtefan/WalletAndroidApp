@@ -8,7 +8,8 @@ data class SingleExpanseCategoryResponse(
     val _links: SingleLinks,
     val expanseCategoryName: String,
     val id: Int,
-    val type: String
+    val type: String,
+    val icon:String
 )
 
 data class SingleLinks(

@@ -1,5 +1,6 @@
 package com.example.wallet.ui.screens
 
+import android.view.SurfaceControl
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
@@ -20,6 +21,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
+import com.example.wallet.model.Expanse
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
@@ -40,6 +42,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
     val locationFieldName = "location"
     val categoryFieldName = "categoryName"
     val walletFieldName = "walletName"
+    val categoryIcon = "categoryIcon"
     val fieldsOnTheScreen = arrayListOf<String>(
         nameFieldName,
         amountFieldName,
@@ -48,7 +51,8 @@ fun TransactionDetailsScreen(transactionId: Int) {
         commentsFieldName,
         locationFieldName,
         categoryFieldName,
-        walletFieldName
+        walletFieldName,
+        categoryIcon
     )
 
     if (dataLoaded === false) {
@@ -57,7 +61,7 @@ fun TransactionDetailsScreen(transactionId: Int) {
 
     Column(Modifier.verticalScroll(rememberScrollState())) {
         LogoTransactionDetailsSection()
-        ImageSection()
+        ImageSection(transaction)
         EditableFieldTransactionDetails(
             padding = 100,
             field = nameFieldName,
@@ -94,7 +98,6 @@ fun TransactionDetailsScreen(transactionId: Int) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(text = "Wallet: ")
 
-            /*TODO: Add wallet selector*/
             WalletSelctorTransactionDetails(
                 padding = 20,
                 labelText = transaction.walletName,
@@ -162,7 +165,7 @@ private fun LogoTransactionDetailsSection() {
 }
 
 @Composable
-fun ImageSection() {
+fun ImageSection(transaction:Expanse) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Card(
             shape = CircleShape,
@@ -170,7 +173,7 @@ fun ImageSection() {
             modifier = Modifier.size(150.dp),
             elevation = 5.dp
         ) {
-            CategoryImage()
+            CategoryImage(transaction.categoryIcon,50)
         }
     }
 }

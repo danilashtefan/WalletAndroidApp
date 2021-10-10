@@ -3,7 +3,8 @@ package com.example.wallet.model.response
 data class SingleTransactionWalletResponse(
     val _links: Links,
     val id: Int,
-    val walletName: String
+    val walletName: String,
+    val currency: String
 )
 
 data class SingleWallet(

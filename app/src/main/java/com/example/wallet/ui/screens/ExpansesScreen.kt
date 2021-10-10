@@ -16,8 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -121,7 +123,7 @@ private fun CalendarDatePicker(viewModel: ExpansesViewModel,
 fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController,viewModel: ExpansesViewModel){
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(expanses) { expanse ->
-            ReusableRow(categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type){
+            ReusableRow(categoryIcon = expanse.categoryIcon,categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type){
                 val expanseId = expanse.id
                 expanse._links?.category?.let { Log.d("Expanse Category Link", it.href) }
                 navController.navigate("transactionDetails/$expanseId")
@@ -133,7 +135,7 @@ fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController,vie
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun ReusableRow(categoryName: String, date: String, location: String, amount: Int, comments: String, type: String,clickAction:() -> Unit) {
+private fun ReusableRow(categoryIcon:String, categoryName: String, date: String, location: String, amount: Int, comments: String, type: String,clickAction:() -> Unit) {
     val currency = "$"
     var sign = "+"
     if(type == "expanse") {
@@ -153,7 +155,7 @@ private fun ReusableRow(categoryName: String, date: String, location: String, am
                 ) {
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier) {
-                    CategoryImage()
+                    CategoryImage(categoryIcon,30)
                     Spacer(Modifier.width(15.dp))
                     Text(text = categoryName)
                 }
@@ -210,19 +212,29 @@ private fun ReusableRow(categoryName: String, date: String, location: String, am
     }
 }
 @Composable
-fun CategoryImage() {
-    Image(
-        painter = painterResource(id = R.drawable.groceries),
-        contentDescription = "",
-        modifier = Modifier.size(25.dp),
-    )
+fun CategoryImage(categoryIcon: String, size: Int) {
+    Emoji(emojiCode = categoryIcon, size = size)
 }
 
-@Preview
 @Composable
-fun ComposablePreview() {
-    ReusableRow("","","",1, "comment", "expanse"){}
+fun Emoji(emojiCode: String, size: Int) {
+    Box() {
+        Canvas(modifier = Modifier
+            .size(40.dp)
+            .align(Alignment.Center), onDraw = {
+            drawCircle(color = Color.White)
+        })
+        Text(
+            text = emojiCode,
+            fontSize = size.sp,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(bottom = 2.dp)
+        )
+    }
 }
+
 
 
 

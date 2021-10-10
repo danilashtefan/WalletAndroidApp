@@ -33,9 +33,10 @@ class ExpansesViewModel(
         viewModelScope.launch(handler + Dispatchers.IO) {
             var expanses = getExpanses()
             for (transaction in expanses) {
-                val transactionCategoryNameAndId = getAndSetCategoriesForTransactions(transaction.id)
-                transaction.categoryName = transactionCategoryNameAndId.first
-                transaction.categoryId = transactionCategoryNameAndId.second
+                val transactionCategoryNameAndIdAndIcon = getAndSetCategoriesForTransactions(transaction.id)
+                transaction.categoryName = transactionCategoryNameAndIdAndIcon.first
+                transaction.categoryId = transactionCategoryNameAndIdAndIcon.second
+                transaction.categoryIcon = transactionCategoryNameAndIdAndIcon.third
                 val transactionWalletNameAndId = getAndSetWalletForTransactions(transaction.id)
                 transaction.walletName = transactionWalletNameAndId.first
                 transaction.walletId = transactionWalletNameAndId.second
@@ -50,9 +51,9 @@ class ExpansesViewModel(
     }
 
     // Method to get the category of particular expanse
-    suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Pair<String, Int> {
+    suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Triple<String, Int, String> {
         val categoryResponse = transactionCategoriesRepository.getCategoryForExpanse(expanseId)
-        return Pair(categoryResponse.expanseCategoryName, categoryResponse.id)
+        return Triple(categoryResponse.expanseCategoryName, categoryResponse.id, categoryResponse.icon)
     }
 
     suspend fun getAndSetWalletForTransactions(expanseId: Int): Pair<String, Int> {

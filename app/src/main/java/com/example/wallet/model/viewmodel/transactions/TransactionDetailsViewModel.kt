@@ -42,6 +42,7 @@ class TransactionDetailsViewModel() : ViewModel() {
 
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
+    var categoryIconTemporaryValueBeforeSavingtoDB: String? = null
 
 
     fun chooseCategory(category: String) {
@@ -107,6 +108,7 @@ class TransactionDetailsViewModel() : ViewModel() {
         this.amountFieldTemporaryValueBeforeSavingtoDB = transaction.amount.toString()
         this.typeFieldTemporaryValueBeforeSavingtoDB = transaction.type
         this.categoryNameFieldTemporaryValueBeforeSavingtoDB = transaction.categoryName
+        this.categoryIconTemporaryValueBeforeSavingtoDB = transaction.categoryIcon
         this.walletNameFieldTemporaryValueBeforeSavingtoDB = transaction.walletName
         this.dateFieldTemporaryValueBeforeSavingtoDB = transaction.date
         this.commentsFieldTemporaryValueBeforeSavingtoDB = transaction.comments
@@ -149,6 +151,7 @@ class TransactionDetailsViewModel() : ViewModel() {
             "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB = value
             "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB = value
             "type" -> typeFieldTemporaryValueBeforeSavingtoDB = value
+            "categoryIcon" -> categoryIconTemporaryValueBeforeSavingtoDB = value
         }
 
     }
@@ -163,6 +166,7 @@ class TransactionDetailsViewModel() : ViewModel() {
             "categoryName" -> return categoryNameFieldTemporaryValueBeforeSavingtoDB
             "walletName" -> return walletNameFieldTemporaryValueBeforeSavingtoDB
             "type" -> return typeFieldTemporaryValueBeforeSavingtoDB
+            "categoryIcon" -> return categoryIconTemporaryValueBeforeSavingtoDB
         }
         return null
     }

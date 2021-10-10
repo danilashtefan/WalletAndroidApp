@@ -12,7 +12,8 @@ data class ExpanseCategory(
     val _links: Links? = null,
     val expanseCategoryName: String = "",
     val id: Int = 0,
-    val type: String =""
+    val type: String ="",
+    val icon: String ="💸"
 )
 
 data class ExpanseCategoryX(
