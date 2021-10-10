@@ -385,7 +385,7 @@ fun CategorySelectorTransactionAdd(
                     Card(onClick = {
                         viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option.expanseCategoryName)
+                        Text(option.name)
                     }
                 }
 

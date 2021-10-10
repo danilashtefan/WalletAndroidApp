@@ -89,7 +89,7 @@ init{
 
     fun updateCategoryLinkValueBeforeSavingToDB(category: ExpanseCategory) {
         this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
-        updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
+        updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.name)
     }
 
     fun getFieldToUpdateInDB(field: String): String? {
@@ -128,9 +128,35 @@ init{
 
     }
 
+//    fun addCategoryToDb(){
+//        val handler = CoroutineExceptionHandler { _, exception ->
+//            Log.d("EXCEPTION", "Thread exception when adding category to Db")
+//        }
+//
+//        viewModelScope.launch(handler + Dispatchers.IO) {
+//            addCategoryToDb(
+//                transactionData = AddOrEditTransactionRequest(
+//                    name = nameFieldTemporaryValueBeforeSavingtoDB,
+//                    amount = amountFieldTemporaryValueBeforeSavingtoDB?.toInt(),
+//                    date = dateFieldTemporaryValueBeforeSavingtoDB,
+//                    comments = commentsFieldTemporaryValueBeforeSavingtoDB,
+//                    location = locationFieldTemporaryValueBeforeSavingtoDB,
+//                    type = typeFieldTemporaryValueBeforeSavingtoDB,
+//                    category = categoryLinkTemporaryValueBeforeSavingtoDB,
+//                    wallet = walletLinkTemporaryValueBeforeSavingtoDB
+//                )
+//            )
+//        }
+//    }
+
     suspend fun addTransactionToDb( transactionData: AddOrEditTransactionRequest) {
         TransactionsRepository.addTransactionToDb(transactionData)
     }
+
+//    suspend fun addCategoryToDb(categoryData:){
+//
+//    }
+
 
     fun updateWalletLinkValueBeforeSavingToDB(wallet: Wallet) {
         this.walletLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)

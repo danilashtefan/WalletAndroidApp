@@ -53,7 +53,7 @@ class ExpansesViewModel(
     // Method to get the category of particular expanse
     suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Triple<String, Int, String> {
         val categoryResponse = transactionCategoriesRepository.getCategoryForExpanse(expanseId)
-        return Triple(categoryResponse.expanseCategoryName, categoryResponse.id, categoryResponse.icon)
+        return Triple(categoryResponse.name, categoryResponse.id, categoryResponse.icon)
     }
 
     suspend fun getAndSetWalletForTransactions(expanseId: Int): Pair<String, Int> {

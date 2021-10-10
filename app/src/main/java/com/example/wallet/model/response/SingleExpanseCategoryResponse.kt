@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName
 data class SingleExpanseCategoryResponse(
     @SerializedName("_links")
     val _links: SingleLinks,
-    val expanseCategoryName: String,
+    val name: String,
     val id: Int,
     val type: String,
     val icon:String
