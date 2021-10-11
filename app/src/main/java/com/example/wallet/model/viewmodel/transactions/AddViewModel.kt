@@ -11,6 +11,7 @@ import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.Wallet
+import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -41,9 +42,9 @@ class AddViewModel: ViewModel() {
     var dataLoaded = mutableStateOf(false)
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
-    var emojiCategory: String? = ""
-    var nameCategory: String? = ""
-    var typeCategory: String? = ""
+    var iconCategoryFieldTemporaryValueBeforeSavingtoDB: String? = ""
+    var nameCategoryFieldTemporaryValueBeforeSavingtoDB: String? = ""
+    var typeCategoryFieldTemporaryValueBeforeSavingtoDB: String? = ""
 
 
 
@@ -81,7 +82,9 @@ init{
             "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB = value
             "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB = value
             "type" -> typeFieldTemporaryValueBeforeSavingtoDB = value
-          //  "nameCategory" -> nameCategory = value
+            "nameCategory" -> nameCategoryFieldTemporaryValueBeforeSavingtoDB = value
+            "typeCategory" -> typeCategoryFieldTemporaryValueBeforeSavingtoDB = value
+            "iconCategory" -> iconCategoryFieldTemporaryValueBeforeSavingtoDB = value
 
         }
 
@@ -89,7 +92,7 @@ init{
 
     fun updateCategoryLinkValueBeforeSavingToDB(category: ExpanseCategory) {
         this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
-        updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.name)
+        updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
     }
 
     fun getFieldToUpdateInDB(field: String): String? {
@@ -128,34 +131,30 @@ init{
 
     }
 
-//    fun addCategoryToDb(){
-//        val handler = CoroutineExceptionHandler { _, exception ->
-//            Log.d("EXCEPTION", "Thread exception when adding category to Db")
-//        }
-//
-//        viewModelScope.launch(handler + Dispatchers.IO) {
-//            addCategoryToDb(
-//                transactionData = AddOrEditTransactionRequest(
-//                    name = nameFieldTemporaryValueBeforeSavingtoDB,
-//                    amount = amountFieldTemporaryValueBeforeSavingtoDB?.toInt(),
-//                    date = dateFieldTemporaryValueBeforeSavingtoDB,
-//                    comments = commentsFieldTemporaryValueBeforeSavingtoDB,
-//                    location = locationFieldTemporaryValueBeforeSavingtoDB,
-//                    type = typeFieldTemporaryValueBeforeSavingtoDB,
-//                    category = categoryLinkTemporaryValueBeforeSavingtoDB,
-//                    wallet = walletLinkTemporaryValueBeforeSavingtoDB
-//                )
-//            )
-//        }
-//    }
+    fun addCategoryToDb(){
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Thread exception when adding category to Db")
+        }
+
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            addCategoryToDb(
+                categoryData = AddOrEditCategoryRequest(
+                    expanseCategoryName = nameCategoryFieldTemporaryValueBeforeSavingtoDB,
+                    type = typeCategoryFieldTemporaryValueBeforeSavingtoDB,
+                    icon = iconCategoryFieldTemporaryValueBeforeSavingtoDB
+
+                )
+            )
+        }
+    }
 
     suspend fun addTransactionToDb( transactionData: AddOrEditTransactionRequest) {
         TransactionsRepository.addTransactionToDb(transactionData)
     }
 
-//    suspend fun addCategoryToDb(categoryData:){
-//
-//    }
+    suspend fun addCategoryToDb(categoryData:AddOrEditCategoryRequest){
+        categoriesRepository.addCategoryToDb(categoryData)
+    }
 
 
     fun updateWalletLinkValueBeforeSavingToDB(wallet: Wallet) {

@@ -6,6 +6,7 @@ import com.example.wallet.model.response.AllExpanseCategoriesResponse
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.SingleTransactionWalletResponse
 import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
+import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -55,6 +56,10 @@ class WalletWebService {
          return api.addTransactionToDb(transactionData)
     }
 
+    suspend fun addCategoryToDb(categoryData: AddOrEditCategoryRequest) {
+        return api.addCategoryToDb(categoryData)
+    }
+
     interface WalletAPI{
         @GET("expanses")
         suspend fun getExpanses(): AllExpansesResponse
@@ -76,6 +81,9 @@ class WalletWebService {
 
         @POST("expanses")
         suspend fun addTransactionToDb(@Body transactionData: AddOrEditTransactionRequest)
+
+        @POST("expanseCategories")
+        suspend fun addCategoryToDb(@Body categoryData: AddOrEditCategoryRequest)
 
 
     }

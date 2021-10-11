@@ -10,7 +10,7 @@ data class Embedded(
 )
 data class ExpanseCategory(
     val _links: Links? = null,
-    val name: String = "",
+    val expanseCategoryName: String = "",
     val id: Int = 0,
     val type: String ="",
     val icon: String ="💸"

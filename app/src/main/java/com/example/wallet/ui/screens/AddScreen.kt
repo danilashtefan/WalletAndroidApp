@@ -67,9 +67,9 @@ fun WalletAddSection() {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CategoryAddSection(viewModel: AddViewModel) {
-    var emoji = viewModel.emojiCategory
-    var name = viewModel.nameCategory
-    var type = viewModel.typeCategory
+    var emoji = viewModel.iconCategoryFieldTemporaryValueBeforeSavingtoDB
+    var name = viewModel.nameCategoryFieldTemporaryValueBeforeSavingtoDB
+    var type = viewModel.typeCategoryFieldTemporaryValueBeforeSavingtoDB
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Box(
@@ -134,7 +134,7 @@ fun CategoryAddSection(viewModel: AddViewModel) {
                 TextField(
                     value = textState2.value,
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     onValueChange = {
                         textState2.value = it
                         viewModel.updateTemporaryFieldValueBeforeSavingToDB(
@@ -163,19 +163,21 @@ fun CategoryAddSection(viewModel: AddViewModel) {
                             fontSize = 30.sp,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.clickable(onClick = {
-                                //editTransactionViewModel.setEmoji(emoji)
+                                viewModel.updateTemporaryFieldValueBeforeSavingToDB(
+                                    "iconCategory",
+                                    emoji
+                                )
                             })
                         )
                     }
                 }
-SaveButtonCategoryAdd(viewModel = viewModel)
+                SaveButtonCategoryAdd(viewModel = viewModel)
             }
         }
 
     }
 
 }
-
 
 
 @Composable
@@ -306,7 +308,7 @@ private fun SaveButtonCategoryAdd(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(onClick = {
-           // viewModel.addTransactionToDb()
+             viewModel.addCategoryToDb()
         }) {
             Text(text = "Add category")
         }
@@ -385,7 +387,7 @@ fun CategorySelectorTransactionAdd(
                     Card(onClick = {
                         viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option.name)
+                        Text(option.expanseCategoryName)
                     }
                 }
 

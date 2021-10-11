@@ -133,7 +133,7 @@ class TransactionDetailsViewModel() : ViewModel() {
 
     fun updateCategoryLinkValueBeforeSavingToDB(category: ExpanseCategory) {
         this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
-        updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.name)
+        updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
     }
 
     fun updateWalletLinkValueBeforeSavingToDB(wallet: Wallet){
