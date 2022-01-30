@@ -27,7 +27,7 @@ class ExpansesViewModel(
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception")
+            Log.d("EXCEPTION", "Thread exception while fetching expanses to the initial screen")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
