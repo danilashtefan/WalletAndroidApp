@@ -86,6 +86,5 @@ class WalletWebService {
         @POST("expanseCategories")
         suspend fun addCategoryToDb(@Body categoryData: AddOrEditCategoryRequest)
 
-
     }
 }

@@ -25,10 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.wallet.model.classesFromResponse.Transaction
 import com.example.wallet.ui.navigationBar.BottomNavigationBar
 import com.example.wallet.ui.navigationBar.BottomNavigationItem
-import com.example.wallet.ui.screens.AddScreen
-import com.example.wallet.ui.screens.ExpanseCategoriesScreen
-import com.example.wallet.ui.screens.TransactionDetailsScreen
-import com.example.wallet.ui.screens.ExpansesScreen
+import com.example.wallet.ui.screens.*
 import com.example.wallet.ui.theme.WalletTheme
 import com.google.gson.Gson
 
@@ -37,35 +34,36 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WalletTheme {
-                val navController = rememberNavController()
-                    Scaffold(
-                        bottomBar = { BottomNavigationBar(
-                            items = listOf(
-                                BottomNavigationItem("Expenses",
-                                route = "expanses",
-                                icon = Icons.Default.Money),
-                                BottomNavigationItem("Add",
-                                    route = "add",
-                                    icon = Icons.Default.Add
-                                ),
-                                BottomNavigationItem("Categories",
-                                    route = "categories",
-                                    icon = Icons.Default.Book)
-
-                            ),
-                            navController = navController ,
-                            onItemClick = {
-                                navController.navigate(it.route)
-                            }
-                        )}
-                    ) {innerPadding->innerPadding.calculateTopPadding()
-                        Box(modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color(0xFFBB87E4))
-                            .padding(innerPadding)) {
-                            UsersApplication(navController)
-                        }
-                    }
+//                val navController = rememberNavController()
+//                    Scaffold(
+//                        bottomBar = { BottomNavigationBar(
+//                            items = listOf(
+//                                BottomNavigationItem("Expenses",
+//                                route = "expanses",
+//                                icon = Icons.Default.Money),
+//                                BottomNavigationItem("Add",
+//                                    route = "add",
+//                                    icon = Icons.Default.Add
+//                                ),
+//                                BottomNavigationItem("Categories",
+//                                    route = "categories",
+//                                    icon = Icons.Default.Book)
+//
+//                            ),
+//                            navController = navController ,
+//                            onItemClick = {
+//                                navController.navigate(it.route)
+//                            }
+//                        )}
+//                    ) {innerPadding->innerPadding.calculateTopPadding()
+//                        Box(modifier = Modifier
+//                            .fillMaxSize()
+//                            .background(Color(0xFFBB87E4))
+//                            .padding(innerPadding)) {
+//                            UsersApplication(navController)
+//                        }
+//                    }
+                LoginScreen()
 
             }
 

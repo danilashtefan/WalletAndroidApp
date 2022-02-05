@@ -138,7 +138,7 @@ fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController,vie
 private fun ReusableRow(categoryIcon:String, categoryName: String, date: String, location: String, amount: Int, comments: String, type: String,clickAction:() -> Unit) {
     val currency = "$"
     var sign = "+"
-    if(type == "expanse") {
+    if(type == "Expense") {
         sign = "-"
     }
 
