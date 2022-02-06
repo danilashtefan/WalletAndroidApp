@@ -23,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.example.wallet.model.classesFromResponse.Transaction
+import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.ui.navigationBar.BottomNavigationBar
 import com.example.wallet.ui.navigationBar.BottomNavigationItem
 import com.example.wallet.ui.screens.*
@@ -30,11 +31,12 @@ import com.example.wallet.ui.theme.WalletTheme
 import com.google.gson.Gson
 
 class MainActivity : ComponentActivity() {
+    lateinit var dataStoreManager: DataStorePreferenceRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             WalletTheme {
-//                val navController = rememberNavController()
+                val navController = rememberNavController()
 //                    Scaffold(
 //                        bottomBar = { BottomNavigationBar(
 //                            items = listOf(
@@ -63,8 +65,8 @@ class MainActivity : ComponentActivity() {
 //                            UsersApplication(navController)
 //                        }
 //                    }
-                LoginScreen()
 
+            LoginScreen(navController = navController)
             }
 
         }
@@ -74,6 +76,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun UsersApplication(navController: NavHostController){
     NavHost(navController = navController, startDestination ="expanses"){
+
+        composable("login"){
+            LoginScreen(navController)
+        }
+
         composable("expanses"){
             ExpansesScreen(navController)
         }

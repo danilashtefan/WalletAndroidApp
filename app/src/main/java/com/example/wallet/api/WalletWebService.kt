@@ -5,9 +5,11 @@ import com.example.wallet.model.Expanse
 import com.example.wallet.model.response.AllExpanseCategoriesResponse
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.SingleTransactionWalletResponse
+import com.example.wallet.model.response.login.LoginResponse
 import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
+import com.example.wallet.requests.LoginRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -29,6 +31,9 @@ class WalletWebService {
         api = retrofit.create(WalletAPI::class.java)
     }
 
+    suspend fun login(loginRequest: LoginRequest): LoginResponse {
+        return api.login(loginRequest)
+    }
 
    suspend fun getExpanses(): AllExpansesResponse {
      return api.getExpanses()
@@ -62,6 +67,9 @@ class WalletWebService {
     }
 
     interface WalletAPI{
+        @POST("login")
+        suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
+
         @GET("expanses")
         suspend fun getExpanses(): AllExpansesResponse
 
