@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -25,15 +26,20 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.helpers.EmojiProvider
+import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.model.viewmodel.transactions.AddViewModel
+import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
 import com.example.wallet.ui.theme.PurpleBasic
 import java.util.*
 
 @Composable
-fun AddScreen(navController: NavHostController) {
-    val viewModel: AddViewModel = viewModel()
+fun AddScreen(
+    navController: NavHostController,
+    dataStorePreferenceRepository: DataStorePreferenceRepository
+) {
+    val viewModel: AddViewModel = viewModel(factory = AddViewModelFactory(DataStorePreferenceRepository(LocalContext.current)))
     val listOfButtons = listOf<String>("Transaction", "Category", "Wallet")
     var dataLoaded = viewModel.dataLoaded.value
     if (dataLoaded === false) {

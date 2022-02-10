@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,12 +27,22 @@ import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.R
 import com.example.wallet.model.Expanse
+import com.example.wallet.model.repository.DataStorePreferenceRepository
+import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
+import com.example.wallet.model.viewmodel.transactions.ExpenseCategoriesViewModelFactory
+import com.example.wallet.model.viewmodel.transactions.ExpensesViewModelFactory
 
 @Composable
-fun ExpansesScreen(navController: NavHostController) {
-    val viewModel: ExpansesViewModel = viewModel() //ViewModel is bound to a composable
+fun ExpansesScreen(
+    navController: NavHostController,
+    dataStorePreferenceRepository: DataStorePreferenceRepository
+) {
+    val viewModel: ExpansesViewModel = viewModel(factory = ExpensesViewModelFactory(DataStorePreferenceRepository(
+        LocalContext.current))
+    ) //ViewModel is bound to a composable
     val expanses = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
+    val accessToken = viewModel.accessToken
 
     if (!dataLoaded) {
         return;

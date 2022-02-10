@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.Expanse
+import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
@@ -16,7 +17,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class TransactionDetailsViewModel() : ViewModel() {
+class TransactionDetailsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) : ViewModel() {
     private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private val walletRepository: WalletRepository = WalletRepository()
    // private val walletRepository: WalletRepository = WalletRepository()
@@ -25,8 +26,6 @@ class TransactionDetailsViewModel() : ViewModel() {
     var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
     var transactionWalletsState = mutableStateOf((listOf(Wallet())))
     var transaction = mutableStateOf(Expanse())
-   // var chosenCategory= ExpanseCategory()
-
 
     var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
     var amountFieldTemporaryValueBeforeSavingtoDB: String? = null

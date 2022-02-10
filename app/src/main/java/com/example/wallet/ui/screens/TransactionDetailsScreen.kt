@@ -15,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -22,13 +23,21 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
 import com.example.wallet.model.Expanse
+import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.Wallet
+import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
+import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModelFactory
 
 @Composable
-fun TransactionDetailsScreen(transactionId: Int) {
-    val viewModel: TransactionDetailsViewModel = viewModel() //ViewModel is bound to a composable
+fun TransactionDetailsScreen(
+    transactionId: Int,
+    dataStorePreferenceRepository: DataStorePreferenceRepository
+) {
+    val viewModel: TransactionDetailsViewModel = viewModel(factory = TransactionDetailsViewModelFactory(DataStorePreferenceRepository(
+        LocalContext.current))
+    ) //ViewModel is bound to a composable
     viewModel.setTransactionId(transactionId)
     var dataLoaded = viewModel.dataLoaded.value
     var transaction = viewModel.transaction.value

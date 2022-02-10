@@ -15,58 +15,55 @@ import androidx.compose.material.icons.filled.Money
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
-import com.example.wallet.model.classesFromResponse.Transaction
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.ui.navigationBar.BottomNavigationBar
 import com.example.wallet.ui.navigationBar.BottomNavigationItem
 import com.example.wallet.ui.screens.*
 import com.example.wallet.ui.theme.WalletTheme
-import com.google.gson.Gson
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 class MainActivity : ComponentActivity() {
-    lateinit var dataStoreManager: DataStorePreferenceRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             WalletTheme {
                 val navController = rememberNavController()
-//                    Scaffold(
-//                        bottomBar = { BottomNavigationBar(
-//                            items = listOf(
-//                                BottomNavigationItem("Expenses",
-//                                route = "expanses",
-//                                icon = Icons.Default.Money),
-//                                BottomNavigationItem("Add",
-//                                    route = "add",
-//                                    icon = Icons.Default.Add
-//                                ),
-//                                BottomNavigationItem("Categories",
-//                                    route = "categories",
-//                                    icon = Icons.Default.Book)
-//
-//                            ),
-//                            navController = navController ,
-//                            onItemClick = {
-//                                navController.navigate(it.route)
-//                            }
-//                        )}
-//                    ) {innerPadding->innerPadding.calculateTopPadding()
-//                        Box(modifier = Modifier
-//                            .fillMaxSize()
-//                            .background(Color(0xFFBB87E4))
-//                            .padding(innerPadding)) {
-//                            UsersApplication(navController)
-//                        }
-//                    }
+                    Scaffold(
+                        bottomBar = { BottomNavigationBar(
+                            items = listOf(
+                                BottomNavigationItem("Expenses",
+                                route = "expanses",
+                                icon = Icons.Default.Money),
+                                BottomNavigationItem("Add",
+                                    route = "add",
+                                    icon = Icons.Default.Add
+                                ),
+                                BottomNavigationItem("Categories",
+                                    route = "categories",
+                                    icon = Icons.Default.Book)
 
-            LoginScreen(navController = navController)
+                            ),
+                            navController = navController ,
+                            onItemClick = {
+                                navController.navigate(it.route)
+                            }
+                        )}
+                    ) {innerPadding->innerPadding.calculateTopPadding()
+                        Box(modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color(0xFFBB87E4))
+                            .padding(innerPadding)) {
+                            UsersApplication(navController)
+                        }
+                    }
+
             }
 
         }
@@ -75,22 +72,22 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun UsersApplication(navController: NavHostController){
-    NavHost(navController = navController, startDestination ="expanses"){
+    NavHost(navController = navController, startDestination ="login"){
 
         composable("login"){
-            LoginScreen(navController)
+            LoginScreen(navController, DataStorePreferenceRepository(LocalContext.current))
         }
 
         composable("expanses"){
-            ExpansesScreen(navController)
+            ExpansesScreen(navController, DataStorePreferenceRepository(LocalContext.current))
         }
         
         composable("categories"){
-            ExpanseCategoriesScreen(navHostController = navController)
+            ExpanseCategoriesScreen(navHostController = navController, DataStorePreferenceRepository(LocalContext.current))
         }
 
         composable("add"){
-          AddScreen(navController = navController)
+          AddScreen(navController = navController, DataStorePreferenceRepository(LocalContext.current))
         }
         composable("transactionDetails/{transactionId}",
         arguments = listOf(navArgument("transactionId"){
@@ -98,7 +95,7 @@ fun UsersApplication(navController: NavHostController){
         })){
             navBackStackEntry->
             navBackStackEntry.arguments?.let {
-                TransactionDetailsScreen(transactionId = it.getInt("transactionId"))
+                TransactionDetailsScreen(transactionId = it.getInt("transactionId"), DataStorePreferenceRepository(LocalContext.current))
             }
         }
     }

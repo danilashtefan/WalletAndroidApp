@@ -1,5 +1,7 @@
 package com.example.wallet.api
 
+import android.util.Log
+import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.AllExpansesResponse
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.response.AllExpanseCategoriesResponse
@@ -35,8 +37,10 @@ class WalletWebService {
         return api.login(loginRequest)
     }
 
-   suspend fun getExpanses(): AllExpansesResponse {
-     return api.getExpanses()
+   suspend fun getExpanses(authToken: String?): AllExpansesResponse {
+      val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+       Log.d("INFO","Authorization header: $authHeader")
+     return api.getExpanses(authHeader = authHeader)
     }
 
     suspend fun getExpanseCategories():AllExpanseCategoriesResponse{
@@ -71,7 +75,7 @@ class WalletWebService {
         suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
 
         @GET("expanses")
-        suspend fun getExpanses(): AllExpansesResponse
+        suspend fun getExpanses(@Header("Authorization")authHeader:String): AllExpansesResponse
 
         @GET("expanseCategories")
         suspend fun getExpanseCategories():AllExpanseCategoriesResponse

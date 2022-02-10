@@ -15,4 +15,10 @@ object LinkBuilder {
         return walletUrl
     }
 
+    fun builtAuthorizationHeader(authToken:String?):String{
+        val bearer = "Bearer "
+        var authHeader = bearer + authToken
+        return authHeader
+    }
+
 }

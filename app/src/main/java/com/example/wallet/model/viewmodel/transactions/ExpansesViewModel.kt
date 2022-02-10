@@ -2,24 +2,32 @@ package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.model.Expanse
+import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ExpansesViewModel(
-    private val expansesRepository: TransactionsRepository = TransactionsRepository,
-    private val transactionCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository(),
-    private val transactionWalletsRepository: WalletRepository = WalletRepository()
+    private val dataStorePreferenceRepository: DataStorePreferenceRepository
 ) : ViewModel() {
-
+    private val expansesRepository: TransactionsRepository = TransactionsRepository
+    private val transactionCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
+    private val transactionWalletsRepository: WalletRepository = WalletRepository()
     var minDatePicked = mutableStateOf("Start Date")
     var maxDatePicked = mutableStateOf("End Date")
+    private val _accessToken = MutableLiveData("")
+    var accessToken = ""
     var expandedCalendarMin = mutableStateOf(false)
     var expandedCalendarMax = mutableStateOf(false)
     val transactionState = mutableStateOf((emptyList<Expanse>()))
@@ -29,8 +37,19 @@ class ExpansesViewModel(
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while fetching expanses to the initial screen")
         }
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            dataStorePreferenceRepository.getAccessToken.
+            catch { Log.d("ERROR","EXPECTION while getting the token in the expense screen") }
+                .collect{
+                    Log.d("TOKEN","Access token on all expense screen: $it")
+                    accessToken = it
+                }
+        }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
+            while (accessToken.equals("")){
+                Log.d("INFO","Access token is not set up yet")
+            }
             var expanses = getExpanses()
             for (transaction in expanses) {
                 val transactionCategoryNameAndIdAndIcon = getAndSetCategoriesForTransactions(transaction.id)
@@ -42,12 +61,14 @@ class ExpansesViewModel(
                 transaction.walletId = transactionWalletNameAndId.second
             }
             transactionState.value = expanses
-            dataLoaded.value = true
+
         }
+        dataLoaded.value = true
     }
 
     suspend fun getExpanses(): List<Expanse> {
-        return expansesRepository.getExpanses()._embedded.expanses
+        Log.d("INFO","getExpanses is called")
+        return expansesRepository.getExpanses(accessToken)._embedded.expanses
     }
 
     // Method to get the category of particular expanse

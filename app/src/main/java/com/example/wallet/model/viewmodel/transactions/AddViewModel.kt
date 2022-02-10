@@ -3,9 +3,12 @@ package com.example.wallet.model.viewmodel.transactions
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.helpers.LinkBuilder
+import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
@@ -17,10 +20,9 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class AddViewModel: ViewModel() {
+class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) : ViewModel() {
     private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private val walletRepository: WalletRepository = WalletRepository()
-
 
 //RELATED TO TRANSACTION ADD
 //--------------------------------------------------------------------------
@@ -132,6 +134,8 @@ init{
     }
 
     fun addCategoryToDb(){
+        val accessToken: LiveData<String> = dataStorePreferenceRepository.getAccessToken.asLiveData()
+
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception when adding category to Db")
         }
@@ -146,6 +150,8 @@ init{
                 )
             )
         }
+
+
     }
 
     suspend fun addTransactionToDb( transactionData: AddOrEditTransactionRequest) {
