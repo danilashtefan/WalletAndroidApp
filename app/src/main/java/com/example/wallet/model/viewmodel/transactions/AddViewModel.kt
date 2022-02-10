@@ -18,12 +18,14 @@ import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) : ViewModel() {
     private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private val walletRepository: WalletRepository = WalletRepository()
-
+    var userName = ""
 //RELATED TO TRANSACTION ADD
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
@@ -53,6 +55,14 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
 init{
     val handler = CoroutineExceptionHandler { _, exception ->
         Log.d("EXCEPTION", "Thread exception while fetching categories on Adding Screen")
+    }
+    viewModelScope.launch(handler + Dispatchers.IO) {
+        dataStorePreferenceRepository.getUsername.
+        catch { Log.d("ERROR","Could not get Username from Data Store on Add screen") }
+            .collect{
+                Log.d("TOKEN","Username on Add Screen: $it")
+                userName = it
+            }
     }
     viewModelScope.launch(handler + Dispatchers.IO) {
         val transactionCategories = getTransactionCategories()
