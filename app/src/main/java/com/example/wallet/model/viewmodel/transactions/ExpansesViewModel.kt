@@ -11,6 +11,8 @@ import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +32,8 @@ class ExpansesViewModel(
     var accessToken = ""
     var expandedCalendarMin = mutableStateOf(false)
     var expandedCalendarMax = mutableStateOf(false)
-    val transactionState = mutableStateOf((emptyList<Expanse>()))
+    //val transactionState = mutableStateOf((emptyList<Expanse>()))
+    val transactionState = mutableStateOf((emptyList<SecondAllExpensesItem>()))
     var dataLoaded = mutableStateOf(false)
 
     init {
@@ -50,7 +53,7 @@ class ExpansesViewModel(
             while (accessToken.equals("")){
                 Log.d("INFO","Access token is not set up yet")
             }
-            var expanses = getExpanses()
+            var expanses = getFilteredExpenses()
             for (transaction in expanses) {
                 val transactionCategoryNameAndIdAndIcon = getAndSetCategoriesForTransactions(transaction.id)
                 transaction.categoryName = transactionCategoryNameAndIdAndIcon.first
@@ -66,9 +69,16 @@ class ExpansesViewModel(
         dataLoaded.value = true
     }
 
+    //Method to get expenses from the JpaRepository default API, there is no filtering by username avalable
     suspend fun getExpanses(): List<Expanse> {
         Log.d("INFO","getExpanses is called")
         return expansesRepository.getExpanses(accessToken)._embedded.expanses
+    }
+
+    //Method to get expenses filtered by the token used
+    suspend fun getFilteredExpenses(): SecondAllExpensesResponse {
+        Log.d("INFO","getFiltered expenses is called")
+        return expansesRepository.getFilteredExpanses(accessToken)
     }
 
     // Method to get the category of particular expanse
@@ -82,7 +92,7 @@ class ExpansesViewModel(
         return Pair(walletResponse.walletName, walletResponse.id)
     }
 
-    fun getTransaction(transactionId: Int): Expanse {
+    fun getTransaction(transactionId: Int): SecondAllExpensesItem {
         for (tx in transactionState.value) {
             if (tx.id === transactionId) {
                 return tx;

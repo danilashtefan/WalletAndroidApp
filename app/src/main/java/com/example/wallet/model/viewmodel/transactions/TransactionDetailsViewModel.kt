@@ -11,10 +11,13 @@ import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.ExpanseCategory
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class TransactionDetailsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) : ViewModel() {
@@ -25,7 +28,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var dataLoaded = mutableStateOf(false)
     var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
     var transactionWalletsState = mutableStateOf((listOf(Wallet())))
-    var transaction = mutableStateOf(Expanse())
+    var transaction = mutableStateOf(SecondAllExpensesItem())
 
     var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
     var amountFieldTemporaryValueBeforeSavingtoDB: String? = null
@@ -43,6 +46,22 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
     var categoryIconTemporaryValueBeforeSavingtoDB: String? = null
 
+    var username:String = ""
+
+    init {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Thread exception while getting username on the transaction details screen")
+        }
+
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            dataStorePreferenceRepository.getUsername.
+            catch { Log.d("ERROR","Could not get Username from Data Store on Transaction details screen screen") }
+                .collect{
+                    Log.d("TOKEN","Username on Transaction details Screen: $it")
+                    username = it
+                }
+        }
+    }
 
     fun chooseCategory(category: String) {
         val transaction = TransactionsRepository.updateExpenseCategory(category, this.transactionId);
@@ -69,7 +88,8 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
                     location = locationFieldTemporaryValueBeforeSavingtoDB,
                     type = typeFieldTemporaryValueBeforeSavingtoDB,
                     category = categoryLinkTemporaryValueBeforeSavingtoDB,
-                    wallet = walletLinkTemporaryValueBeforeSavingtoDB
+                    wallet = walletLinkTemporaryValueBeforeSavingtoDB,
+                    username = username
                 )
             )
         }

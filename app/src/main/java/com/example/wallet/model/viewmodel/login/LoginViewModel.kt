@@ -47,6 +47,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
 //                _accessToken.postValue(it)
 //            }
                 Log.d("INFO","Access token is: ${accessToken.value}")
+            Log.d("INFO","Username: $username")
         }
     }
 

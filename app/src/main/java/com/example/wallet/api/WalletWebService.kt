@@ -9,6 +9,7 @@ import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.SingleTransactionWalletResponse
 import com.example.wallet.model.response.login.LoginResponse
 import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import com.example.wallet.requests.LoginRequest
@@ -41,6 +42,12 @@ class WalletWebService {
       val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
        Log.d("INFO","Authorization header: $authHeader")
      return api.getExpanses(authHeader = authHeader)
+    }
+
+    suspend fun getFilteredExpanses(authToken: String?): SecondAllExpensesResponse {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        Log.d("INFO","Authorization header: $authHeader")
+        return api.getFilteredExpanses(authHeader = authHeader)
     }
 
     suspend fun getExpanseCategories():AllExpanseCategoriesResponse{
@@ -76,6 +83,9 @@ class WalletWebService {
 
         @GET("expanses")
         suspend fun getExpanses(@Header("Authorization")authHeader:String): AllExpansesResponse
+
+        @GET("expanses2")
+        suspend fun getFilteredExpanses(@Header("Authorization")authHeader:String): SecondAllExpensesResponse
 
         @GET("expanseCategories")
         suspend fun getExpanseCategories():AllExpanseCategoriesResponse

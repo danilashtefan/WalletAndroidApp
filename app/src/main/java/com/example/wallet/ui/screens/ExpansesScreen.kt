@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -26,10 +25,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.R
-import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.DataStorePreferenceRepository
-import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
-import com.example.wallet.model.viewmodel.transactions.ExpenseCategoriesViewModelFactory
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.viewmodel.transactions.ExpensesViewModelFactory
 
 @Composable
@@ -131,12 +128,14 @@ private fun CalendarDatePicker(viewModel: ExpansesViewModel,
 
 
 @Composable
-fun ExpanseSection(expanses: List<Expanse>, navController: NavHostController,viewModel: ExpansesViewModel){
+fun ExpanseSection(
+    expanses: List<SecondAllExpensesItem>, navController: NavHostController,
+    viewModel: ExpansesViewModel){
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(expanses) { expanse ->
             ReusableRow(categoryIcon = expanse.categoryIcon,categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type){
                 val expanseId = expanse.id
-                expanse._links?.category?.let { Log.d("Expanse Category Link", it.href) }
+                //expanse._links?.category?.let { Log.d("Expanse Category Link", it.href) }
                 navController.navigate("transactionDetails/$expanseId")
             }
         }

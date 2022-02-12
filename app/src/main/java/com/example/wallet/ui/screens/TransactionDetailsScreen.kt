@@ -1,6 +1,5 @@
 package com.example.wallet.ui.screens
 
-import android.view.SurfaceControl
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
@@ -22,11 +21,10 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
-import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.ExpanseCategory
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.response.transactions.Wallet
-import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModelFactory
 
@@ -174,7 +172,7 @@ private fun LogoTransactionDetailsSection() {
 }
 
 @Composable
-fun ImageSection(transaction:Expanse) {
+fun ImageSection(transaction: SecondAllExpensesItem) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Card(
             shape = CircleShape,

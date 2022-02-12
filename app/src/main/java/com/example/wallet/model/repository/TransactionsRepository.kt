@@ -3,20 +3,28 @@ package com.example.wallet.model.repository
 import com.example.wallet.api.WalletWebService
 import com.example.wallet.model.AllExpansesResponse
 import com.example.wallet.model.Expanse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import java.lang.Exception
 
 object TransactionsRepository {
     private val service: WalletWebService = WalletWebService()
     var expense = AllExpansesResponse()
+    var expenseFiltered = SecondAllExpensesResponse()
 
     suspend fun getExpanses(authToken: String?): AllExpansesResponse {
         expense = service.getExpanses(authToken)
         return expense
     }
 
-    fun getExpense(expenseId: Int): Expanse {
-        for(expense in expense._embedded.expanses) {
+    suspend fun getFilteredExpanses(authToken: String?): SecondAllExpensesResponse {
+        expenseFiltered = service.getFilteredExpanses(authToken)
+        return expenseFiltered
+    }
+
+    fun getExpense(expenseId: Int): SecondAllExpensesItem {
+        for(expense in expenseFiltered) {
             if(expense.id === expenseId) {
                 return expense
             }
@@ -24,11 +32,11 @@ object TransactionsRepository {
         throw Exception("No expense found!")
     }
 
-    fun updateExpenseCategory(category: String, transactionId: Int): Expanse {
+    fun updateExpenseCategory(category: String, transactionId: Int): SecondAllExpensesItem {
         return updateField("categoryName", category, transactionId)
     }
-    fun updateField(field: String, value: String?, transactionId: Int): Expanse {
-        for(expense in expense._embedded.expanses) {
+    fun updateField(field: String, value: String?, transactionId: Int): SecondAllExpensesItem {
+        for(expense in expenseFiltered) {
             if (expense.id === transactionId) {
                 when (field) {
                     "amount" -> if (value != null) {

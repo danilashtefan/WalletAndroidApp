@@ -136,7 +136,8 @@ init{
                     location = locationFieldTemporaryValueBeforeSavingtoDB,
                     type = typeFieldTemporaryValueBeforeSavingtoDB,
                     category = categoryLinkTemporaryValueBeforeSavingtoDB,
-                    wallet = walletLinkTemporaryValueBeforeSavingtoDB
+                    wallet = walletLinkTemporaryValueBeforeSavingtoDB,
+                    username = userName
                 )
             )
         }
