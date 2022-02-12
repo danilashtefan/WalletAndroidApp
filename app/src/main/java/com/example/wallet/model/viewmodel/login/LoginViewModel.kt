@@ -28,6 +28,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
     val accessToken: LiveData<String> = _accessToken
     init {
         Log.d("INFO:", "Login ViewModel initialized")
+
     }
 
     fun login(loginRequest: LoginRequest) {

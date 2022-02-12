@@ -40,7 +40,7 @@ fun LoginScreen(
 
 
 
-    Surface(modifier = Modifier.fillMaxSize(),color = MaterialTheme.colors.BackgroundColor){
+    Surface(modifier = Modifier.fillMaxSize(),color = Color.White){
         Column (modifier = Modifier.fillMaxSize(),verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally){
             WelcomeText()
@@ -53,7 +53,7 @@ fun LoginScreen(
 }
 @Composable
 fun WelcomeText(){
-    Text(text = "Welcome To Maps",
+    Text(text = "Welcome",
         color = Color.White,
         fontSize = 25.sp,
         modifier = Modifier.padding(top = 40.dp)
