@@ -28,6 +28,8 @@ import androidx.navigation.NavHostController
 import com.example.wallet.helpers.EmojiProvider
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.ExpanseCategory
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.model.viewmodel.transactions.AddViewModel
 import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
@@ -367,7 +369,7 @@ fun WalletSelectorTransactionAdd(
 fun CategorySelectorTransactionAdd(
     padding: Int,
     labelText: String?,
-    optionsList: List<ExpanseCategory>,
+    optionsList: List<SecondAllExpenseCategoriesResponseItem>,
     enabled: Boolean = true,
     viewModel: AddViewModel,
 ) {

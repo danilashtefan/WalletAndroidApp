@@ -11,6 +11,8 @@ import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.ExpanseCategory
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.requests.AddOrEditTransactionRequest
@@ -26,7 +28,8 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
    // private val walletRepository: WalletRepository = WalletRepository()
     private var transactionId: Int = 0;
     var dataLoaded = mutableStateOf(false)
-    var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
+    //var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
+    var transactionCetegoriesState = mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
     var transactionWalletsState = mutableStateOf((listOf(Wallet())))
     var transaction = mutableStateOf(SecondAllExpensesItem())
 
@@ -47,10 +50,19 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var categoryIconTemporaryValueBeforeSavingtoDB: String? = null
 
     var username:String = ""
+    var authToken = ""
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while getting username on the transaction details screen")
+        }
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            dataStorePreferenceRepository.getAccessToken.
+            catch { Log.d("ERROR","EXPECTION while getting the token in the add screen") }
+                .collect{
+                    Log.d("TOKEN","Access token on add screen: $it")
+                    authToken = it
+                }
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
@@ -104,8 +116,14 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     init {
     }
 
+    //Method to fetch from default API. Delete later
     suspend fun getTransactionCategories(): List<ExpanseCategory> {
         var listOfCategories = categoriesRepository.getExpanseCategories()._embedded.expanseCategories
+        return listOfCategories
+    }
+
+    suspend fun getFilteredTransactionCategories(): SecondAllExpenseCategoriesResponse {
+        var listOfCategories = categoriesRepository.getFilteredExpenseCategories(authToken)
         return listOfCategories
     }
 
@@ -142,7 +160,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
-            val transactionCategories = getTransactionCategories()
+            val transactionCategories = getFilteredTransactionCategories()
             val transactionWallets = getTransactionWallets()
             transactionCetegoriesState.value = transactionCategories
             transactionWalletsState.value = transactionWallets
@@ -150,7 +168,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         }
     }
 
-    fun updateCategoryLinkValueBeforeSavingToDB(category: ExpanseCategory) {
+    fun updateCategoryLinkValueBeforeSavingToDB(category: SecondAllExpenseCategoriesResponseItem) {
         this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
         updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
     }

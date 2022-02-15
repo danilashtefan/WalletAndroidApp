@@ -9,6 +9,7 @@ import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.SingleTransactionWalletResponse
 import com.example.wallet.model.response.login.LoginResponse
 import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
@@ -57,6 +58,11 @@ class WalletWebService {
        return api.getExpanseCategories()
     }
 
+    suspend fun getFilteredExpenseCategories(authToken: String?):SecondAllExpenseCategoriesResponse{
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.getFilteredExpenseCategories(authHeader = authHeader)
+    }
+
     suspend fun getCategoryForExpanse(expenseId: Int): SingleExpanseCategoryResponse{
         return api.getCategoryForExpanse(expenseId)
     }
@@ -95,6 +101,9 @@ class WalletWebService {
 
         @GET("expanses/{id}/category")
         suspend fun getCategoryForExpanse(@Path("id") expanseId: Int):SingleExpanseCategoryResponse
+
+        @GET("expanseCategories2")
+        suspend fun getFilteredExpenseCategories(@Header("Authorization")authHeader:String): SecondAllExpenseCategoriesResponse
 
         @PATCH("expanses/{id}")
         suspend fun updateTransactionInDb(@Path("id") transactionId: Int, @Body transactionData: AddOrEditTransactionRequest):Expanse

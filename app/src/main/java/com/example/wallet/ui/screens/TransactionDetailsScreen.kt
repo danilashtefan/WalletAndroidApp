@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.R
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.ExpanseCategory
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
@@ -190,7 +191,7 @@ fun ImageSection(transaction: SecondAllExpensesItem) {
 private fun CategorySelctorTransactionDetails(
     padding: Int,
     labelText: String,
-    optionsList: List<ExpanseCategory>,
+    optionsList: List<SecondAllExpenseCategoriesResponseItem>,
     enabled: Boolean = true,
     viewModel: TransactionDetailsViewModel,
     transactionId: Int
