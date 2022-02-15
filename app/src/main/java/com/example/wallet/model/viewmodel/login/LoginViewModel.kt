@@ -26,12 +26,14 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
     lateinit var password:String
     private val _accessToken = MutableLiveData("")
     val accessToken: LiveData<String> = _accessToken
+
+    private var authResult: Boolean = false
     init {
         Log.d("INFO:", "Login ViewModel initialized")
 
     }
 
-    fun login(loginRequest: LoginRequest) {
+    fun login(loginRequest: LoginRequest): String {
 
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while loging in: $exception")
@@ -41,14 +43,19 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
             var tokens = loginRepository.login(loginRequest)
             dataStorePreferenceRepository.setTokens(tokens.access_token, tokens.refresh_token)
             dataStorePreferenceRepository.setUsername(username)
-//            dataStorePreferenceRepository.getToken<String>().
-//            catch { Log.d("ERROR","EXPECTION") }
-//                .collect{
-//                _accessToken.postValue(it)
-//            }
-                Log.d("INFO","Access token is: ${accessToken.value}")
+            Log.d("INFO","Access token is: ${accessToken.value}")
             Log.d("INFO","Username: $username")
+            if(!tokens.access_token.equals("")) {
+                authResult = true
+            }
+
         }
+        //Sleep is to wait for the server's response about the authentication
+        Thread.sleep(500)
+        if(authResult) {
+            return "Success"
+        }
+        return "Failure"
     }
 
     fun updateViewModelFieldState(field: String, value: String) {

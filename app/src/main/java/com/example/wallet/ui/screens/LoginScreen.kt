@@ -93,9 +93,10 @@ fun text_field(InputType : KeyboardType,placeholder : String,IconImage : Painter
 @Composable
 fun SignIn(viewModel: LoginViewModel, navController: NavHostController){
     Button(onClick = {
-        viewModel.login(LoginRequest(username = viewModel.username, password = viewModel.password))
-        navController.navigate("expanses")
-                     },modifier = Modifier
+        var result = viewModel.login(LoginRequest(username = viewModel.username, password = viewModel.password))
+        if(result.equals("Success")){
+            navController.navigate("expanses")
+        } },modifier = Modifier
         .padding(top = 25.dp)
         .requiredWidth(277.dp),
     colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.ButtonColor)){
