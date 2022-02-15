@@ -23,7 +23,10 @@ class WalletWebService {
 
     init{
         val retrofit = Retrofit.Builder()
+                //HOME
             .baseUrl("http://10.0.1.60:8080/api/")
+                //OFFICE
+            //baseUrl("http://192.168.0.116:8080/api/")
        //.baseUrl("http://192.168.0.17:8080/api/")
             //.baseUrl("http://192.168.1.80:8080/api/")
             //.baseUrl("http://152.66.156.198:8080/api/")

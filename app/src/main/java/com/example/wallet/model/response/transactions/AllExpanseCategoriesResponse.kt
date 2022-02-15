@@ -13,7 +13,8 @@ data class ExpanseCategory(
     val expanseCategoryName: String = "",
     val id: Int = 0,
     val type: String ="",
-    val icon: String ="💸"
+    val icon: String ="💸",
+    val username:String = "jack"
 )
 
 data class ExpanseCategoryX(
