@@ -40,6 +40,8 @@ fun ExpansesScreen(
     val expanses = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
     val accessToken = viewModel.accessToken
+    val totalExpenses = viewModel.totalExpenses
+    val totalIncome = viewModel.totalIncome
 
     if (!dataLoaded) {
         return;
@@ -49,7 +51,7 @@ fun ExpansesScreen(
         modifier = Modifier
             .background(Color(0xFFBB87E4))
     ) {
-        TransactionListSection(viewModel)
+        TransactionListSection(viewModel, totalExpenses, totalIncome)
         ExpanseSection(expanses ,navController,viewModel)
     }
 
@@ -57,7 +59,9 @@ fun ExpansesScreen(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TransactionListSection(
-    viewModel: ExpansesViewModel
+    viewModel: ExpansesViewModel,
+    totalExpenses:Int,
+    totalIncome:Int
 ){
 
     Column() {
@@ -88,7 +92,10 @@ fun TransactionListSection(
         }
 
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
-            Text(text = "Total expenses:",style =MaterialTheme.typography.h6, color = Color.White )
+            Text(text = "Total expenses: ${totalExpenses}",style =MaterialTheme.typography.h6, color = Color.White )
+        }
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+            Text(text = "Total income: ${totalIncome}",style =MaterialTheme.typography.h6, color = Color.White )
         }
     }
 }

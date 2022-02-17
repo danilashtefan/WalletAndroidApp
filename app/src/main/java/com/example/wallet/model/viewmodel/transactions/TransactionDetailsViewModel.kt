@@ -160,10 +160,11 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
-            val transactionCategories = getFilteredTransactionCategories()
+
             val transactionWallets = getTransactionWallets()
-            transactionCetegoriesState.value = transactionCategories
             transactionWalletsState.value = transactionWallets
+            val transactionCategories = getFilteredTransactionCategories()
+            transactionCetegoriesState.value = transactionCategories
             dataLoaded.value = true;
         }
     }

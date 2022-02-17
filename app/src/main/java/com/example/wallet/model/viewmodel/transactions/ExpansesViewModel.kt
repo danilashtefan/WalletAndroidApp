@@ -1,6 +1,7 @@
 package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
+import android.util.MutableInt
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,6 +37,7 @@ class ExpansesViewModel(
     val transactionState = mutableStateOf((emptyList<SecondAllExpensesItem>()))
     var dataLoaded = mutableStateOf(false)
     var totalExpenses = 0
+    var totalIncome = 0
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
@@ -65,8 +67,18 @@ class ExpansesViewModel(
                 transaction.walletId = transactionWalletNameAndId.second
             }
             transactionState.value = expanses
-
-
+            var totalExpensesTemp = 0
+            var totalIncomeTemp = 0
+            for (expense in expanses){
+                if(expense.type.equals("Expense")) {
+                    totalExpensesTemp += expense.amount
+                }
+                if(expense.type.equals("Income")){
+                    totalIncomeTemp += expense.amount
+                }
+            }
+            totalExpenses=  totalExpensesTemp
+            totalIncome = totalIncomeTemp
         }
         dataLoaded.value = true
     }

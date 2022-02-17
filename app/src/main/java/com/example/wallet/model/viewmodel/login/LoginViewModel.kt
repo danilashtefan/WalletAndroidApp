@@ -51,7 +51,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
 
         }
         //Sleep is to wait for the server's response about the authentication
-        Thread.sleep(500)
+        Thread.sleep(1000)
         if(authResult) {
             return "Success"
         }
