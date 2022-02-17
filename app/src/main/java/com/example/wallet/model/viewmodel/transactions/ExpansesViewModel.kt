@@ -35,6 +35,7 @@ class ExpansesViewModel(
     //val transactionState = mutableStateOf((emptyList<Expanse>()))
     val transactionState = mutableStateOf((emptyList<SecondAllExpensesItem>()))
     var dataLoaded = mutableStateOf(false)
+    var totalExpenses = 0
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
@@ -64,6 +65,7 @@ class ExpansesViewModel(
                 transaction.walletId = transactionWalletNameAndId.second
             }
             transactionState.value = expanses
+
 
         }
         dataLoaded.value = true

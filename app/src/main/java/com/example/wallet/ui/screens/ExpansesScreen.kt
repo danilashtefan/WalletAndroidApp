@@ -88,7 +88,7 @@ fun TransactionListSection(
         }
 
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
-            Text(text = "Total expanses:",style =MaterialTheme.typography.h6, color = Color.White )
+            Text(text = "Total expenses:",style =MaterialTheme.typography.h6, color = Color.White )
         }
     }
 }
