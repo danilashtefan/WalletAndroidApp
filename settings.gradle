@@ -3,6 +3,7 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+
     }
     plugins {
         id 'com.android.application' version '7.1.0-alpha04'
@@ -15,6 +16,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url('https://repo1.maven.org/maven2/') }
+        //maven { url 'https://jitpack.io' }
     }
 }
 rootProject.name = "Wallet"
