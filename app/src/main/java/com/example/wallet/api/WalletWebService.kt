@@ -14,6 +14,7 @@ import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpense
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponse
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
+import com.example.wallet.requests.AddOrEditWalletRequest
 import com.example.wallet.requests.LoginRequest
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -92,6 +93,10 @@ class WalletWebService {
         return api.addCategoryToDb(categoryData)
     }
 
+    suspend fun addWalletToDb(walletData: AddOrEditWalletRequest){
+        return api.addWalletToDb(walletData)
+    }
+
     interface WalletAPI{
         @POST("login")
         suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
@@ -128,6 +133,9 @@ class WalletWebService {
 
         @POST("expanseCategories")
         suspend fun addCategoryToDb(@Body categoryData: AddOrEditCategoryRequest)
+
+        @POST("wallets")
+        suspend fun addWalletToDb(@Body walletData: AddOrEditWalletRequest)
 
     }
 }

@@ -17,6 +17,7 @@ import com.example.wallet.model.response.transactions.SecondAPI.*
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
+import com.example.wallet.requests.AddOrEditWalletRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -54,6 +55,11 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     var iconCategoryFieldTemporaryValueBeforeSavingtoDB: String? = ""
     var nameCategoryFieldTemporaryValueBeforeSavingtoDB: String? = ""
     var typeCategoryFieldTemporaryValueBeforeSavingtoDB: String? = ""
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+    var iconWalletFieldTemporaryValueBeforeSavingtoDB: String? = ""
+    var nameWalletFieldTemporaryValueBeforeSavingtoDB: String? = ""
+    var currencyWalletFieldTemporaryValueBeforeSavingtoDB: String? = ""
 
 
 
@@ -123,6 +129,9 @@ init{
             "nameCategory" -> nameCategoryFieldTemporaryValueBeforeSavingtoDB = value
             "typeCategory" -> typeCategoryFieldTemporaryValueBeforeSavingtoDB = value
             "iconCategory" -> iconCategoryFieldTemporaryValueBeforeSavingtoDB = value
+            "iconWallet" -> iconWalletFieldTemporaryValueBeforeSavingtoDB = value
+            "currencyWallet" -> currencyWalletFieldTemporaryValueBeforeSavingtoDB = value
+            "nameWallet" -> nameWalletFieldTemporaryValueBeforeSavingtoDB = value
 
         }
 
@@ -191,12 +200,37 @@ init{
 
     }
 
+    fun addWalletToDb(){
+
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Thread exception when adding wallet to Db")
+        }
+
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            addWalletToDb(
+                walletData = AddOrEditWalletRequest(
+                    walletName = nameWalletFieldTemporaryValueBeforeSavingtoDB,
+                    currency = currencyWalletFieldTemporaryValueBeforeSavingtoDB,
+                    icon = iconWalletFieldTemporaryValueBeforeSavingtoDB,
+                    username = userName
+
+                )
+            )
+        }
+
+
+    }
+
     suspend fun addTransactionToDb( transactionData: AddOrEditTransactionRequest) {
         TransactionsRepository.addTransactionToDb(transactionData)
     }
 
     suspend fun addCategoryToDb(categoryData:AddOrEditCategoryRequest){
         categoriesRepository.addCategoryToDb(categoryData)
+    }
+
+    suspend fun addWalletToDb(walletData: AddOrEditWalletRequest){
+        walletRepository.addWalletToDb(walletData)
     }
 
 

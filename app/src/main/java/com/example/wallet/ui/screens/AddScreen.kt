@@ -64,14 +64,111 @@ fun AddingSection(viewModel: AddViewModel) {
         "" -> TransactionAddSection(viewModel)
         "transaction" -> TransactionAddSection(viewModel)
         "category" -> CategoryAddSection(viewModel)
-        "wallet" -> WalletAddSection()
+        "wallet" -> WalletAddSection(viewModel)
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WalletAddSection() {
-    TODO("Not yet implemented")
+fun WalletAddSection(viewModel: AddViewModel) {
+    var emoji = viewModel.iconWalletFieldTemporaryValueBeforeSavingtoDB
+    var name = viewModel.nameWalletFieldTemporaryValueBeforeSavingtoDB
+    var currency = viewModel.currencyWalletFieldTemporaryValueBeforeSavingtoDB
+
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.background(
+                color = PurpleBasic
+            )
+        ) {
+            TypeOfElementToAddText("Add Wallet")
+            Spacer(modifier = Modifier.padding(bottom = 50.dp))
+            var emojis = EmojiProvider.emojis
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Spacer(modifier = Modifier.height(35.dp))
+
+                Spacer(modifier = Modifier.height(30.dp))
+                var text1 = ""
+                if (text1 === null) {
+                    text1 = ""
+                }
+                val textState1 = remember { mutableStateOf(TextFieldValue(text1)) }
+
+                TextField(
+                    value = textState1.value,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    onValueChange = {
+                        textState1.value = it
+                        viewModel.updateTemporaryFieldValueBeforeSavingToDB(
+                            "nameWallet",
+                            textState1.value.text
+                        )
+                    },
+                    textStyle = TextStyle(
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                    ),
+                    label = { Text("Name") },
+                    maxLines = 1,
+                )
+
+                var text2 = ""
+                if (text2 === null) {
+                    text2 = ""
+                }
+                val textState2 = remember { mutableStateOf(TextFieldValue(text1)) }
+                TextField(
+                    value = textState2.value,
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    onValueChange = {
+                        textState2.value = it
+                        viewModel.updateTemporaryFieldValueBeforeSavingToDB(
+                            "currencyWallet",
+                            textState2.value.text
+                        )
+                    },
+                    textStyle = TextStyle(
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                    ),
+                    label = { Text("Type") },
+                    maxLines = 1
+                )
+                Spacer(modifier = Modifier.height(30.dp))
+                LazyVerticalGrid(
+                    cells = GridCells.Fixed(4),
+                    modifier = Modifier
+                        .height(220.dp)
+                        .padding(bottom = 20.dp)
+                ) {
+                    items(emojis) { emoji ->
+                        Text(
+                            emoji,
+                            fontSize = 30.sp,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.clickable(onClick = {
+                                viewModel.updateTemporaryFieldValueBeforeSavingToDB(
+                                    "iconWallet",
+                                    emoji
+                                )
+                            })
+                        )
+                    }
+                }
+                SaveButtonWalletAdd(viewModel = viewModel)
+            }
+        }
+
+    }
+
 }
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -320,6 +417,19 @@ private fun SaveButtonCategoryAdd(
              viewModel.addCategoryToDb()
         }) {
             Text(text = "Add category")
+        }
+    }
+}
+
+@Composable
+private fun SaveButtonWalletAdd(
+    viewModel: AddViewModel
+) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        OutlinedButton(onClick = {
+            viewModel.addWalletToDb()
+        }) {
+            Text(text = "Add wallet")
         }
     }
 }
