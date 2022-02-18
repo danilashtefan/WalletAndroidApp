@@ -30,6 +30,7 @@ import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.model.viewmodel.transactions.AddViewModel
 import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
@@ -328,7 +329,7 @@ private fun SaveButtonCategoryAdd(
 fun WalletSelectorTransactionAdd(
     padding: Int,
     labelText: String?,
-    optionsList: List<Wallet>,
+    optionsList: List<SecondAllWalletsResponseItem>,
     enabled: Boolean = true,
     viewModel: AddViewModel,
 ) {

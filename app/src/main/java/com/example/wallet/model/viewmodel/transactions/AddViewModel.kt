@@ -13,9 +13,7 @@ import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.ExpanseCategory
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
+import com.example.wallet.model.response.transactions.SecondAPI.*
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
@@ -41,8 +39,9 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     var commentsFieldTemporaryValueBeforeSavingtoDB: String? = null
     var locationFieldTemporaryValueBeforeSavingtoDB: String? = null
     //var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
-    var transactionCetegoriesState = mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
-    var transactionWalletsState = mutableStateOf((listOf(Wallet())))
+    var transactionCetegoriesState = mutableStateOf(emptyList<SecondAllExpenseCategoriesResponseItem>())
+    //var transactionWalletsState = mutableStateOf((listOf(Wallet())))
+    var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
     //This is only Category Name Displayed, not the actual Category name!!
     var categoryNameFieldTemporaryValueBeforeSavingtoDB: String? = "Category of transaction"
     var typeFieldTemporaryValueBeforeSavingtoDB: String? = "Type of transaction"
@@ -82,7 +81,7 @@ init{
     }
     viewModelScope.launch(handler + Dispatchers.IO) {
         val transactionCategories = getFilteredTransactionCategories()
-        val transactionWallets = getTransactionWallets()
+        val transactionWallets = getFilteredWallets()
         transactionCetegoriesState.value = transactionCategories
         transactionWalletsState.value = transactionWallets
         dataLoaded.value = true;
@@ -99,6 +98,11 @@ init{
     suspend fun getFilteredTransactionCategories(): SecondAllExpenseCategoriesResponse{
         var listOfCategories = categoriesRepository.getFilteredExpenseCategories(authToken)
         return listOfCategories
+    }
+
+    suspend fun getFilteredWallets(): SecondAllWalletsResponse{
+        var listOfWallets = walletRepository.getFilteredWallets(authToken)
+        return listOfWallets
     }
 
     suspend fun getTransactionWallets(): List<Wallet>{
@@ -196,7 +200,7 @@ init{
     }
 
 
-    fun updateWalletLinkValueBeforeSavingToDB(wallet: Wallet) {
+    fun updateWalletLinkValueBeforeSavingToDB(wallet: SecondAllWalletsResponseItem) {
         this.walletLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
         updateTemporaryFieldValueBeforeSavingToDB("walletName", wallet.walletName)
     }

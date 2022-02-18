@@ -25,6 +25,7 @@ import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
 import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModelFactory
@@ -232,7 +233,7 @@ private fun CategorySelctorTransactionDetails(
 private fun WalletSelctorTransactionDetails(
     padding: Int,
     labelText: String,
-    optionsList: List<Wallet>,
+    optionsList: List<SecondAllWalletsResponseItem>,
     enabled: Boolean = true,
     viewModel: TransactionDetailsViewModel,
     transactionId: Int

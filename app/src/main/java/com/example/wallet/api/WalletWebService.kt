@@ -11,6 +11,7 @@ import com.example.wallet.model.response.login.LoginResponse
 import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponse
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import com.example.wallet.requests.LoginRequest
@@ -40,6 +41,11 @@ class WalletWebService {
 
     suspend fun login(loginRequest: LoginRequest): LoginResponse {
         return api.login(loginRequest)
+    }
+
+    suspend fun getFilteredWallets(authToken: String?): SecondAllWalletsResponse{
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.getFilteredWallets(authHeader)
     }
 
    suspend fun getExpanses(authToken: String?): AllExpansesResponse {
@@ -95,6 +101,9 @@ class WalletWebService {
 
         @GET("expanses2")
         suspend fun getFilteredExpanses(@Header("Authorization")authHeader:String): SecondAllExpensesResponse
+
+        @GET("wallets2")
+        suspend fun getFilteredWallets(@Header("Authorization")authHeader:String): SecondAllWalletsResponse
 
         @GET("expanseCategories")
         suspend fun getExpanseCategories():AllExpanseCategoriesResponse
