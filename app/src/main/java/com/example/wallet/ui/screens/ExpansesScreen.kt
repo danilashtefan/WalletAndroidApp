@@ -25,9 +25,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.R
+import com.example.wallet.helpers.DateFormatter
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.viewmodel.transactions.ExpensesViewModelFactory
+import java.text.SimpleDateFormat
 
 @Composable
 fun ExpansesScreen(
@@ -123,10 +125,10 @@ private fun CalendarDatePicker(viewModel: ExpansesViewModel,
         update = { views ->
             views.setOnDateChangeListener { calendarView, year, month, day ->
                 if(dateType == "minimum") {
-                    viewModel.minDatePicked.value = day.toString()
+                    viewModel.minDatePicked.value = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
                 }
                 else{
-                    viewModel.maxDatePicked.value = day.toString()
+                    viewModel.maxDatePicked.value = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
                 }
             }
         }
@@ -138,8 +140,12 @@ private fun CalendarDatePicker(viewModel: ExpansesViewModel,
 fun ExpanseSection(
     expanses: List<SecondAllExpensesItem>, navController: NavHostController,
     viewModel: ExpansesViewModel){
+
+    var filteredTransactions = expanses.filter {SimpleDateFormat("yyyy-MM-dd").parse(DateFormatter.formatDate(it.date)) >= SimpleDateFormat("yyyy-MM-dd").parse(viewModel.minDatePicked.value) &&
+            SimpleDateFormat("yyyy-MM-dd").parse(DateFormatter.formatDate(it.date)) <= SimpleDateFormat("yyyy-MM-dd").parse(viewModel.maxDatePicked.value)
+    }
     LazyColumn(modifier = Modifier.padding(16.dp)) {
-        items(expanses) { expanse ->
+        items(filteredTransactions) { expanse ->
             ReusableRow(categoryIcon = expanse.categoryIcon,categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type){
                 val expanseId = expanse.id
                 //expanse._links?.category?.let { Log.d("Expanse Category Link", it.href) }

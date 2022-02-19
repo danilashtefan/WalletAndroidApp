@@ -27,8 +27,8 @@ class ExpansesViewModel(
     private val expansesRepository: TransactionsRepository = TransactionsRepository
     private val transactionCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private val transactionWalletsRepository: WalletRepository = WalletRepository()
-    var minDatePicked = mutableStateOf("Start Date")
-    var maxDatePicked = mutableStateOf("End Date")
+    var minDatePicked = mutableStateOf("1000-01-01")
+    var maxDatePicked = mutableStateOf("3000-12-12")
     private val _accessToken = MutableLiveData("")
     var accessToken = ""
     var expandedCalendarMin = mutableStateOf(false)
