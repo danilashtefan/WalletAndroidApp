@@ -41,7 +41,7 @@ fun ExpansesScreen(
     ) //ViewModel is bound to a composable
     val expanses = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
-    val accessToken = viewModel.accessToken
+    val accessToken = viewModel.authToken
     val totalExpenses = viewModel.totalExpenses
     val totalIncome = viewModel.totalIncome
 
@@ -146,11 +146,15 @@ fun ExpanseSection(
     }
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(filteredTransactions) { expanse ->
-            ReusableRow(categoryIcon = expanse.categoryIcon,categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type){
-                val expanseId = expanse.id
+            val expanseId = expanse.id
+            ReusableRow(categoryIcon = expanse.categoryIcon,categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type, editClickAction = {
+
                 //expanse._links?.category?.let { Log.d("Expanse Category Link", it.href) }
                 navController.navigate("transactionDetails/$expanseId")
-            }
+            },deleteClickAction = {
+                Log.d("INFO", "Delete button pressed")
+                viewModel.deleteExpense(expanse)
+            })
         }
     }
 }
@@ -158,7 +162,7 @@ fun ExpanseSection(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun ReusableRow(categoryIcon:String, categoryName: String, date: String, location: String, amount: Int, comments: String, type: String,clickAction:() -> Unit) {
+private fun ReusableRow(categoryIcon:String, categoryName: String, date: String, location: String, amount: Int, comments: String, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit) {
     val currency = "$"
     var sign = "+"
     if(type == "Expense") {
@@ -194,8 +198,9 @@ private fun ReusableRow(categoryIcon:String, categoryName: String, date: String,
                 ) {
                     Text(
                         text = sign,
-                        modifier = Modifier.align(Alignment.CenterVertically).
-                                padding(end = 3.dp)
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(end = 3.dp)
                     )
 
                     Text(
@@ -226,8 +231,14 @@ private fun ReusableRow(categoryIcon:String, categoryName: String, date: String,
                     Text(text= "Date: " + date)
                     Text(text = "Comment: " + comments)
                     Text(text="Type: " +type )
-                    OutlinedButton(onClick = {clickAction.invoke()}) {
-                        Text(text = "Edit")
+                    Row(){
+                        OutlinedButton(onClick = {editClickAction.invoke()}) {
+                            Text(text = "Edit")
+                        }
+                        Spacer(modifier = Modifier.size(20.dp))
+                        OutlinedButton(onClick = {deleteClickAction.invoke()}) {
+                            Text(text = "Delete", color = Color.Red)
+                        }
                     }
                 }
             }

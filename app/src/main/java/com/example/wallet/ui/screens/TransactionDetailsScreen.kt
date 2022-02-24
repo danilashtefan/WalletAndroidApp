@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.example.wallet.R
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.ExpanseCategory
@@ -32,11 +33,16 @@ import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewMod
 
 @Composable
 fun TransactionDetailsScreen(
+    navController: NavHostController,
     transactionId: Int,
     dataStorePreferenceRepository: DataStorePreferenceRepository
 ) {
-    val viewModel: TransactionDetailsViewModel = viewModel(factory = TransactionDetailsViewModelFactory(DataStorePreferenceRepository(
-        LocalContext.current))
+    val viewModel: TransactionDetailsViewModel = viewModel(
+        factory = TransactionDetailsViewModelFactory(
+            DataStorePreferenceRepository(
+                LocalContext.current
+            )
+        )
     ) //ViewModel is bound to a composable
     viewModel.setTransactionId(transactionId)
     var dataLoaded = viewModel.dataLoaded.value
@@ -138,13 +144,20 @@ fun TransactionDetailsScreen(
             viewModel = viewModel
         )
         Spacer(modifier = Modifier.size(20.dp))
-        SaveButtonTransactionDetails(fieldsOnTheScreen, viewModel)
+        SaveButtonTransactionDetails(navController, fieldsOnTheScreen, viewModel)
+//        Spacer(modifier = Modifier.size(20.dp))
+//        DeleteButtonTransactionDetails(
+//            navController,
+//            expenseId = transactionId,
+//            viewModel = viewModel
+//        )
 
     }
 }
 
 @Composable
 private fun SaveButtonTransactionDetails(
+    navController: NavHostController,
     fieldsOnTheScreen: ArrayList<String>,
     viewModel: TransactionDetailsViewModel
 ) {
@@ -154,11 +167,32 @@ private fun SaveButtonTransactionDetails(
                 viewModel.updateField(field, viewModel.getFieldToUpdateInDB(field))
             }
             viewModel.updateTransactionInDb()
+            navController.navigate("expanses")
+
         }) {
             Text(text = "Save the changes")
         }
     }
 }
+
+
+@Composable
+private fun DeleteButtonTransactionDetails(
+    navController: NavHostController,
+    expenseId: Int,
+    viewModel: TransactionDetailsViewModel
+) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
+            viewModel.deleteTransaction(expenseId)
+            Thread.sleep(500)
+            navController.navigate("expanses")
+        }) {
+            Text(text = "Delete transaction", color = Color.Red)
+        }
+    }
+}
+
 
 @Composable
 private fun LogoTransactionDetailsSection() {
@@ -182,7 +216,7 @@ fun ImageSection(transaction: SecondAllExpensesItem) {
             modifier = Modifier.size(150.dp),
             elevation = 5.dp
         ) {
-            CategoryImage(transaction.categoryIcon,50)
+            CategoryImage(transaction.categoryIcon, 50)
         }
     }
 }

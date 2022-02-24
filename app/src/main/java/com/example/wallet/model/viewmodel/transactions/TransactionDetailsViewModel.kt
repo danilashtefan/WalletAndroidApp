@@ -16,18 +16,23 @@ import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class TransactionDetailsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) : ViewModel() {
+class TransactionDetailsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
+    ViewModel() {
     private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private val walletRepository: WalletRepository = WalletRepository()
-   // private val walletRepository: WalletRepository = WalletRepository()
+
+    // private val walletRepository: WalletRepository = WalletRepository()
     private var transactionId: Int = 0;
     var dataLoaded = mutableStateOf(false)
+
     //var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
-    var transactionCetegoriesState = mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
+    var transactionCetegoriesState =
+        mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
     var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
     var transaction = mutableStateOf(SecondAllExpensesItem())
 
@@ -47,34 +52,48 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
     var categoryIconTemporaryValueBeforeSavingtoDB: String? = null
 
-    var username:String = ""
+    var username: String = ""
     var authToken = ""
+
+    var authTokenJob : Job
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception while getting username on the transaction details screen")
+            Log.d(
+                "EXCEPTION",
+                "Thread exception while getting username on the transaction details screen"
+            )
         }
-        viewModelScope.launch(handler + Dispatchers.IO) {
-            dataStorePreferenceRepository.getAccessToken.
-            catch { Log.d("ERROR","EXPECTION while getting the token in the add screen") }
-                .collect{
-                    Log.d("TOKEN","Access token on add screen: $it")
+        authTokenJob = viewModelScope.launch(handler + Dispatchers.IO) {
+            dataStorePreferenceRepository.getAccessToken.catch {
+                Log.d(
+                    "ERROR",
+                    "EXPECTION while getting the token in the add screen"
+                )
+            }
+                .collect {
                     authToken = it
+                    Log.d("TOKEN", "Access token on transaction details screen: $authToken")
                 }
         }
 
-        viewModelScope.launch(handler + Dispatchers.IO) {
-            dataStorePreferenceRepository.getUsername.
-            catch { Log.d("ERROR","Could not get Username from Data Store on Transaction details screen screen") }
-                .collect{
-                    Log.d("TOKEN","Username on Transaction details Screen: $it")
+        val usernameJob: Job = viewModelScope.launch(handler + Dispatchers.IO) {
+            dataStorePreferenceRepository.getUsername.catch {
+                Log.d(
+                    "ERROR",
+                    "Could not get Username from Data Store on Transaction details screen screen"
+                )
+            }
+                .collect {
+                    Log.d("TOKEN", "Username on Transaction details Screen: $it")
                     username = it
                 }
         }
     }
 
     fun chooseCategory(category: String) {
-        val transaction = TransactionsRepository.updateExpenseCategory(category, this.transactionId);
+        val transaction =
+            TransactionsRepository.updateExpenseCategory(category, this.transactionId);
         this.transaction.value = transaction
     }
 
@@ -107,8 +126,11 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     }
 
 
-    suspend fun updateTransactionInDb(transactionId: Int, transactionData: AddOrEditTransactionRequest) {
-         TransactionsRepository.updateTransactionInDb(transactionId, transactionData)
+    suspend fun updateTransactionInDb(
+        transactionId: Int,
+        transactionData: AddOrEditTransactionRequest
+    ) {
+        TransactionsRepository.updateTransactionInDb(transactionId, transactionData)
     }
 
     init {
@@ -116,7 +138,8 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
 
     //Method to fetch from default API. Delete later
     suspend fun getTransactionCategories(): List<ExpanseCategory> {
-        var listOfCategories = categoriesRepository.getExpanseCategories()._embedded.expanseCategories
+        var listOfCategories =
+            categoriesRepository.getExpanseCategories()._embedded.expanseCategories
         return listOfCategories
     }
 
@@ -130,7 +153,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         return listOfWallets
     }
 
-    suspend fun getTransactionWallets(): List<Wallet>{
+    suspend fun getTransactionWallets(): List<Wallet> {
         var listOfWallets = walletRepository.getWallets()._embedded.wallets
         return listOfWallets
     }
@@ -154,8 +177,10 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         this.commentsFieldTemporaryValueBeforeSavingtoDB = transaction.comments
         this.locationFieldTemporaryValueBeforeSavingtoDB = transaction.location
         this.photoUrlFieldTemporaryValueBeforeSavingtoDB = transaction.photoUrl
-        this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
-        this.walletLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildWalletLinkForAddingToExpanse(transaction.walletId)
+        this.categoryLinkTemporaryValueBeforeSavingtoDB =
+            LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
+        this.walletLinkTemporaryValueBeforeSavingtoDB =
+            LinkBuilder.buildWalletLinkForAddingToExpanse(transaction.walletId)
 
 
         val handler = CoroutineExceptionHandler { _, exception ->
@@ -173,12 +198,14 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     }
 
     fun updateCategoryLinkValueBeforeSavingToDB(category: SecondAllExpenseCategoriesResponseItem) {
-        this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
+        this.categoryLinkTemporaryValueBeforeSavingtoDB =
+            LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
         updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
     }
 
-    fun updateWalletLinkValueBeforeSavingToDB(wallet: SecondAllWalletsResponseItem){
-        this.walletLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
+    fun updateWalletLinkValueBeforeSavingToDB(wallet: SecondAllWalletsResponseItem) {
+        this.walletLinkTemporaryValueBeforeSavingtoDB =
+            LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
         updateTemporaryFieldValueBeforeSavingToDB("walletName", wallet.walletName)
     }
 
@@ -210,6 +237,18 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
             "categoryIcon" -> return categoryIconTemporaryValueBeforeSavingtoDB
         }
         return null
+    }
+
+    fun deleteTransaction(expenseId: Int) {
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Thread exception while deleting the transaction : $exception")
+        }
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            //authTokenJob.join()
+            Thread.sleep(500)
+            Log.d("INFO", "Auth token for delete is $authToken")
+            TransactionsRepository.deleteTransaction(expenseId, authToken)
+        }
     }
 
 

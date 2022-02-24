@@ -70,5 +70,9 @@ object TransactionsRepository {
 
     }
 
+    suspend fun deleteTransaction(expenseId: Int, authToken: String) {
+        return service.deleteTransactionFromDb(expenseId, authToken)
+    }
+
 
 }

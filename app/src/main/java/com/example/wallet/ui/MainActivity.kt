@@ -95,7 +95,7 @@ fun UsersApplication(navController: NavHostController){
         })){
             navBackStackEntry->
             navBackStackEntry.arguments?.let {
-                TransactionDetailsScreen(transactionId = it.getInt("transactionId"), DataStorePreferenceRepository(LocalContext.current))
+                TransactionDetailsScreen(navController,transactionId = it.getInt("transactionId"), DataStorePreferenceRepository(LocalContext.current))
             }
         }
     }

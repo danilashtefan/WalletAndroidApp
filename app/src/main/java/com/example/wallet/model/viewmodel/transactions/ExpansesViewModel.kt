@@ -1,12 +1,10 @@
 package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
-import android.util.MutableInt
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
@@ -16,7 +14,6 @@ import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpense
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -30,7 +27,7 @@ class ExpansesViewModel(
     var minDatePicked = mutableStateOf("1000-01-01")
     var maxDatePicked = mutableStateOf("3000-12-12")
     private val _accessToken = MutableLiveData("")
-    var accessToken = ""
+    var authToken = ""
     var expandedCalendarMin = mutableStateOf(false)
     var expandedCalendarMax = mutableStateOf(false)
     //val transactionState = mutableStateOf((emptyList<Expanse>()))
@@ -48,12 +45,12 @@ class ExpansesViewModel(
             catch { Log.d("ERROR","EXPECTION while getting the token in the expense screen") }
                 .collect{
                     Log.d("TOKEN","Access token on all expense screen: $it")
-                    accessToken = it
+                    authToken = it
                 }
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
-            while (accessToken.equals("")){
+            while (authToken.equals("")){
                 Log.d("INFO","Access token is not set up yet")
             }
             var expanses = getFilteredExpenses()
@@ -86,13 +83,13 @@ class ExpansesViewModel(
     //Method to get expenses from the JpaRepository default API, there is no filtering by username avalable
     suspend fun getExpanses(): List<Expanse> {
         Log.d("INFO","getExpanses is called")
-        return expansesRepository.getExpanses(accessToken)._embedded.expanses
+        return expansesRepository.getExpanses(authToken)._embedded.expanses
     }
 
     //Method to get expenses filtered by the token used
     suspend fun getFilteredExpenses(): SecondAllExpensesResponse {
         Log.d("INFO","getFiltered expenses is called")
-        return expansesRepository.getFilteredExpanses(accessToken)
+        return expansesRepository.getFilteredExpanses(authToken)
     }
 
     // Method to get the category of particular expanse
@@ -121,6 +118,20 @@ class ExpansesViewModel(
 
     fun getSign(expanse: Expanse) {
 
+    }
+
+    fun deleteExpense(expanse: SecondAllExpensesItem) {
+        //transactionState.value.remove(expanse)
+        transactionState.value = transactionState.value.toMutableList().also{it.remove(expanse)}
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Thread exception while deleting the transaction : $exception")
+        }
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            //authTokenJob.join()
+            Thread.sleep(500)
+            Log.d("INFO", "Auth token for delete is $authToken")
+            TransactionsRepository.deleteTransaction(expanse.id, authToken)
+        }
     }
 
 

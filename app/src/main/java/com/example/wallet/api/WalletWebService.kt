@@ -70,6 +70,11 @@ class WalletWebService {
         return api.getFilteredExpenseCategories(authHeader = authHeader)
     }
 
+    suspend fun deleteTransactionFromDb(expenseId: Int, authToken: String) {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.deleteTransactionFromDb(expenseId, authHeader)
+    }
+
     suspend fun getCategoryForExpanse(expenseId: Int): SingleExpanseCategoryResponse{
         return api.getCategoryForExpanse(expenseId)
     }
@@ -77,10 +82,10 @@ class WalletWebService {
     suspend fun getWalletForExpanse(expenseId: Int): SingleTransactionWalletResponse {
         return api.getWalletForExpanse(expenseId)
     }
-
     suspend fun getWallets(): AllTransactionWalletsResponse{
         return api.getWallets()
     }
+
     suspend fun updateTransactionInDb(transactionId: Int, transactionData: AddOrEditTransactionRequest):Expanse{
         return api.updateTransactionInDb(transactionId,transactionData)
     }
@@ -106,6 +111,9 @@ class WalletWebService {
 
         @GET("expanses2")
         suspend fun getFilteredExpanses(@Header("Authorization")authHeader:String): SecondAllExpensesResponse
+
+        @DELETE("expanses2/{id}")
+        suspend fun deleteTransactionFromDb(@Path("id") expanseId: Int, @Header("Authorization")authHeader:String)
 
         @GET("wallets2")
         suspend fun getFilteredWallets(@Header("Authorization")authHeader:String): SecondAllWalletsResponse
