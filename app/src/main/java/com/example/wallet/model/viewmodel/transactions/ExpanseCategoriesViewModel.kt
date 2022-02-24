@@ -22,6 +22,7 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
     val expanseCategoriesState = mutableStateOf((emptyList<ExpanseCategory>()))
     private val _accessToken = MutableLiveData("")
     val accessToken: MutableLiveData<String> = _accessToken
+    var whatToSeeState = mutableStateOf("")
 
     init{
         val handler = CoroutineExceptionHandler { _, exception ->
