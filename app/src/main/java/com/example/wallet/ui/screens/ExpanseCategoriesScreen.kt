@@ -29,6 +29,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.helpers.DateFormatter
 import com.example.wallet.model.repository.DataStorePreferenceRepository
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.viewmodel.transactions.AddViewModel
 import com.example.wallet.model.viewmodel.transactions.ExpanseCategoriesViewModel
@@ -53,7 +54,6 @@ fun ExpanseCategoriesScreen(
     )
     val listOfButtons = listOf<String>("Category", "Wallet")
     val expanseCategories = viewModel.expanseCategoriesState.value
-    val accessToken = viewModel.accessToken.value
     var dataLoaded = viewModel.dataLoaded.value
     val transactionsCategories = viewModel.transactionCetegoriesState.value
     val transactionsWallet = viewModel.transactionWalletsState.value
@@ -68,7 +68,7 @@ fun ExpanseCategoriesScreen(
     ) {
         LogoSection(pictureSize = 93)
         ChooseWhatToSeeSection(listOfButtons = listOfButtons, viewModel = viewModel)
-        DetailsSection(viewModel)
+        DetailsSection(viewModel, transactionsCategories)
     }
 
 
@@ -89,9 +89,9 @@ fun ChooseWhatToSeeSection(listOfButtons: List<String>, viewModel: ExpanseCatego
 }
 
 @Composable
-fun DetailsSection(viewModel: ExpanseCategoriesViewModel) {
+fun DetailsSection(viewModel: ExpanseCategoriesViewModel, transactionsCategories: List<SecondAllExpenseCategoriesResponseItem>) {
     when (viewModel.whatToSeeState.value) {
-        "category" -> CategoriesListSection(viewModel)
+        "category" -> CategoriesListSection(viewModel, transactionsCategories)
         "wallet" -> WalletsListSection(viewModel)
     }
 }
@@ -99,16 +99,16 @@ fun DetailsSection(viewModel: ExpanseCategoriesViewModel) {
 @Composable
 fun CategoriesListSection(
     viewModel: ExpanseCategoriesViewModel,
-    expanseCategories:
+    transactionsCategories: List<SecondAllExpenseCategoriesResponseItem>
 ) {
 
 
     LazyColumn(modifier = Modifier.padding(16.dp)) {
-        items(expanseCategories) { expanse ->
+        items(transactionsCategories) { expanse ->
             val expanseId = expanse.id
             ReusableCategoryAndRow(
-                categoryIcon = expanse.categoryIcon,
-                categoryName = expanse.categoryName,
+                categoryIcon = expanse.icon,
+                categoryName = expanse.expanseCategoryName,
                 type = expanse.type,
                 editClickAction = {
 
@@ -156,31 +156,31 @@ private fun ReusableCategoryAndRow(
                     Text(text = categoryName)
                 }
                 Spacer(Modifier.weight(0.4f))
-                Column(Modifier) {
-                    Text("Wallet")
-                    Text("Date")
-                    Text("Location")
-                }
+//                Column(Modifier) {
+//                    Text("Wallet")
+//                    Text("Date")
+//                    Text("Location")
+//                }
                 Spacer(Modifier.weight(0.3f))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = sign,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(end = 3.dp)
-                    )
-
-                    Text(
-                        text = amount.toString(),
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                    Text(
-                        text = currency,
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                }
+//                Row(
+//                    horizontalArrangement = Arrangement.SpaceBetween
+//                ) {
+//                    Text(
+//                        text = sign,
+//                        modifier = Modifier
+//                            .align(Alignment.CenterVertically)
+//                            .padding(end = 3.dp)
+//                    )
+//
+//                    Text(
+//                        text = amount.toString(),
+//                        modifier = Modifier.align(Alignment.CenterVertically)
+//                    )
+//                    Text(
+//                        text = currency,
+//                        modifier = Modifier.align(Alignment.CenterVertically)
+//                    )
+//                }
                 Spacer(Modifier.width(16.dp))
                 IconButton({ println("Pressed") }) {
                     Icon(
@@ -196,10 +196,6 @@ private fun ReusableCategoryAndRow(
             //Spacer(Modifier.width(30.dp))
             AnimatedVisibility(visible = expanded) {
                 Column() {
-                    Text(text = "Location: " + location)
-                    Text(text = "Date: " + date)
-                    Text(text = "Comment: " + comments)
-                    Text(text = "Type: " + type)
                     Row() {
                         OutlinedButton(onClick = { editClickAction.invoke() }) {
                             Text(text = "Edit")

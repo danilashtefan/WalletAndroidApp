@@ -27,8 +27,7 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
         mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
     var whatToSeeState = mutableStateOf("")
     var dataLoaded = mutableStateOf(false)
-    var transactionCetegoriesState =
-        mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
+    var transactionCetegoriesState = mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
     var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
     var userName = ""
     var authToken = ""
