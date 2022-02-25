@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -152,15 +153,20 @@ private fun ReusableCategoryAndRow(
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier) {
                     CategoryImage(categoryIcon, 30)
-                    Spacer(Modifier.width(15.dp))
-                    Text(text = categoryName)
+                    //Spacer(Modifier.width(15.dp)
                 }
-                Spacer(Modifier.weight(0.4f))
-//                Column(Modifier) {
-//                    Text("Wallet")
-//                    Text("Date")
-//                    Text("Location")
-//                }
+                Spacer(Modifier.weight(0.2f))
+                Column(Modifier) {
+                    Row(Modifier) {
+                        Text("Category Name: ")
+                        Text("" + categoryName, fontWeight = FontWeight.Bold)
+                    }
+                    Row(Modifier){
+                        Text("Type: ")
+                        Text(""+type, fontWeight = FontWeight.Bold)
+                    }
+                }
+
                 Spacer(Modifier.weight(0.3f))
 //                Row(
 //                    horizontalArrangement = Arrangement.SpaceBetween
