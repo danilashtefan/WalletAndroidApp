@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 
 class TransactionDetailsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
     ViewModel() {
-    private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private val walletRepository: WalletRepository = WalletRepository()
 
     // private val walletRepository: WalletRepository = WalletRepository()
@@ -139,12 +138,12 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     //Method to fetch from default API. Delete later
     suspend fun getTransactionCategories(): List<ExpanseCategory> {
         var listOfCategories =
-            categoriesRepository.getExpanseCategories()._embedded.expanseCategories
+            ExpanseCategoriesRepository.getExpanseCategories()._embedded.expanseCategories
         return listOfCategories
     }
 
     suspend fun getFilteredTransactionCategories(): SecondAllExpenseCategoriesResponse {
-        var listOfCategories = categoriesRepository.getFilteredExpenseCategories(authToken)
+        var listOfCategories = ExpanseCategoriesRepository.getFilteredExpenseCategories(authToken)
         return listOfCategories
     }
 

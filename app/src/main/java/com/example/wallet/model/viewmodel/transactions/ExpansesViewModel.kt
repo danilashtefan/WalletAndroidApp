@@ -22,7 +22,6 @@ class ExpansesViewModel(
     private val dataStorePreferenceRepository: DataStorePreferenceRepository
 ) : ViewModel() {
     private val expansesRepository: TransactionsRepository = TransactionsRepository
-    private val transactionCategoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private val transactionWalletsRepository: WalletRepository = WalletRepository()
     var minDatePicked = mutableStateOf("1000-01-01")
     var maxDatePicked = mutableStateOf("3000-12-12")
@@ -94,7 +93,7 @@ class ExpansesViewModel(
 
     // Method to get the category of particular expanse
     suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Triple<String, Int, String> {
-        val categoryResponse = transactionCategoriesRepository.getCategoryForExpanse(expanseId)
+        val categoryResponse = ExpanseCategoriesRepository.getCategoryForExpanse(expanseId)
         return Triple(categoryResponse.expanseCategoryName, categoryResponse.id, categoryResponse.icon)
     }
 

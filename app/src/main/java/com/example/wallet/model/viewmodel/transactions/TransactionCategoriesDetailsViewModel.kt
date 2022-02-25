@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 
 class TransactionCategoriesDetailsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
     ViewModel() {
-    private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private var categoryId: Int = 0;
     var dataLoaded = mutableStateOf(false)
     var category = mutableStateOf(SecondAllExpenseCategoriesResponseItem())
@@ -71,7 +70,7 @@ class TransactionCategoriesDetailsViewModel(private val dataStorePreferenceRepos
             return;
         }
         this.categoryId = categoryId
-        val category = categoriesRepository.getCategory(this.categoryId)
+        val category = ExpanseCategoriesRepository.getCategory(this.categoryId)
         this.category.value = category
 
 
