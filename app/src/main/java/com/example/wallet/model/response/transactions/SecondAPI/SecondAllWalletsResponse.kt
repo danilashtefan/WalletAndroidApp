@@ -6,5 +6,6 @@ data class SecondAllWalletsResponseItem(
     val currency: String,
     val id: Int,
     val username: String,
-    val walletName: String
+    val walletName: String,
+    val icon:String
 )

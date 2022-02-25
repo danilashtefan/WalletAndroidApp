@@ -8,9 +8,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
+import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -23,6 +25,7 @@ import kotlinx.coroutines.launch
 class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
     ViewModel() {
     private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
+    private val walletRepository: WalletRepository = WalletRepository()
     val expanseCategoriesState =
         mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
     var whatToSeeState = mutableStateOf("")
@@ -65,9 +68,9 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
 
         viewModelScope.launch(handler + Dispatchers.IO) {
             val transactionCategories = getFilteredTransactionCategories()
-            //val transactionWallets = getFilteredWallets()
+            val transactionWallets = getFilteredWallets()
             transactionCetegoriesState.value = transactionCategories
-            //transactionWalletsState.value = transactionWallets
+            transactionWalletsState.value = transactionWallets
             dataLoaded.value = true;
         }
     }
@@ -75,6 +78,11 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
     suspend fun getFilteredTransactionCategories(): SecondAllExpenseCategoriesResponse {
         var listOfCategories = categoriesRepository.getFilteredExpenseCategories(authToken)
         return listOfCategories
+    }
+
+    suspend fun getFilteredWallets(): SecondAllWalletsResponse {
+        var listOfWallets = walletRepository.getFilteredWallets(authToken)
+        return listOfWallets
     }
 
 }

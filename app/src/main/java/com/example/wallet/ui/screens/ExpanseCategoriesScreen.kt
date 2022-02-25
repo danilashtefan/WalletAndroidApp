@@ -3,7 +3,6 @@ package com.example.wallet.ui.screens
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -21,22 +19,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.wallet.helpers.DateFormatter
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
-import com.example.wallet.model.viewmodel.transactions.AddViewModel
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
 import com.example.wallet.model.viewmodel.transactions.ExpanseCategoriesViewModel
-import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.model.viewmodel.transactions.ExpenseCategoriesViewModelFactory
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -57,7 +47,7 @@ fun ExpanseCategoriesScreen(
     val expanseCategories = viewModel.expanseCategoriesState.value
     var dataLoaded = viewModel.dataLoaded.value
     val transactionsCategories = viewModel.transactionCetegoriesState.value
-    val transactionsWallet = viewModel.transactionWalletsState.value
+    val transactionsWallets = viewModel.transactionWalletsState.value
 
     if (!dataLoaded) {
         return;
@@ -69,7 +59,7 @@ fun ExpanseCategoriesScreen(
     ) {
         LogoSection(pictureSize = 93)
         ChooseWhatToSeeSection(listOfButtons = listOfButtons, viewModel = viewModel)
-        DetailsSection(viewModel, transactionsCategories)
+        DetailsSection(viewModel, transactionsCategories, transactionsWallets)
     }
 
 
@@ -90,10 +80,15 @@ fun ChooseWhatToSeeSection(listOfButtons: List<String>, viewModel: ExpanseCatego
 }
 
 @Composable
-fun DetailsSection(viewModel: ExpanseCategoriesViewModel, transactionsCategories: List<SecondAllExpenseCategoriesResponseItem>) {
+fun DetailsSection(
+    viewModel: ExpanseCategoriesViewModel,
+    transactionsCategories: List<SecondAllExpenseCategoriesResponseItem>,
+    transactionWallets: List<SecondAllWalletsResponseItem>
+
+) {
     when (viewModel.whatToSeeState.value) {
         "category" -> CategoriesListSection(viewModel, transactionsCategories)
-        "wallet" -> WalletsListSection(viewModel)
+        "wallet" -> WalletsListSection(viewModel, transactionWallets)
     }
 }
 
@@ -107,9 +102,9 @@ fun CategoriesListSection(
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(transactionsCategories) { expanse ->
             val expanseId = expanse.id
-            ReusableCategoryAndRow(
-                categoryIcon = expanse.icon,
-                categoryName = expanse.expanseCategoryName,
+            ReusableCategoryAndWalletRow(
+                icon = expanse.icon,
+                name = expanse.expanseCategoryName,
                 type = expanse.type,
                 editClickAction = {
 
@@ -124,16 +119,35 @@ fun CategoriesListSection(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WalletsListSection(viewModel: ExpanseCategoriesViewModel) {
-    Text(text = "HELLO WALLET")
+fun WalletsListSection(
+    viewModel: ExpanseCategoriesViewModel,
+    transactionsWallets: List<SecondAllWalletsResponseItem>
+) {
+    LazyColumn(modifier = Modifier.padding(16.dp)) {
+        items(transactionsWallets) { wallet ->
+            val expanseId = wallet.id
+            ReusableCategoryAndWalletRow(
+                icon = wallet.icon,
+                name = wallet.walletName,
+                type = wallet.currency,
+                editClickAction = {
+
+                    //navController.navigate("transactionDetails/$expanseId")
+                },
+                deleteClickAction = {
+                    Log.d("INFO", "Delete button pressed")
+                })
+        }
+    }
+
 }
 
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun ReusableCategoryAndRow(
-    categoryIcon: String,
-    categoryName: String,
+private fun ReusableCategoryAndWalletRow(
+    icon: String,
+    name: String,
     type: String,
     editClickAction: () -> Unit,
     deleteClickAction: () -> Unit
@@ -152,41 +166,22 @@ private fun ReusableCategoryAndRow(
             ) {
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier) {
-                    CategoryImage(categoryIcon, 30)
+                    CategoryImage(icon, 30)
                     //Spacer(Modifier.width(15.dp)
                 }
                 Spacer(Modifier.weight(0.2f))
                 Column(Modifier) {
                     Row(Modifier) {
                         Text("Category Name: ")
-                        Text("" + categoryName, fontWeight = FontWeight.Bold)
+                        Text("" + name, fontWeight = FontWeight.Bold)
                     }
-                    Row(Modifier){
+                    Row(Modifier) {
                         Text("Type: ")
-                        Text(""+type, fontWeight = FontWeight.Bold)
+                        Text("" + type, fontWeight = FontWeight.Bold)
                     }
                 }
 
                 Spacer(Modifier.weight(0.3f))
-//                Row(
-//                    horizontalArrangement = Arrangement.SpaceBetween
-//                ) {
-//                    Text(
-//                        text = sign,
-//                        modifier = Modifier
-//                            .align(Alignment.CenterVertically)
-//                            .padding(end = 3.dp)
-//                    )
-//
-//                    Text(
-//                        text = amount.toString(),
-//                        modifier = Modifier.align(Alignment.CenterVertically)
-//                    )
-//                    Text(
-//                        text = currency,
-//                        modifier = Modifier.align(Alignment.CenterVertically)
-//                    )
-//                }
                 Spacer(Modifier.width(16.dp))
                 IconButton({ println("Pressed") }) {
                     Icon(
