@@ -167,6 +167,7 @@ private fun SaveButtonTransactionDetails(
                 viewModel.updateField(field, viewModel.getFieldToUpdateInDB(field))
             }
             viewModel.updateTransactionInDb()
+            Thread.sleep(500)
             navController.navigate("expanses")
 
         }) {
