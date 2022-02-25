@@ -77,14 +77,8 @@ class TransactionCategoriesDetailsViewModel(private val dataStorePreferenceRepos
         this.nameFieldTemporaryValueBeforeSavingtoDB = category.expanseCategoryName
         this.typeFieldTemporaryValueBeforeSavingtoDB = category.type
 
-
-        val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception setTransactionId")
-        }
-
-        viewModelScope.launch(handler + Dispatchers.IO) {
             dataLoaded.value = true;
-        }
+
     }
 
 //    fun updateCategoryInDb() {
