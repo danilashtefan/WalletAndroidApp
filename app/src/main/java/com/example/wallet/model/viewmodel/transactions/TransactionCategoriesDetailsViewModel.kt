@@ -81,35 +81,13 @@ class TransactionCategoriesDetailsViewModel(private val dataStorePreferenceRepos
 
     }
 
-//    fun updateCategoryInDb() {
-//        val handler = CoroutineExceptionHandler { _, exception ->
-//            Log.d("EXCEPTION", "Thread exception when saving category to DB")
-//        }
-//
-//        viewModelScope.launch(handler + Dispatchers.IO) {
-//            updateTransactionInDb(
-////                transactionId = transactionId, transactionData = AddOrEditTransactionRequest(
-////                    name = nameFieldTemporaryValueBeforeSavingtoDB,
-////                    amount = amountFieldTemporaryValueBeforeSavingtoDB?.toInt(),
-////                    date = dateFieldTemporaryValueBeforeSavingtoDB,
-////                    comments = commentsFieldTemporaryValueBeforeSavingtoDB,
-////                    location = locationFieldTemporaryValueBeforeSavingtoDB,
-////                    type = typeFieldTemporaryValueBeforeSavingtoDB,
-////                    category = categoryLinkTemporaryValueBeforeSavingtoDB,
-////                    wallet = walletLinkTemporaryValueBeforeSavingtoDB,
-////                    username = username
-//                )
-//
-//        }
-//
-//    }
+    fun updateTemporaryFieldValueBeforeSavingToDB(field: String, value: String) {
+        when (field) {
+            "name" -> nameFieldTemporaryValueBeforeSavingtoDB = value
+            "iconCategory" -> iconFieldTemporaryValueBeforeSavingtoDB = value
+        }
 
-//    suspend fun updateCategoryInDb(
-//        categoryId: Int,
-//        categoryData: AddOrEditTransactionRequest
-//    ) {
-//        TransactionsRepository.updateTransactionInDb(categoryId, categoryData)
-//    }
+    }
 
 
 

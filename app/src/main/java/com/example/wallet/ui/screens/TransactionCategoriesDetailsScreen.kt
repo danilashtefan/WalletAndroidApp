@@ -1,28 +1,37 @@
 package com.example.wallet.ui.screens
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.wallet.helpers.EmojiProvider
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
-import com.example.wallet.model.viewmodel.transactions.TransactionCategoriesDetailsViewModel
-import com.example.wallet.model.viewmodel.transactions.TransactionCategoriesDetailsViewModelFactory
-import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
-import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModelFactory
+import com.example.wallet.model.viewmodel.transactions.*
+import com.example.wallet.ui.theme.PurpleBasic
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TransactionCategoriesDetailsScreen(
     navController: NavHostController,
@@ -53,95 +62,124 @@ fun TransactionCategoriesDetailsScreen(
     Column(Modifier.verticalScroll(rememberScrollState())) {
         LogoTransactionDetailsSection()
         CategoriesDetailsImageSection(category)
-//        EditableFieldTransactionDetails(
-//            padding = 100,
-//            field = nameFieldName,
-//            labelText = "Name",
-//            value = transaction.name,
-//            viewModel = viewModel
-//        )
-//        EditableFieldTransactionDetails(
-//            padding = 20,
-//            field = amountFieldName,
-//            labelText = "Amount",
-//            value = transaction.amount,
-//            viewModel = viewModel
-//        )
-//        EditableFieldTransactionDetails(
-//            padding = 20,
-//            field = typeFieldName,
-//            labelText = "Type",
-//            value = transaction.type,
-//            viewModel = viewModel
-//        )
-//        //InfoRow(20,"Category")
-//        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-//            Text(text = "Category: ")
-//            CategorySelctorTransactionDetails(
-//                padding = 20,
-//                labelText = transaction.categoryName,
-//                optionsList = transactionsCategories,
-//                viewModel = viewModel,
-//                transactionId = transaction.id
-//            )
-//        }
-//
-//        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-//            Text(text = "Wallet: ")
-//
-//            WalletSelctorTransactionDetails(
-//                padding = 20,
-//                labelText = transaction.walletName,
-//                optionsList = transactionsWallet,
-//                viewModel = viewModel,
-//                transactionId = transactionId
-//            )
-//
-//        }
-//        EditableFieldTransactionDetails(
-//            20,
-//            field = dateFieldName,
-//            labelText = "Date",
-//            value = transaction.date,
-//            viewModel = viewModel
-//        )
-//        EditableFieldTransactionDetails(
-//            20,
-//            field = commentsFieldName,
-//            labelText = "Comments",
-//            value = transaction.comments,
-//            viewModel = viewModel
-//        )
-//        EditableFieldTransactionDetails(
-//            20,
-//            field = locationFieldName,
-//            labelText = "Location",
-//            value = transaction.location,
-//            viewModel = viewModel
-//        )
-//        Spacer(modifier = Modifier.size(20.dp))
-//        SaveButtonTransactionDetails(navController, fieldsOnTheScreen, viewModel)
-////        Spacer(modifier = Modifier.size(20.dp))
-////        DeleteButtonTransactionDetails(
-////            navController,
-////            expenseId = transactionId,
-////            viewModel = viewModel
-////        )
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier.background(
+                    color = PurpleBasic
+                )
+            ) {
 
+                TypeOfElementToAddOrEditText("Edit category")
+                Spacer(modifier = Modifier.padding(bottom = 50.dp))
+                var emojis = EmojiProvider.emojis
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Spacer(modifier = Modifier.height(35.dp))
+                    Spacer(modifier = Modifier.height(30.dp))
+                    var text1 = ""
+                    if (text1 === null) {
+                        text1 = ""
+                    }
+                    val textState1 = remember { mutableStateOf(TextFieldValue(text1)) }
+
+                    TextField(
+                        value = textState1.value,
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        onValueChange = {
+                            textState1.value = it
+                            viewModel.updateTemporaryFieldValueBeforeSavingToDB(
+                                "nameCategory",
+                                textState1.value.text
+                            )
+                        },
+                        textStyle = TextStyle(
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                        ),
+                        label = { Text("Name") },
+                        maxLines = 1,
+                    )
+
+                    var text2 = ""
+                    if (text2 === null) {
+                        text2 = ""
+                    }
+                    val textState2 = remember { mutableStateOf(TextFieldValue(text1)) }
+                    TextField(
+                        value = textState2.value,
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        onValueChange = {
+                            textState2.value = it
+                            viewModel.updateTemporaryFieldValueBeforeSavingToDB(
+                                "typeCategory",
+                                textState2.value.text
+                            )
+                        },
+                        textStyle = TextStyle(
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                        ),
+                        label = { Text("Type") },
+                        maxLines = 1
+                    )
+                    Spacer(modifier = Modifier.height(30.dp))
+                    LazyVerticalGrid(
+                        cells = GridCells.Fixed(4),
+                        modifier = Modifier
+                            .height(220.dp)
+                            .padding(bottom = 20.dp)
+                    ) {
+                        items(emojis) { emoji ->
+                            Text(
+                                emoji,
+                                fontSize = 30.sp,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.clickable(onClick = {
+                                    viewModel.updateTemporaryFieldValueBeforeSavingToDB(
+                                        "iconCategory",
+                                        emoji
+                                    )
+                                })
+                            )
+                        }
+                    }
+                    SaveButtonCategoryEdit(viewModel = viewModel)
+                }
+
+
+            }
+        }
     }
 }
 
-
+@Composable
+private fun SaveButtonCategoryEdit(
+    viewModel: TransactionCategoriesDetailsViewModel
+) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+        OutlinedButton(onClick = {
+            //viewModel.addCategoryToDb()
+        }) {
+            Text(text = "Edit category")
+        }
+    }
+}
 @Composable
 fun CategoriesDetailsImageSection(category: SecondAllExpenseCategoriesResponseItem) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Card(
             shape = CircleShape,
             border = BorderStroke(width = 2.dp, color = Color.White),
-            modifier = Modifier.size(150.dp),
+            modifier = Modifier.size(70.dp),
             elevation = 5.dp
         ) {
             CategoryImage(category.icon, 50)
         }
     }
 }
+

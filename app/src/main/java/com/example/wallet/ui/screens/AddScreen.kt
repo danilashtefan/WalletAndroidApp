@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -27,11 +26,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.helpers.EmojiProvider
 import com.example.wallet.model.repository.DataStorePreferenceRepository
-import com.example.wallet.model.response.ExpanseCategory
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
-import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.model.viewmodel.transactions.AddViewModel
 import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
 import com.example.wallet.ui.theme.PurpleBasic
@@ -81,7 +77,7 @@ fun WalletAddSection(viewModel: AddViewModel) {
                 color = PurpleBasic
             )
         ) {
-            TypeOfElementToAddText("Add Wallet")
+            TypeOfElementToAddOrEditText("Add Wallet")
             Spacer(modifier = Modifier.padding(bottom = 50.dp))
             var emojis = EmojiProvider.emojis
             Column(
@@ -183,7 +179,7 @@ fun CategoryAddSection(viewModel: AddViewModel) {
                 color = PurpleBasic
             )
         ) {
-            TypeOfElementToAddText("Add Category")
+            TypeOfElementToAddOrEditText("Add Category")
             Spacer(modifier = Modifier.padding(bottom = 50.dp))
             var emojis = EmojiProvider.emojis
             Column(
@@ -310,7 +306,7 @@ fun TransactionAddSection(viewModel: AddViewModel) {
 
 
     Column(Modifier.verticalScroll(rememberScrollState())) {
-        TypeOfElementToAddText("Add Transaction")
+        TypeOfElementToAddOrEditText("Add Transaction")
         Spacer(modifier = Modifier.padding(bottom = 20.dp))
         EditableFieldTransactionAdd(
             padding = 30,
@@ -382,7 +378,7 @@ fun TransactionAddSection(viewModel: AddViewModel) {
 }
 
 @Composable
-fun TypeOfElementToAddText(text: String) {
+fun TypeOfElementToAddOrEditText(text: String) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Text(
             text = text, style = TextStyle(
