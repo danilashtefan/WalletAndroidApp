@@ -4,14 +4,20 @@ import com.example.wallet.api.WalletWebService
 import com.example.wallet.model.response.AllExpanseCategoriesResponse
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.requests.AddOrEditCategoryRequest
+import java.lang.Exception
 
-class ExpanseCategoriesRepository(private val service: WalletWebService = WalletWebService()) {
+object ExpanseCategoriesRepository {
+    private val service: WalletWebService = WalletWebService()
+    var categoriesFiltered = SecondAllExpenseCategoriesResponse()
     suspend fun getExpanseCategories(): AllExpanseCategoriesResponse {
+
         return service.getExpanseCategories()
     }
     suspend fun getFilteredExpenseCategories(authToken: String?):SecondAllExpenseCategoriesResponse{
-        return service.getFilteredExpenseCategories(authToken)
+        categoriesFiltered = service.getFilteredExpenseCategories(authToken)
+        return categoriesFiltered
     }
 
     suspend fun getCategoryForExpanse(expanseId: Int): SingleExpanseCategoryResponse {
@@ -20,6 +26,17 @@ class ExpanseCategoriesRepository(private val service: WalletWebService = Wallet
 
     suspend fun addCategoryToDb(categoryData: AddOrEditCategoryRequest) {
         return service.addCategoryToDb(categoryData)
+    }
+
+    fun getCategory(categoryId: Int):SecondAllExpenseCategoriesResponseItem{
+
+        for(category in categoriesFiltered) {
+            if(category.id === categoryId) {
+                return category
+            }
+        }
+        throw Exception("No category found!")
+
     }
 
 

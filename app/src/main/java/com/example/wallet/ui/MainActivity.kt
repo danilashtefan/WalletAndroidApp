@@ -98,6 +98,16 @@ fun UsersApplication(navController: NavHostController){
                 TransactionDetailsScreen(navController,transactionId = it.getInt("transactionId"), DataStorePreferenceRepository(LocalContext.current))
             }
         }
+        composable("categoriesDetails/{categoryId}",
+            arguments = listOf(navArgument("categoryId"){
+                type = NavType.IntType
+            })){
+                navBackStackEntry->
+            navBackStackEntry.arguments?.let {
+                TransactionCategoriesDetailsScreen(navController,categoryId = it.getInt("categoryId"), DataStorePreferenceRepository(LocalContext.current))
+            }
+        }
+
     }
 }
 

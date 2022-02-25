@@ -59,7 +59,7 @@ fun ExpanseCategoriesScreen(
     ) {
         LogoSection(pictureSize = 93)
         ChooseWhatToSeeSection(listOfButtons = listOfButtons, viewModel = viewModel)
-        DetailsSection(viewModel, transactionsCategories, transactionsWallets)
+        DetailsSection(viewModel, transactionsCategories, transactionsWallets, navController = navHostController)
     }
 
 
@@ -83,11 +83,12 @@ fun ChooseWhatToSeeSection(listOfButtons: List<String>, viewModel: ExpanseCatego
 fun DetailsSection(
     viewModel: ExpanseCategoriesViewModel,
     transactionsCategories: List<SecondAllExpenseCategoriesResponseItem>,
-    transactionWallets: List<SecondAllWalletsResponseItem>
+    transactionWallets: List<SecondAllWalletsResponseItem>,
+    navController: NavHostController
 
 ) {
     when (viewModel.whatToSeeState.value) {
-        "category" -> CategoriesListSection(viewModel, transactionsCategories)
+        "category" -> CategoriesListSection(viewModel, transactionsCategories, navController = navController)
         "wallet" -> WalletsListSection(viewModel, transactionWallets)
     }
 }
@@ -95,20 +96,21 @@ fun DetailsSection(
 @Composable
 fun CategoriesListSection(
     viewModel: ExpanseCategoriesViewModel,
-    transactionsCategories: List<SecondAllExpenseCategoriesResponseItem>
+    transactionsCategories: List<SecondAllExpenseCategoriesResponseItem>,
+    navController: NavHostController
 ) {
 
 
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(transactionsCategories) { expanse ->
-            val expanseId = expanse.id
+            val categoryId = expanse.id
             ReusableCategoryAndWalletRow(
                 icon = expanse.icon,
                 name = expanse.expanseCategoryName,
                 type = expanse.type,
                 editClickAction = {
 
-                    //navController.navigate("transactionDetails/$expanseId")
+                    navController.navigate("categoriesDetails/$categoryId")
                 },
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")
@@ -172,7 +174,7 @@ private fun ReusableCategoryAndWalletRow(
                 Spacer(Modifier.weight(0.2f))
                 Column(Modifier) {
                     Row(Modifier) {
-                        Text("Category Name: ")
+                        Text("Name: ")
                         Text("" + name, fontWeight = FontWeight.Bold)
                     }
                     Row(Modifier) {

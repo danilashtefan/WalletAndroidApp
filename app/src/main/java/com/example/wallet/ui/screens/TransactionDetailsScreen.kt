@@ -196,7 +196,7 @@ private fun DeleteButtonTransactionDetails(
 
 
 @Composable
-private fun LogoTransactionDetailsSection() {
+fun LogoTransactionDetailsSection() {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
         Image(
             painter = painterResource(id = R.drawable.wallet_no_background_cropped),

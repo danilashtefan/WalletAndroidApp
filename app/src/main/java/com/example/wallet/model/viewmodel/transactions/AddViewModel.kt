@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) : ViewModel() {
-    private val categoriesRepository: ExpanseCategoriesRepository = ExpanseCategoriesRepository()
     private val walletRepository: WalletRepository = WalletRepository()
     var userName = ""
     var authToken = ""
@@ -97,12 +96,12 @@ init{
 
     //Method to get from default API. To be deleted
     suspend fun getTransactionCategories(): List<ExpanseCategory> {
-        var listOfCategories = categoriesRepository.getExpanseCategories()._embedded.expanseCategories
+        var listOfCategories = ExpanseCategoriesRepository.getExpanseCategories()._embedded.expanseCategories
         return listOfCategories
     }
 
     suspend fun getFilteredTransactionCategories(): SecondAllExpenseCategoriesResponse{
-        var listOfCategories = categoriesRepository.getFilteredExpenseCategories(authToken)
+        var listOfCategories = ExpanseCategoriesRepository.getFilteredExpenseCategories(authToken)
         return listOfCategories
     }
 
@@ -226,7 +225,7 @@ init{
     }
 
     suspend fun addCategoryToDb(categoryData:AddOrEditCategoryRequest){
-        categoriesRepository.addCategoryToDb(categoryData)
+        ExpanseCategoriesRepository.addCategoryToDb(categoryData)
     }
 
     suspend fun addWalletToDb(walletData: AddOrEditWalletRequest){
