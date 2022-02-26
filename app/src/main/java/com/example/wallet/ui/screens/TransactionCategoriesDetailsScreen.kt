@@ -77,7 +77,7 @@ fun TransactionCategoriesDetailsScreen(
                 ) {
                     Spacer(modifier = Modifier.height(35.dp))
                     Spacer(modifier = Modifier.height(30.dp))
-                    var text1 = ""
+                    var text1 = category.expanseCategoryName
                     if (text1 === null) {
                         text1 = ""
                     }
@@ -90,7 +90,7 @@ fun TransactionCategoriesDetailsScreen(
                         onValueChange = {
                             textState1.value = it
                             viewModel.updateTemporaryFieldValueBeforeSavingToDB(
-                                "nameCategory",
+                                "name",
                                 textState1.value.text
                             )
                         },
@@ -103,11 +103,11 @@ fun TransactionCategoriesDetailsScreen(
                         maxLines = 1,
                     )
 
-                    var text2 = ""
+                    var text2 = category.type
                     if (text2 === null) {
                         text2 = ""
                     }
-                    val textState2 = remember { mutableStateOf(TextFieldValue(text1)) }
+                    val textState2 = remember { mutableStateOf(TextFieldValue(text2)) }
                     TextField(
                         value = textState2.value,
                         singleLine = true,
@@ -115,7 +115,7 @@ fun TransactionCategoriesDetailsScreen(
                         onValueChange = {
                             textState2.value = it
                             viewModel.updateTemporaryFieldValueBeforeSavingToDB(
-                                "typeCategory",
+                                "type",
                                 textState2.value.text
                             )
                         },
@@ -141,7 +141,7 @@ fun TransactionCategoriesDetailsScreen(
                                 textAlign = TextAlign.Center,
                                 modifier = Modifier.clickable(onClick = {
                                     viewModel.updateTemporaryFieldValueBeforeSavingToDB(
-                                        "iconCategory",
+                                        "icon",
                                         emoji
                                     )
                                 })
@@ -163,7 +163,7 @@ private fun SaveButtonCategoryEdit(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(onClick = {
-            //viewModel.addCategoryToDb()
+            viewModel.editCategoryInDb()
         }) {
             Text(text = "Edit category")
         }

@@ -102,12 +102,20 @@ class WalletWebService {
         return api.addWalletToDb(walletData)
     }
 
+    suspend fun editCategoryInDb(id: Int, categoryData: AddOrEditCategoryRequest, authToken: String) {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.updateCategoryInDb(id,categoryData, authHeader)
+    }
+
     interface WalletAPI{
         @POST("login")
         suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
 
         @GET("expanses")
         suspend fun getExpanses(@Header("Authorization")authHeader:String): AllExpansesResponse
+
+        @PATCH("expanseCategories2/{id}")
+        suspend fun updateCategoryInDb(@Path("id") categoryId: Int, @Body categoryData: AddOrEditCategoryRequest,@Header("Authorization")authHeader:String)
 
         @GET("expanses2")
         suspend fun getFilteredExpanses(@Header("Authorization")authHeader:String): SecondAllExpensesResponse

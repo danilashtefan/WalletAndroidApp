@@ -66,6 +66,7 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
+            Thread.sleep(500)
             val transactionCategories = getFilteredTransactionCategories()
             val transactionWallets = getFilteredWallets()
             transactionCetegoriesState.value = transactionCategories

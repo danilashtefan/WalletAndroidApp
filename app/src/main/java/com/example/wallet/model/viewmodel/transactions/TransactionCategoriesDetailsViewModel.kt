@@ -4,11 +4,10 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
-import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
+import com.example.wallet.requests.AddOrEditCategoryRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -84,9 +83,35 @@ class TransactionCategoriesDetailsViewModel(private val dataStorePreferenceRepos
     fun updateTemporaryFieldValueBeforeSavingToDB(field: String, value: String) {
         when (field) {
             "name" -> nameFieldTemporaryValueBeforeSavingtoDB = value
-            "iconCategory" -> iconFieldTemporaryValueBeforeSavingtoDB = value
+            "icon" -> iconFieldTemporaryValueBeforeSavingtoDB = value
+            "type" -> typeFieldTemporaryValueBeforeSavingtoDB = value
         }
 
+    }
+
+    fun editCategoryInDb(){
+
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Thread exception when adding category to Db")
+        }
+
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            editCategoryInDb( id = categoryId,
+                categoryData = AddOrEditCategoryRequest(
+                    expanseCategoryName = nameFieldTemporaryValueBeforeSavingtoDB,
+                    type = typeFieldTemporaryValueBeforeSavingtoDB,
+                    icon = iconFieldTemporaryValueBeforeSavingtoDB,
+                    username = username
+
+                )
+            )
+        }
+
+
+    }
+
+    suspend fun editCategoryInDb(id: Int, categoryData:AddOrEditCategoryRequest){
+        ExpanseCategoriesRepository.editCategoryInDb(id, categoryData, authToken)
     }
 
 

@@ -15,28 +15,37 @@ object ExpanseCategoriesRepository {
 
         return service.getExpanseCategories()
     }
-    suspend fun getFilteredExpenseCategories(authToken: String?):SecondAllExpenseCategoriesResponse{
+
+    suspend fun getFilteredExpenseCategories(authToken: String?): SecondAllExpenseCategoriesResponse {
         categoriesFiltered = service.getFilteredExpenseCategories(authToken)
         return categoriesFiltered
     }
 
     suspend fun getCategoryForExpanse(expanseId: Int): SingleExpanseCategoryResponse {
-         return service.getCategoryForExpanse(expanseId)
+        return service.getCategoryForExpanse(expanseId)
     }
 
     suspend fun addCategoryToDb(categoryData: AddOrEditCategoryRequest) {
         return service.addCategoryToDb(categoryData)
     }
 
-    fun getCategory(categoryId: Int):SecondAllExpenseCategoriesResponseItem{
+    fun getCategory(categoryId: Int): SecondAllExpenseCategoriesResponseItem {
 
-        for(category in categoriesFiltered) {
-            if(category.id === categoryId) {
+        for (category in categoriesFiltered) {
+            if (category.id === categoryId) {
                 return category
             }
         }
         throw Exception("No category found!")
 
+    }
+
+    suspend fun editCategoryInDb(
+        id: Int,
+        categoryData: AddOrEditCategoryRequest,
+        authToken: String
+    ) {
+        return service.editCategoryInDb(id, categoryData, authToken)
     }
 
 
