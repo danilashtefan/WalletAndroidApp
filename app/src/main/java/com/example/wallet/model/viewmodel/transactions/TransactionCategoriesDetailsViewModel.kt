@@ -75,6 +75,7 @@ class TransactionCategoriesDetailsViewModel(private val dataStorePreferenceRepos
 
         this.nameFieldTemporaryValueBeforeSavingtoDB = category.expanseCategoryName
         this.typeFieldTemporaryValueBeforeSavingtoDB = category.type
+        this.iconFieldTemporaryValueBeforeSavingtoDB = category.icon
 
             dataLoaded.value = true;
 

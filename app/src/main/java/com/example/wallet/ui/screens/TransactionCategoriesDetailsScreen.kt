@@ -47,12 +47,6 @@ fun TransactionCategoriesDetailsScreen(
     ) //ViewModel is bound to a composable
     viewModel.setCategoryId(categoryId)
     var dataLoaded = viewModel.dataLoaded.value
-    val nameFieldName = "name"
-    val typeFieldName = "type"
-    val fieldsOnTheScreen = arrayListOf<String>(
-        nameFieldName,
-        typeFieldName
-    )
     var category = viewModel.category.value
 
     if (dataLoaded === false) {
