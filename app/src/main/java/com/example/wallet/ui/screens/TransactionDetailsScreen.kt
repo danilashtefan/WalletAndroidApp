@@ -145,13 +145,6 @@ fun TransactionDetailsScreen(
         )
         Spacer(modifier = Modifier.size(20.dp))
         SaveButtonTransactionDetails(navController, fieldsOnTheScreen, viewModel)
-//        Spacer(modifier = Modifier.size(20.dp))
-//        DeleteButtonTransactionDetails(
-//            navController,
-//            expenseId = transactionId,
-//            viewModel = viewModel
-//        )
-
     }
 }
 

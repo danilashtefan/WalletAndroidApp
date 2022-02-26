@@ -89,7 +89,7 @@ fun DetailsSection(
 ) {
     when (viewModel.whatToSeeState.value) {
         "category" -> CategoriesListSection(viewModel, transactionsCategories, navController = navController)
-        "wallet" -> WalletsListSection(viewModel, transactionWallets)
+        "wallet" -> WalletsListSection(viewModel, transactionWallets, navController)
     }
 }
 
@@ -123,18 +123,19 @@ fun CategoriesListSection(
 @Composable
 fun WalletsListSection(
     viewModel: ExpanseCategoriesViewModel,
-    transactionsWallets: List<SecondAllWalletsResponseItem>
+    transactionsWallets: List<SecondAllWalletsResponseItem>,
+    navController: NavHostController
 ) {
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(transactionsWallets) { wallet ->
-            val expanseId = wallet.id
+            val walletId = wallet.id
             ReusableCategoryAndWalletRow(
                 icon = wallet.icon,
                 name = wallet.walletName,
                 type = wallet.currency,
                 editClickAction = {
 
-                    //navController.navigate("transactionDetails/$expanseId")
+                    navController.navigate("walletsDetails/$walletId")
                 },
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")

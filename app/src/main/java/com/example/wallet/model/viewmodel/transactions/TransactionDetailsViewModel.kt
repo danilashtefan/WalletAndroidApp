@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 
 class TransactionDetailsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
     ViewModel() {
-    private val walletRepository: WalletRepository = WalletRepository()
 
     // private val walletRepository: WalletRepository = WalletRepository()
     private var transactionId: Int = 0;
@@ -148,12 +147,12 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     }
 
     suspend fun getFilteredWallets(): SecondAllWalletsResponse {
-        var listOfWallets = walletRepository.getFilteredWallets(authToken)
+        var listOfWallets = WalletRepository.getFilteredWallets(authToken)
         return listOfWallets
     }
 
     suspend fun getTransactionWallets(): List<Wallet> {
-        var listOfWallets = walletRepository.getWallets()._embedded.wallets
+        var listOfWallets = WalletRepository.getWallets()._embedded.wallets
         return listOfWallets
     }
 

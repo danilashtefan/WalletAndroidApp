@@ -26,10 +26,13 @@ class WalletWebService {
 
     init{
         val retrofit = Retrofit.Builder()
+                //KAMORA
+            .baseUrl("http://192.168.88.224:8080/api/")
                 //HOME
-            .baseUrl("http://10.0.1.60:8080/api/")
+            //.baseUrl("http://10.0.1.60:8080/api/")
                 //OFFICE
             //baseUrl("http://192.168.0.116:8080/api/")
+                //Iulia
        //.baseUrl("http://192.168.0.17:8080/api/")
             //.baseUrl("http://192.168.1.80:8080/api/")
             //.baseUrl("http://152.66.156.198:8080/api/")
@@ -107,6 +110,12 @@ class WalletWebService {
         return api.updateCategoryInDb(id,categoryData, authHeader)
     }
 
+    suspend fun editWalletInDb(id: Int, walletData: AddOrEditWalletRequest, authToken: String) {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.updateWalletInDb(id,walletData, authHeader)
+    }
+
+
     interface WalletAPI{
         @POST("login")
         suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
@@ -116,6 +125,9 @@ class WalletWebService {
 
         @PATCH("expanseCategories2/{id}")
         suspend fun updateCategoryInDb(@Path("id") categoryId: Int, @Body categoryData: AddOrEditCategoryRequest,@Header("Authorization")authHeader:String)
+
+        @PATCH("wallets2/{id}")
+        suspend fun updateWalletInDb(@Path("id") categoryId: Int, @Body walletData: AddOrEditWalletRequest,@Header("Authorization")authHeader:String)
 
         @GET("expanses2")
         suspend fun getFilteredExpanses(@Header("Authorization")authHeader:String): SecondAllExpensesResponse

@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) : ViewModel() {
-    private val walletRepository: WalletRepository = WalletRepository()
     var userName = ""
     var authToken = ""
 
@@ -106,12 +105,12 @@ init{
     }
 
     suspend fun getFilteredWallets(): SecondAllWalletsResponse{
-        var listOfWallets = walletRepository.getFilteredWallets(authToken)
+        var listOfWallets = WalletRepository.getFilteredWallets(authToken)
         return listOfWallets
     }
 
     suspend fun getTransactionWallets(): List<Wallet>{
-        var listOfWallets = walletRepository.getWallets()._embedded.wallets
+        var listOfWallets = WalletRepository.getWallets()._embedded.wallets
         return listOfWallets
     }
 
@@ -229,7 +228,7 @@ init{
     }
 
     suspend fun addWalletToDb(walletData: AddOrEditWalletRequest){
-        walletRepository.addWalletToDb(walletData)
+        WalletRepository.addWalletToDb(walletData)
     }
 
 

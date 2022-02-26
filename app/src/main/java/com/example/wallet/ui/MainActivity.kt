@@ -27,7 +27,6 @@ import com.example.wallet.ui.navigationBar.BottomNavigationBar
 import com.example.wallet.ui.navigationBar.BottomNavigationItem
 import com.example.wallet.ui.screens.*
 import com.example.wallet.ui.theme.WalletTheme
-import dagger.hilt.android.qualifiers.ApplicationContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,6 +88,7 @@ fun UsersApplication(navController: NavHostController){
         composable("add"){
           AddScreen(navController = navController, DataStorePreferenceRepository(LocalContext.current))
         }
+
         composable("transactionDetails/{transactionId}",
         arguments = listOf(navArgument("transactionId"){
             type = NavType.IntType
@@ -98,6 +98,7 @@ fun UsersApplication(navController: NavHostController){
                 TransactionDetailsScreen(navController,transactionId = it.getInt("transactionId"), DataStorePreferenceRepository(LocalContext.current))
             }
         }
+
         composable("categoriesDetails/{categoryId}",
             arguments = listOf(navArgument("categoryId"){
                 type = NavType.IntType
@@ -105,6 +106,15 @@ fun UsersApplication(navController: NavHostController){
                 navBackStackEntry->
             navBackStackEntry.arguments?.let {
                 TransactionCategoriesDetailsScreen(navController,categoryId = it.getInt("categoryId"), DataStorePreferenceRepository(LocalContext.current))
+            }
+        }
+        composable("walletsDetails/{walletId}",
+            arguments = listOf(navArgument("walletId"){
+                type = NavType.IntType
+            })){
+                navBackStackEntry->
+            navBackStackEntry.arguments?.let {
+                WalletsDetailsScreen(navController,walletId = it.getInt("walletId"), DataStorePreferenceRepository(LocalContext.current))
             }
         }
 

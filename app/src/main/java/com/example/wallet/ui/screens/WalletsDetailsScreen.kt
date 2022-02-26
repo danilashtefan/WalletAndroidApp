@@ -27,27 +27,30 @@ import androidx.navigation.NavHostController
 import com.example.wallet.helpers.EmojiProvider
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
-import com.example.wallet.model.viewmodel.transactions.*
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
+import com.example.wallet.model.viewmodel.transactions.TransactionCategoriesDetailsViewModel
+import com.example.wallet.model.viewmodel.transactions.TransactionCategoriesDetailsViewModelFactory
+import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModel
+import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModelFactory
 import com.example.wallet.ui.theme.PurpleBasic
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TransactionCategoriesDetailsScreen(
+fun WalletsDetailsScreen(
     navController: NavHostController,
-    categoryId: Int,
+    walletId: Int,
     dataStorePreferenceRepository: DataStorePreferenceRepository
 ) {
-    val viewModel: TransactionCategoriesDetailsViewModel = viewModel(
-        factory = TransactionCategoriesDetailsViewModelFactory(
+    val viewModel: WalletsDetailsViewModel = viewModel(
+        factory = WalletsDetailsViewModelFactory(
             DataStorePreferenceRepository(
                 LocalContext.current
             )
         )
     ) //ViewModel is bound to a composable
-    viewModel.setCategoryId(categoryId)
+    viewModel.setWalletId(walletId)
     var dataLoaded = viewModel.dataLoaded.value
-    var category = viewModel.category.value
+    var wallet = viewModel.wallet.value
 
     if (dataLoaded === false) {
         return;
@@ -55,7 +58,7 @@ fun TransactionCategoriesDetailsScreen(
 
     Column(Modifier.verticalScroll(rememberScrollState())) {
         LogoTransactionDetailsSection()
-        CategoriesDetailsImageSection(category)
+        WalletsDetailsImageSection(wallet)
         Surface(modifier = Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier.background(
@@ -63,7 +66,7 @@ fun TransactionCategoriesDetailsScreen(
                 )
             ) {
 
-                TypeOfElementToAddOrEditText("Edit category")
+                TypeOfElementToAddOrEditText("Edit wallet")
                 Spacer(modifier = Modifier.padding(bottom = 50.dp))
                 var emojis = EmojiProvider.emojis
                 Column(
@@ -71,7 +74,7 @@ fun TransactionCategoriesDetailsScreen(
                 ) {
                     Spacer(modifier = Modifier.height(35.dp))
                     Spacer(modifier = Modifier.height(30.dp))
-                    var text1 = category.expanseCategoryName
+                    var text1 = wallet.walletName
                     if (text1 === null) {
                         text1 = ""
                     }
@@ -97,7 +100,7 @@ fun TransactionCategoriesDetailsScreen(
                         maxLines = 1,
                     )
 
-                    var text2 = category.type
+                    var text2 = wallet.currency
                     if (text2 === null) {
                         text2 = ""
                     }
@@ -142,7 +145,7 @@ fun TransactionCategoriesDetailsScreen(
                             )
                         }
                     }
-                    SaveButtonCategoryEdit(viewModel = viewModel, navController = navController)
+                    SaveButtonWalletEdit(viewModel = viewModel, navController = navController)
                 }
 
 
@@ -152,23 +155,23 @@ fun TransactionCategoriesDetailsScreen(
 }
 
 @Composable
-private fun SaveButtonCategoryEdit(
-    viewModel: TransactionCategoriesDetailsViewModel,
+private fun SaveButtonWalletEdit(
+    viewModel: WalletsDetailsViewModel,
     navController: NavHostController
 
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(onClick = {
-            viewModel.editCategoryInDb()
+            viewModel.editWalletInDb()
             Thread.sleep(500)
             navController.navigate("expanses")
         }) {
-            Text(text = "Edit category")
+            Text(text = "Edit wallet")
         }
     }
 }
 @Composable
-fun CategoriesDetailsImageSection(category: SecondAllExpenseCategoriesResponseItem) {
+fun WalletsDetailsImageSection(wallet: SecondAllWalletsResponseItem) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         Card(
             shape = CircleShape,
@@ -176,8 +179,7 @@ fun CategoriesDetailsImageSection(category: SecondAllExpenseCategoriesResponseIt
             modifier = Modifier.size(70.dp),
             elevation = 5.dp
         ) {
-            CategoryImage(category.icon, 50)
+            CategoryImage(wallet.icon, 50)
         }
     }
 }
-

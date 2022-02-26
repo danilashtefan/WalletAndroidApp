@@ -22,7 +22,6 @@ class ExpansesViewModel(
     private val dataStorePreferenceRepository: DataStorePreferenceRepository
 ) : ViewModel() {
     private val expansesRepository: TransactionsRepository = TransactionsRepository
-    private val transactionWalletsRepository: WalletRepository = WalletRepository()
     var minDatePicked = mutableStateOf("1000-01-01")
     var maxDatePicked = mutableStateOf("3000-12-12")
     private val _accessToken = MutableLiveData("")
@@ -98,7 +97,7 @@ class ExpansesViewModel(
     }
 
     suspend fun getAndSetWalletForTransactions(expanseId: Int): Pair<String, Int> {
-        val walletResponse = transactionWalletsRepository.getWalletForExpanse(expanseId)
+        val walletResponse = WalletRepository.getWalletForExpanse(expanseId)
         return Pair(walletResponse.walletName, walletResponse.id)
     }
 

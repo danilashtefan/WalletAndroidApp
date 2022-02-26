@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 
 class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
     ViewModel() {
-    private val walletRepository: WalletRepository = WalletRepository()
     val expanseCategoriesState =
         mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
     var whatToSeeState = mutableStateOf("")
@@ -81,7 +80,7 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
     }
 
     suspend fun getFilteredWallets(): SecondAllWalletsResponse {
-        var listOfWallets = walletRepository.getFilteredWallets(authToken)
+        var listOfWallets = WalletRepository.getFilteredWallets(authToken)
         return listOfWallets
     }
 
