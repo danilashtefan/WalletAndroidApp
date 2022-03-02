@@ -89,6 +89,10 @@ fun UsersApplication(navController: NavHostController){
           AddScreen(navController = navController, DataStorePreferenceRepository(LocalContext.current))
         }
 
+        composable("circle"){
+            TestCircleScreen(navController = navController)
+        }
+
         composable("transactionDetails/{transactionId}",
         arguments = listOf(navArgument("transactionId"){
             type = NavType.IntType

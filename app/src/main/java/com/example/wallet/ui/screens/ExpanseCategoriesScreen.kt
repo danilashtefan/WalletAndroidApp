@@ -114,7 +114,8 @@ fun CategoriesListSection(
                 },
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")
-                })
+                },
+            navController)
         }
     }
 }
@@ -139,7 +140,8 @@ fun WalletsListSection(
                 },
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")
-                })
+                },
+                navController)
         }
     }
 
@@ -153,7 +155,8 @@ private fun ReusableCategoryAndWalletRow(
     name: String,
     type: String,
     editClickAction: () -> Unit,
-    deleteClickAction: () -> Unit
+    deleteClickAction: () -> Unit,
+    navController: NavHostController
 ) {
 
     Card(
@@ -186,7 +189,7 @@ private fun ReusableCategoryAndWalletRow(
 
                 Spacer(Modifier.weight(0.3f))
                 Spacer(Modifier.width(16.dp))
-                IconButton({ println("Pressed") }) {
+                IconButton(onClick = { navController.navigate("circle")}) {
                     Icon(
                         imageVector = Icons.Filled.ChevronRight,
                         contentDescription = null,

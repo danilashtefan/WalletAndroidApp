@@ -27,9 +27,9 @@ class WalletWebService {
     init{
         val retrofit = Retrofit.Builder()
                 //KAMORA
-            .baseUrl("http://192.168.88.224:8080/api/")
+            //.baseUrl("http://192.168.88.224:8080/api/")
                 //HOME
-            //.baseUrl("http://10.0.1.60:8080/api/")
+            .baseUrl("http://10.0.1.60:8080/api/")
                 //OFFICE
             //baseUrl("http://192.168.0.116:8080/api/")
                 //Iulia
