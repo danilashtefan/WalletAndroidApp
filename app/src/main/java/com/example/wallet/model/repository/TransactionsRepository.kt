@@ -23,6 +23,11 @@ object TransactionsRepository {
         return expenseFiltered
     }
 
+    suspend fun getCategoryFilteredExpenses(authToken: String?, categoryId: Int):SecondAllExpensesResponse{
+        expenseFiltered = service.getCategoryFilteredExpenses(authToken, categoryId)
+        return expenseFiltered
+    }
+
     fun getExpense(expenseId: Int): SecondAllExpensesItem {
         for(expense in expenseFiltered) {
             if(expense.id === expenseId) {

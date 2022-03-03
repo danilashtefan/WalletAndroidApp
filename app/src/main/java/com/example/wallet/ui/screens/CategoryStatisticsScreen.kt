@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.repository.DataStorePreferenceRepository
+import com.example.wallet.model.viewmodel.transactions.CategoryStatisticsViewModel
+import com.example.wallet.model.viewmodel.transactions.CategoryStatisticsViewModelFactory
 import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModel
 import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModelFactory
 
@@ -39,13 +41,15 @@ fun CategoryStatisticsScreen(
     dataStorePreferenceRepository: DataStorePreferenceRepository
 ) {
 
-    val viewModel: WalletsDetailsViewModel = viewModel(
-        factory = WalletsDetailsViewModelFactory(
+    val viewModel: CategoryStatisticsViewModel = viewModel(
+        factory = CategoryStatisticsViewModelFactory(
             DataStorePreferenceRepository(
                 LocalContext.current
             )
         )
     )
+    viewModel.setCategoryId(categoryId)
+    val totalAmount = viewModel.amount.value
 
     var items: MutableList<Bill> = mutableListOf()
     items.add(Bill(10.0f, Color(0xFF004940)))
@@ -63,7 +67,7 @@ fun CategoryStatisticsScreen(
     amounts.add(5.0)
     amounts.add(7.0)
 
-    StatementBody(items = items, colors = { item -> item.color }, amounts = { item -> item.amount })
+    StatementBody(items = items, colors = { item -> item.color }, amounts = { item -> item.amount }, totalAmount)
 
 }
 
@@ -146,7 +150,7 @@ fun <T> StatementBody(
     items: List<T>,
     colors: (T) -> Color,
     amounts: (T) -> Float,
-
+    totalAmount:Int
     ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Box(Modifier.padding(16.dp)) {
@@ -162,12 +166,12 @@ fun <T> StatementBody(
             )
             Column(modifier = Modifier.align(Alignment.Center)) {
                 Text(
-                    text = "Total",
+                    text = "Total flow",
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
                 Text(
-                    text = "12",
+                    text = totalAmount.toString(),
                     style = MaterialTheme.typography.h2,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
