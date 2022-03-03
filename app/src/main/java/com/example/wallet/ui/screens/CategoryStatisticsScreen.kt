@@ -51,14 +51,27 @@ fun CategoryStatisticsScreen(
     viewModel.setCategoryId(categoryId)
     val totalAmount = viewModel.amount.value
     var expenseItems = viewModel.expanseState.value
+    var incomeItems = viewModel.incomeState.value
+    var transactions = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
 
     while (!dataLoaded){
         return
     }
 
-    StatementBody(items = expenseItems, colors = { item -> item.color }, amounts = { item -> item.transaction.amount.toFloat() }, totalAmount)
+    StatementBody(items = transactions, colors = { item -> item.color }, amounts = { item -> item.transaction.amount.toFloat() }, totalAmount,
 
+        rows = {item -> ReusableRow(
+            categoryIcon = item.transaction.categoryIcon,
+            categoryName = item.transaction.categoryName ,
+            date = item.transaction.date,
+            location = item.transaction.location,
+            amount = item.transaction.amount,
+            comments = item.transaction.comments,
+            type = item.transaction.type,
+            editClickAction = { /*TODO*/ }) {
+
+        }})
 }
 
 @Composable
@@ -71,7 +84,7 @@ fun AnimatedCircle(
         MutableTransitionState(AnimatedCircleProgress.START)
             .apply { targetState = AnimatedCircleProgress.END }
     }
-    val stroke = with(LocalDensity.current) { Stroke(5.dp.toPx()) }
+    val stroke = with(LocalDensity.current) { Stroke(12.dp.toPx()) }
     val transition = updateTransition(currentState)
     val angleOffset by transition.animateFloat(
         transitionSpec = {
@@ -140,7 +153,8 @@ fun <T> StatementBody(
     items: List<T>,
     colors: (T) -> Color,
     amounts: (T) -> Float,
-    totalAmount:Int
+    totalAmount:Int,
+    rows: @Composable (T) -> Unit
     ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Box(Modifier.padding(16.dp)) {
@@ -165,6 +179,11 @@ fun <T> StatementBody(
                     style = MaterialTheme.typography.h2,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
+            }
+        }
+        Column(modifier = Modifier.padding(12.dp)) {
+            items.forEach { item ->
+                rows(item)
             }
         }
 

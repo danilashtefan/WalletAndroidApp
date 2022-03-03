@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.CategoryWrapperWithColor
 import com.example.wallet.model.repository.DataStorePreferenceRepository
+import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
+import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -61,6 +63,13 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
             var wrappedTransactions = arrayListOf<CategoryWrapperWithColor>()
             val rnd = Random()
             for (transaction in transactions){
+                val transactionCategoryNameAndIdAndIcon = getAndSetCategoriesForTransactions(transaction.id)
+                transaction.categoryName = transactionCategoryNameAndIdAndIcon.first
+                transaction.categoryId = transactionCategoryNameAndIdAndIcon.second
+                transaction.categoryIcon = transactionCategoryNameAndIdAndIcon.third
+                val transactionWalletNameAndId = getAndSetWalletForTransactions(transaction.id)
+                transaction.walletName = transactionWalletNameAndId.first
+                transaction.walletId = transactionWalletNameAndId.second
                 wrappedTransactions.add(CategoryWrapperWithColor(
                     transaction = transaction, Color(
                     (0..255).random(),
@@ -71,19 +80,17 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
 
             var totalAmountTemp = 0
             for (transaction in wrappedTransactions){
+
+
                 if(transaction.transaction.type.equals("Expense")){
                     totalAmountTemp -= transaction.transaction.amount
-                    //toMutableList().also{it.remove(expanse)}
-//                    expanseState.value.toMutableList().also{it.add(transaction)}
                     expanseState.value += transaction
                 }else{
                     totalAmountTemp += transaction.transaction.amount
-                   // incomeState.value.toMutableList().also{it.add(transaction)}
                     incomeState.value += transaction
                 }
             }
             amount.value = totalAmountTemp
-
         }
         dataLoaded.value = true
     }
@@ -97,5 +104,16 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
         return TransactionsRepository.getCategoryFilteredExpenses(authToken = authToken, categoryId = categoryId)
 
     }
+
+    suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Triple<String, Int, String> {
+        val categoryResponse = ExpanseCategoriesRepository.getCategoryForExpanse(expanseId)
+        return Triple(categoryResponse.expanseCategoryName, categoryResponse.id, categoryResponse.icon)
+    }
+
+    suspend fun getAndSetWalletForTransactions(expanseId: Int): Pair<String, Int> {
+        val walletResponse = WalletRepository.getWalletForExpanse(expanseId)
+        return Pair(walletResponse.walletName, walletResponse.id)
+    }
+
 
 }

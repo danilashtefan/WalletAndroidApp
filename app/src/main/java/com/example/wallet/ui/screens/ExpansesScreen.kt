@@ -162,7 +162,7 @@ fun ExpanseSection(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun ReusableRow(categoryIcon:String, categoryName: String, date: String, location: String, amount: Int, comments: String, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit) {
+fun ReusableRow(categoryIcon:String, categoryName: String, date: String, location: String?, amount: Int, comments: String?, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit) {
     val currency = "$"
     var sign = "+"
     if(type == "Expense") {
