@@ -5,6 +5,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
@@ -15,9 +17,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.wallet.model.repository.DataStorePreferenceRepository
+import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModel
+import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModelFactory
 
 private const val DividerLengthInDegrees = 1.8f
 
@@ -25,6 +32,40 @@ private const val DividerLengthInDegrees = 1.8f
  * A donut chart that animates when loaded.
  */
 
+@Composable
+fun CategoryStatisticsScreen(
+    navController: NavHostController,
+    categoryId: Int,
+    dataStorePreferenceRepository: DataStorePreferenceRepository
+) {
+
+    val viewModel: WalletsDetailsViewModel = viewModel(
+        factory = WalletsDetailsViewModelFactory(
+            DataStorePreferenceRepository(
+                LocalContext.current
+            )
+        )
+    )
+
+    var items: MutableList<Bill> = mutableListOf()
+    items.add(Bill(10.0f, Color(0xFF004940)))
+    items.add(Bill(5.0f, Color(0xFF005D57)))
+    items.add(Bill(7.0f, Color(0xFF04B97F)))
+
+    var colors: MutableList<Color> = mutableListOf()
+    colors.add(Color.Cyan)
+    colors.add(Color.Blue)
+    colors.add(Color.Red)
+
+
+    var amounts: MutableList<Double> = mutableListOf()
+    amounts.add(10.0)
+    amounts.add(5.0)
+    amounts.add(7.0)
+
+    StatementBody(items = items, colors = { item -> item.color }, amounts = { item -> item.amount })
+
+}
 
 @Composable
 fun AnimatedCircle(
@@ -93,34 +134,10 @@ fun AnimatedCircle(
         }
     }
 }
+
 fun <E> List<E>.extractProportions(selector: (E) -> Float): List<Float> {
     val total = this.sumOf { selector(it).toDouble() }
     return this.map { (selector(it) / total).toFloat() }
-}
-
-
-@Composable
-fun TestCircleScreen(navController: NavHostController) {
-    //items: List<T>, colors: (T) -> Color, amounts: (T) -> Float
-
-    var items : MutableList<Bill> = mutableListOf()
-    items.add(Bill(10.0f, Color.Cyan))
-    items.add(Bill(5.0f, Color.Blue))
-    items.add(Bill(7.0f, Color.Red))
-
-    var colors: MutableList<Color> = mutableListOf()
-    colors.add(Color.Cyan)
-    colors.add(Color.Blue)
-    colors.add(Color.Red)
-
-
-    var amounts: MutableList<Double> = mutableListOf()
-    amounts.add(10.0)
-    amounts.add(5.0)
-    amounts.add(7.0)
-
-    StatementBody(items = items, colors = {item -> item.color}, amounts = {item -> item.amount})
-
 }
 
 
@@ -130,7 +147,7 @@ fun <T> StatementBody(
     colors: (T) -> Color,
     amounts: (T) -> Float,
 
-) {
+    ) {
     Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
         Box(Modifier.padding(16.dp)) {
             val accountsProportion = items.extractProportions { amounts(it) }
@@ -143,6 +160,18 @@ fun <T> StatementBody(
                     .align(Alignment.Center)
                     .fillMaxWidth()
             )
+            Column(modifier = Modifier.align(Alignment.Center)) {
+                Text(
+                    text = "Total",
+                    style = MaterialTheme.typography.body1,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+                Text(
+                    text = "12",
+                    style = MaterialTheme.typography.h2,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+            }
         }
 
     }

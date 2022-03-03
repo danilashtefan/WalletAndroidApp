@@ -108,6 +108,7 @@ fun CategoriesListSection(
                 icon = expanse.icon,
                 name = expanse.expanseCategoryName,
                 type = expanse.type,
+                id = categoryId,
                 editClickAction = {
 
                     navController.navigate("categoriesDetails/$categoryId")
@@ -134,6 +135,7 @@ fun WalletsListSection(
                 icon = wallet.icon,
                 name = wallet.walletName,
                 type = wallet.currency,
+                id = walletId,
                 editClickAction = {
 
                     navController.navigate("walletsDetails/$walletId")
@@ -154,6 +156,7 @@ private fun ReusableCategoryAndWalletRow(
     icon: String,
     name: String,
     type: String,
+    id: Int,
     editClickAction: () -> Unit,
     deleteClickAction: () -> Unit,
     navController: NavHostController
@@ -189,7 +192,7 @@ private fun ReusableCategoryAndWalletRow(
 
                 Spacer(Modifier.weight(0.3f))
                 Spacer(Modifier.width(16.dp))
-                IconButton(onClick = { navController.navigate("circle")}) {
+                IconButton(onClick = { navController.navigate("categoryStatistics/$id")}) {
                     Icon(
                         imageVector = Icons.Filled.ChevronRight,
                         contentDescription = null,
@@ -200,7 +203,7 @@ private fun ReusableCategoryAndWalletRow(
                 }
 
             }
-            //Spacer(Modifier.width(30.dp))
+
             AnimatedVisibility(visible = expanded) {
                 Column() {
                     Row() {

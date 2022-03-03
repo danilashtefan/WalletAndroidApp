@@ -89,8 +89,14 @@ fun UsersApplication(navController: NavHostController){
           AddScreen(navController = navController, DataStorePreferenceRepository(LocalContext.current))
         }
 
-        composable("circle"){
-            TestCircleScreen(navController = navController)
+        composable("categoryStatistics/{categoryId}",
+            arguments = listOf(navArgument("categoryId"){
+                type = NavType.IntType
+            })){
+                navBackStackEntry->
+            navBackStackEntry.arguments?.let {
+                CategoryStatisticsScreen(navController,categoryId = it.getInt("categoryId"), DataStorePreferenceRepository(LocalContext.current))
+            }
         }
 
         composable("transactionDetails/{transactionId}",
