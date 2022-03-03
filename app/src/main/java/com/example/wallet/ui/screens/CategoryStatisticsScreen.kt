@@ -50,24 +50,14 @@ fun CategoryStatisticsScreen(
     )
     viewModel.setCategoryId(categoryId)
     val totalAmount = viewModel.amount.value
+    var expenseItems = viewModel.expanseState.value
+    var dataLoaded = viewModel.dataLoaded.value
 
-    var items: MutableList<Bill> = mutableListOf()
-    items.add(Bill(10.0f, Color(0xFF004940)))
-    items.add(Bill(5.0f, Color(0xFF005D57)))
-    items.add(Bill(7.0f, Color(0xFF04B97F)))
+    while (!dataLoaded){
+        return
+    }
 
-    var colors: MutableList<Color> = mutableListOf()
-    colors.add(Color.Cyan)
-    colors.add(Color.Blue)
-    colors.add(Color.Red)
-
-
-    var amounts: MutableList<Double> = mutableListOf()
-    amounts.add(10.0)
-    amounts.add(5.0)
-    amounts.add(7.0)
-
-    StatementBody(items = items, colors = { item -> item.color }, amounts = { item -> item.amount }, totalAmount)
+    StatementBody(items = expenseItems, colors = { item -> item.color }, amounts = { item -> item.transaction.amount.toFloat() }, totalAmount)
 
 }
 
@@ -181,11 +171,6 @@ fun <T> StatementBody(
     }
 }
 
-@Immutable
-data class Bill(
-    val amount: Float,
-    val color: Color
-)
 
 private enum class AnimatedCircleProgress { START, END }
 

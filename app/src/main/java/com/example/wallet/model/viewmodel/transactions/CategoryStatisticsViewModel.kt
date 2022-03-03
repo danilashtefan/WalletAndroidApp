@@ -2,18 +2,19 @@ package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.wallet.model.CategoryWrapperWithColor
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.TransactionsRepository
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.*
 
 class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
     ViewModel()  {
@@ -22,7 +23,9 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
     var dataLoaded = mutableStateOf(false)
 
     //Transactions of the particular wallet
-    val transactionState = mutableStateOf((emptyList<SecondAllExpensesItem>()))
+    val transactionState = mutableStateOf((emptyList<CategoryWrapperWithColor>()))
+    var expanseState = mutableStateOf((emptyList<CategoryWrapperWithColor>()))
+    var incomeState = mutableStateOf((emptyList<CategoryWrapperWithColor>()))
 
     //Total amount to show on the screen
     var amount = mutableStateOf(0)
@@ -55,19 +58,34 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
                 Log.d("INFO", "Access token is not set up yet")
             }
             var transactions = getFilteredExpenses()
-            transactionState.value = transactions
+            var wrappedTransactions = arrayListOf<CategoryWrapperWithColor>()
+            val rnd = Random()
+            for (transaction in transactions){
+                wrappedTransactions.add(CategoryWrapperWithColor(
+                    transaction = transaction, Color(
+                    (0..255).random(),
+                    (0..255).random(),
+                    (0..255).random())))
+            }
+            transactionState.value = wrappedTransactions
 
             var totalAmountTemp = 0
-            for (transaction in transactions){
-                if(transaction.type.equals("Expense")){
-                    totalAmountTemp -= transaction.amount
+            for (transaction in wrappedTransactions){
+                if(transaction.transaction.type.equals("Expense")){
+                    totalAmountTemp -= transaction.transaction.amount
+                    //toMutableList().also{it.remove(expanse)}
+//                    expanseState.value.toMutableList().also{it.add(transaction)}
+                    expanseState.value += transaction
                 }else{
-                    totalAmountTemp += transaction.amount
+                    totalAmountTemp += transaction.transaction.amount
+                   // incomeState.value.toMutableList().also{it.add(transaction)}
+                    incomeState.value += transaction
                 }
             }
             amount.value = totalAmountTemp
 
         }
+        dataLoaded.value = true
     }
 
     fun setCategoryId(id:Int){
