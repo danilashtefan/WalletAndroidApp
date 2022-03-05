@@ -70,6 +70,12 @@ class WalletWebService {
         return api.getCategoryFilteredExpenses(authHeader = authHeader, categoryId = categoryId)
     }
 
+    suspend fun getWalletFilteredExpenses(authToken: String?, walletId: Int):SecondAllExpensesResponse{
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        Log.d("INFO","Authorization header: $authHeader")
+        return api.getWalletFilteredExpenses(authHeader = authHeader, walletId = walletId)
+    }
+
     suspend fun getExpanseCategories():AllExpanseCategoriesResponse{
        return api.getExpanseCategories()
     }
@@ -146,6 +152,9 @@ class WalletWebService {
 
         @GET("wallets2")
         suspend fun getFilteredWallets(@Header("Authorization")authHeader:String): SecondAllWalletsResponse
+
+        @GET("wallets2/{id}/expenses")
+        suspend fun getWalletFilteredExpenses(@Header("Authorization")authHeader:String, @Path("id") walletId: Int):SecondAllExpensesResponse
 
         @GET("expanseCategories")
         suspend fun getExpanseCategories():AllExpanseCategoriesResponse

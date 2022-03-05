@@ -28,6 +28,10 @@ object TransactionsRepository {
         return expenseFiltered
     }
 
+    suspend fun getWalletFilteredExpenses(authToken: String?, walletId: Int):SecondAllExpensesResponse{
+        expenseFiltered = service.getWalletFilteredExpenses(authToken, walletId)
+        return expenseFiltered
+    }
     fun getExpense(expenseId: Int): SecondAllExpensesItem {
         for(expense in expenseFiltered) {
             if(expense.id === expenseId) {

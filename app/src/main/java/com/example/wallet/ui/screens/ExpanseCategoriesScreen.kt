@@ -105,18 +105,19 @@ fun CategoriesListSection(
         items(transactionsCategories) { expanse ->
             val categoryId = expanse.id
             ReusableCategoryAndWalletRow(
+                route = "categoryStatistics/$categoryId",
                 icon = expanse.icon,
                 name = expanse.expanseCategoryName,
                 type = expanse.type,
                 id = categoryId,
                 editClickAction = {
-
                     navController.navigate("categoriesDetails/$categoryId")
                 },
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")
                 },
-            navController)
+                navController = navController
+            )
         }
     }
 }
@@ -133,6 +134,7 @@ fun WalletsListSection(
             val walletId = wallet.id
             ReusableCategoryAndWalletRow(
                 icon = wallet.icon,
+                route= "walletStatisticStatistics/$walletId",
                 name = wallet.walletName,
                 type = wallet.currency,
                 id = walletId,
@@ -143,7 +145,8 @@ fun WalletsListSection(
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")
                 },
-                navController)
+                navController = navController
+            )
         }
     }
 
@@ -157,6 +160,7 @@ private fun ReusableCategoryAndWalletRow(
     name: String,
     type: String,
     id: Int,
+    route:String,
     editClickAction: () -> Unit,
     deleteClickAction: () -> Unit,
     navController: NavHostController
@@ -192,7 +196,7 @@ private fun ReusableCategoryAndWalletRow(
 
                 Spacer(Modifier.weight(0.3f))
                 Spacer(Modifier.width(16.dp))
-                IconButton(onClick = { navController.navigate("categoryStatistics/$id")}) {
+                IconButton(onClick = { navController.navigate(route)}) {
                     Icon(
                         imageVector = Icons.Filled.ChevronRight,
                         contentDescription = null,
