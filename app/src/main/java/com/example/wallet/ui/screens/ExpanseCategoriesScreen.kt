@@ -134,7 +134,7 @@ fun WalletsListSection(
             val walletId = wallet.id
             ReusableCategoryAndWalletRow(
                 icon = wallet.icon,
-                route= "walletStatisticStatistics/$walletId",
+                route= "walletStatistics/$walletId",
                 name = wallet.walletName,
                 type = wallet.currency,
                 id = walletId,

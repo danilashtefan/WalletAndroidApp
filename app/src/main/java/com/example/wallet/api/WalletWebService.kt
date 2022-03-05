@@ -8,14 +8,12 @@ import com.example.wallet.model.response.AllExpanseCategoriesResponse
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.SingleTransactionWalletResponse
 import com.example.wallet.model.response.login.LoginResponse
+import com.example.wallet.model.response.login.RegisterResponse
 import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponse
-import com.example.wallet.requests.AddOrEditCategoryRequest
-import com.example.wallet.requests.AddOrEditTransactionRequest
-import com.example.wallet.requests.AddOrEditWalletRequest
-import com.example.wallet.requests.LoginRequest
+import com.example.wallet.requests.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -45,6 +43,10 @@ class WalletWebService {
 
     suspend fun login(loginRequest: LoginRequest): LoginResponse {
         return api.login(loginRequest)
+    }
+
+    suspend fun register(registerRequest: RegisterRequest) : RegisterResponse {
+        return api.register(registerRequest)
     }
 
     suspend fun getFilteredWallets(authToken: String?): SecondAllWalletsResponse{
@@ -131,6 +133,9 @@ class WalletWebService {
     interface WalletAPI{
         @POST("login")
         suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
+
+        @POST("user/save")
+        suspend fun register(@Body registerRequest: RegisterRequest): RegisterResponse
 
         @GET("expanses")
         suspend fun getExpanses(@Header("Authorization")authHeader:String): AllExpansesResponse

@@ -90,12 +90,22 @@ fun UsersApplication(navController: NavHostController){
         }
 
         composable("categoryStatistics/{categoryId}",
-            arguments = listOf(navArgument("categoryId"){
+        arguments = listOf(navArgument("categoryId"){
+            type = NavType.IntType
+        })){
+            navBackStackEntry->
+        navBackStackEntry.arguments?.let {
+            CategoryStatisticsScreen(navController,categoryId = it.getInt("categoryId"), DataStorePreferenceRepository(LocalContext.current))
+        }
+    }
+
+        composable("walletStatistics/{walletId}",
+            arguments = listOf(navArgument("walletId"){
                 type = NavType.IntType
             })){
                 navBackStackEntry->
             navBackStackEntry.arguments?.let {
-                CategoryStatisticsScreen(navController,categoryId = it.getInt("categoryId"), DataStorePreferenceRepository(LocalContext.current))
+                WalletStatisticsScreen(navController,walletId = it.getInt("walletId"), DataStorePreferenceRepository(LocalContext.current))
             }
         }
 

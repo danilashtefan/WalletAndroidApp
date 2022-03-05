@@ -12,6 +12,7 @@ import androidx.security.crypto.MasterKeys
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.LoginRepository
 import com.example.wallet.requests.LoginRequest
+import com.example.wallet.requests.RegisterRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -28,6 +29,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
     val accessToken: LiveData<String> = _accessToken
 
     private var authResult: Boolean = false
+    private var registerResult: Boolean = false
     init {
         Log.d("INFO:", "Login ViewModel initialized")
 
@@ -53,6 +55,24 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
         //Sleep is to wait for the server's response about the authentication
         Thread.sleep(1000)
         if(authResult) {
+            return "Success"
+        }
+        return "Failure"
+    }
+
+    fun register(registerRequest: RegisterRequest):String{
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Thread exception while register in: $exception")
+        }
+
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            var response = loginRepository.register(registerRequest)
+            if(!response.username.equals(null)){
+                registerResult = true
+            }
+        }
+        Thread.sleep(1000)
+        if(registerResult){
             return "Success"
         }
         return "Failure"

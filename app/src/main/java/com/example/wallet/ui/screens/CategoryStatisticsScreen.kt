@@ -55,12 +55,10 @@ fun CategoryStatisticsScreen(
         )
     )
     viewModel.setCategoryId(categoryId)
-    val totalAmount = viewModel.totalAmount.value
     val expenseAmount = viewModel.expenseAmount.value
     val incomeAmount = viewModel.incomeAmount.value
     var expenseItems = viewModel.expanseState.value
     var incomeItems = viewModel.incomeState.value
-    var allTransactions = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
     val listOfButtons = listOf<String>("Expense", "Income")
 
@@ -241,6 +239,6 @@ fun <T> StatementBody(
 }
 
 
-private enum class AnimatedCircleProgress { START, END }
+enum class AnimatedCircleProgress { START, END }
 
 

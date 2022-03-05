@@ -26,6 +26,7 @@ import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.viewmodel.login.LoginViewModel
 import com.example.wallet.model.viewmodel.login.LoginViewModelFactory
 import com.example.wallet.requests.LoginRequest
+import com.example.wallet.requests.RegisterRequest
 import com.example.wallet.ui.theme.BackgroundColor
 import com.example.wallet.ui.theme.ButtonColor
 import com.example.wallet.ui.theme.TextFieldColor
@@ -199,25 +200,48 @@ fun text_field(
 
 @Composable
 fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
+    Column() {
 
-    Button(
-        onClick = {
-            var result = viewModel.login(
-                LoginRequest(
-                    username = viewModel.username,
-                    password = viewModel.password
+        Button(
+            onClick = {
+                var result = viewModel.login(
+                    LoginRequest(
+                        username = viewModel.username,
+                        password = viewModel.password
+                    )
                 )
-            )
-            if (result.equals("Success")) {
-                navController.navigate("expanses")
-            } else {
-            }
-        }, modifier = Modifier
-            .padding(top = 25.dp)
-            .requiredWidth(277.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.ButtonColor)
-    ) {
-        Text(text = "Sign In")
+                if (result.equals("Success")) {
+                    navController.navigate("expanses")
+                } else {
+                }
+            }, modifier = Modifier
+                .padding(top = 25.dp)
+                .requiredWidth(277.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.ButtonColor)
+        ) {
+            Text(text = "Sign In")
+        }
+
+        Button(
+            onClick = {
+                var result = viewModel.register(
+                    RegisterRequest(
+                        name = viewModel.username,
+                        username = viewModel.username,
+                        password = viewModel.password
+                    )
+                )
+                if (result.equals("Success")) {
+                    //navController.navigate("expanses")
+                } else {
+                }
+            }, modifier = Modifier
+                .padding(top = 25.dp)
+                .requiredWidth(277.dp),
+            colors = ButtonDefaults.buttonColors(backgroundColor = MaterialTheme.colors.ButtonColor)
+        ) {
+            Text(text = "Register")
+        }
     }
 }
 
