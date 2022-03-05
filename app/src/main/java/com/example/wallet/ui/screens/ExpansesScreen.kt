@@ -148,8 +148,6 @@ fun ExpanseSection(
         items(filteredTransactions) { expanse ->
             val expanseId = expanse.id
             ReusableRow(categoryIcon = expanse.categoryIcon,categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type, editClickAction = {
-
-                //expanse._links?.category?.let { Log.d("Expanse Category Link", it.href) }
                 navController.navigate("transactionDetails/$expanseId")
             },deleteClickAction = {
                 Log.d("INFO", "Delete button pressed")
@@ -224,7 +222,6 @@ fun ReusableRow(categoryIcon:String, categoryName: String, date: String, locatio
                 }
 
             }
-            //Spacer(Modifier.width(30.dp))
             AnimatedVisibility(visible = expanded) {
                 Column() {
                     Text(text = "Location: " +location)

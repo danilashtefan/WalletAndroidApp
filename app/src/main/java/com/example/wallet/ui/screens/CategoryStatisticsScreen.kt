@@ -3,9 +3,13 @@ package com.example.wallet.ui.screens
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -27,6 +31,7 @@ import com.example.wallet.model.viewmodel.transactions.CategoryStatisticsViewMod
 import com.example.wallet.model.viewmodel.transactions.CategoryStatisticsViewModelFactory
 import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModel
 import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModelFactory
+import java.util.*
 
 private const val DividerLengthInDegrees = 1.8f
 
@@ -49,29 +54,50 @@ fun CategoryStatisticsScreen(
         )
     )
     viewModel.setCategoryId(categoryId)
-    val totalAmount = viewModel.amount.value
+    val totalAmount = viewModel.totalAmount.value
+    val expenseAmount = viewModel.expenseAmount.value
+    val incomeAmount = viewModel.incomeAmount.value
     var expenseItems = viewModel.expanseState.value
     var incomeItems = viewModel.incomeState.value
-    var transactions = viewModel.transactionState.value
+    var allTransactions = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
+    val listOfButtons = listOf<String>("Expense", "Income")
 
     while (!dataLoaded){
         return
     }
+    Column() {
 
-    StatementBody(items = transactions, colors = { item -> item.color }, amounts = { item -> item.transaction.amount.toFloat() }, totalAmount,
+        LazyRow(modifier = Modifier.padding(start = 60.dp)) {
+            items(listOfButtons) { element ->
+                OutlinedButton(onClick = {
+                    viewModel.typeOfTransactionsToDisplay.value =
+                        element.lowercase(Locale.getDefault())
+                }, Modifier.padding(20.dp)) {
+                    Text(text = element)
+                }
+            }
+        }
 
-        rows = {item -> ReusableRow(
-            categoryIcon = item.transaction.categoryIcon,
-            categoryName = item.transaction.categoryName ,
-            date = item.transaction.date,
-            location = item.transaction.location,
-            amount = item.transaction.amount,
-            comments = item.transaction.comments,
-            type = item.transaction.type,
-            editClickAction = { /*TODO*/ }) {
+        var transactionsToShow = if(viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseItems else incomeItems
+        var totalAmount = if(viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseAmount else incomeAmount
+        StatementBody(listOfButtons = listOfButtons,transactions = transactionsToShow, expenses = expenseItems, incomes = incomeItems, colors = { item -> item.color }, amounts = { item -> item.transaction.amount.toFloat() },
+            totalAmount = totalAmount,
 
-        }})
+            row = {item ->
+                val itemId = item.transaction.id
+                ReusableRow(
+                    categoryIcon = item.transaction.categoryIcon,
+                    categoryName = item.transaction.categoryName ,
+                    date = item.transaction.date,
+                    location = item.transaction.location,
+                    amount = item.transaction.amount,
+                    comments = item.transaction.comments,
+                    type = item.transaction.type,
+                    editClickAction = { navController.navigate("transactionDetails/$itemId") }) {
+
+                }})
+    }
 }
 
 @Composable
@@ -150,16 +176,19 @@ fun <E> List<E>.extractProportions(selector: (E) -> Float): List<Float> {
 
 @Composable
 fun <T> StatementBody(
-    items: List<T>,
+    transactions: List<T>,
+    listOfButtons: List<String>,
+    expenses: List<T>,
+    incomes: List<T>,
     colors: (T) -> Color,
     amounts: (T) -> Float,
     totalAmount:Int,
-    rows: @Composable (T) -> Unit
+    row: @Composable (T) -> Unit
     ) {
-    Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    Column() {
         Box(Modifier.padding(16.dp)) {
-            val accountsProportion = items.extractProportions { amounts(it) }
-            val circleColors = items.map { colors(it) }
+            val accountsProportion = transactions.extractProportions { amounts(it) }
+            val circleColors = transactions.map { colors(it) }
             AnimatedCircle(
                 accountsProportion,
                 circleColors,
@@ -170,7 +199,7 @@ fun <T> StatementBody(
             )
             Column(modifier = Modifier.align(Alignment.Center)) {
                 Text(
-                    text = "Total flow",
+                    text = "Total",
                     style = MaterialTheme.typography.body1,
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
@@ -181,13 +210,14 @@ fun <T> StatementBody(
                 )
             }
         }
-        Column(modifier = Modifier.padding(12.dp)) {
-            items.forEach { item ->
-                rows(item)
+        LazyColumn(modifier = Modifier.padding(12.dp)) {
+            items(transactions) { item ->
+                row(item)
             }
         }
 
     }
+
 }
 
 

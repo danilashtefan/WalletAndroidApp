@@ -28,9 +28,12 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
     val transactionState = mutableStateOf((emptyList<CategoryWrapperWithColor>()))
     var expanseState = mutableStateOf((emptyList<CategoryWrapperWithColor>()))
     var incomeState = mutableStateOf((emptyList<CategoryWrapperWithColor>()))
+    var typeOfTransactionsToDisplay = mutableStateOf("expense")
 
     //Total amount to show on the screen
-    var amount = mutableStateOf(0)
+    var totalAmount = mutableStateOf(0)
+    var expenseAmount = mutableStateOf(0)
+    var incomeAmount = mutableStateOf(0)
 
     var username: String = ""
     var authToken = ""
@@ -78,19 +81,22 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
             }
             transactionState.value = wrappedTransactions
 
-            var totalAmountTemp = 0
+            var expenseAmountTemp = 0
+            var incomeAmountTemp = 0
             for (transaction in wrappedTransactions){
 
 
                 if(transaction.transaction.type.equals("Expense")){
-                    totalAmountTemp -= transaction.transaction.amount
+                    expenseAmountTemp += transaction.transaction.amount
                     expanseState.value += transaction
                 }else{
-                    totalAmountTemp += transaction.transaction.amount
+                    incomeAmountTemp += transaction.transaction.amount
                     incomeState.value += transaction
                 }
             }
-            amount.value = totalAmountTemp
+            expenseAmount.value = expenseAmountTemp
+            incomeAmount.value = incomeAmountTemp
+            totalAmount.value = incomeAmountTemp - expenseAmountTemp
         }
         dataLoaded.value = true
     }
