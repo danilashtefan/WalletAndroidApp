@@ -2,6 +2,7 @@ package com.example.wallet.ui.screens
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -86,7 +87,8 @@ fun CategoryStatisticsScreen(
 
             row = {item ->
                 val itemId = item.transaction.id
-                ReusableRow(
+                StatisticsRow(
+                    color = item.color,
                     categoryIcon = item.transaction.categoryIcon,
                     categoryName = item.transaction.categoryName ,
                     date = item.transaction.date,
@@ -98,6 +100,24 @@ fun CategoryStatisticsScreen(
 
                 }})
     }
+}
+
+@Composable
+fun StatisticsRow(color:Color, categoryIcon:String, categoryName: String, date: String, location: String?, amount: Int, comments: String?, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit){
+    Row(){
+        Spacer(Modifier.size(10.dp, 20.dp).background(color = color))
+        ReusableRow(
+            categoryIcon = categoryIcon,
+            categoryName = categoryName ,
+            date = date,
+            location = location,
+            amount = amount,
+            comments = comments,
+            type = type,
+            editClickAction = editClickAction,
+        deleteClickAction = deleteClickAction)
+    }
+
 }
 
 @Composable
