@@ -38,7 +38,8 @@ fun AddScreen(
     navController: NavHostController,
     dataStorePreferenceRepository: DataStorePreferenceRepository
 ) {
-    val viewModel: AddViewModel = viewModel(factory = AddViewModelFactory(DataStorePreferenceRepository(LocalContext.current)))
+    val viewModel: AddViewModel =
+        viewModel(factory = AddViewModelFactory(DataStorePreferenceRepository(LocalContext.current)))
     val listOfButtons = listOf<String>("Transaction", "Category", "Wallet")
     var dataLoaded = viewModel.dataLoaded.value
     if (dataLoaded === false) {
@@ -50,23 +51,23 @@ fun AddScreen(
     ) {
         LogoSection(pictureSize = 90)
         ChooseWhatToAddSection(listOfButtons, viewModel)
-        AddingSection(viewModel)
+        AddingSection(viewModel, navController)
     }
 }
 
 @Composable
-fun AddingSection(viewModel: AddViewModel) {
+fun AddingSection(viewModel: AddViewModel, navController: NavHostController) {
     when (viewModel.whatToAddstate.value) {
-        "" -> TransactionAddSection(viewModel)
-        "transaction" -> TransactionAddSection(viewModel)
-        "category" -> CategoryAddSection(viewModel)
-        "wallet" -> WalletAddSection(viewModel)
+        "" -> TransactionAddSection(viewModel, navController)
+        "transaction" -> TransactionAddSection(viewModel, navController)
+        "category" -> CategoryAddSection(viewModel, navController)
+        "wallet" -> WalletAddSection(viewModel, navController)
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WalletAddSection(viewModel: AddViewModel) {
+fun WalletAddSection(viewModel: AddViewModel, navController: NavHostController) {
     var emoji = viewModel.iconWalletFieldTemporaryValueBeforeSavingtoDB
     var name = viewModel.nameWalletFieldTemporaryValueBeforeSavingtoDB
     var currency = viewModel.currencyWalletFieldTemporaryValueBeforeSavingtoDB
@@ -157,7 +158,7 @@ fun WalletAddSection(viewModel: AddViewModel) {
                         )
                     }
                 }
-                SaveButtonWalletAdd(viewModel = viewModel)
+                SaveButtonWalletAdd(viewModel = viewModel, navController)
             }
         }
 
@@ -168,7 +169,7 @@ fun WalletAddSection(viewModel: AddViewModel) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CategoryAddSection(viewModel: AddViewModel) {
+fun CategoryAddSection(viewModel: AddViewModel, navController: NavHostController) {
     var emoji = viewModel.iconCategoryFieldTemporaryValueBeforeSavingtoDB
     var name = viewModel.nameCategoryFieldTemporaryValueBeforeSavingtoDB
     var type = viewModel.typeCategoryFieldTemporaryValueBeforeSavingtoDB
@@ -273,7 +274,7 @@ fun CategoryAddSection(viewModel: AddViewModel) {
                         )
                     }
                 }
-                SaveButtonCategoryAdd(viewModel = viewModel)
+                SaveButtonCategoryAdd(viewModel = viewModel, navController)
             }
         }
 
@@ -283,7 +284,7 @@ fun CategoryAddSection(viewModel: AddViewModel) {
 
 
 @Composable
-fun TransactionAddSection(viewModel: AddViewModel) {
+fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostController) {
 
     val nameFieldName = "name"
     val amountFieldName = "amount"
@@ -372,7 +373,11 @@ fun TransactionAddSection(viewModel: AddViewModel) {
             viewModel = viewModel
         )
         Spacer(modifier = Modifier.size(20.dp))
-        SaveButtonTransactionAdd(fieldsOnTheScreen = fieldsOnTheScreen, viewModel = viewModel)
+        SaveButtonTransactionAdd(
+            fieldsOnTheScreen = fieldsOnTheScreen,
+            viewModel = viewModel,
+            navController = navController
+        )
 
     }
 }
@@ -393,11 +398,14 @@ fun TypeOfElementToAddOrEditText(text: String) {
 @Composable
 private fun SaveButtonTransactionAdd(
     fieldsOnTheScreen: ArrayList<String>,
-    viewModel: AddViewModel
+    viewModel: AddViewModel,
+    navController: NavHostController
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
             viewModel.addTransactionToDb()
+            Thread.sleep(500)
+            navController.navigate("expanses")
         }) {
             Text(text = "Add transaction")
         }
@@ -406,11 +414,13 @@ private fun SaveButtonTransactionAdd(
 
 @Composable
 private fun SaveButtonCategoryAdd(
-    viewModel: AddViewModel
+    viewModel: AddViewModel, navController: NavHostController
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(onClick = {
-             viewModel.addCategoryToDb()
+            viewModel.addCategoryToDb()
+            Thread.sleep(500)
+            navController.navigate("expanses")
         }) {
             Text(text = "Add category")
         }
@@ -419,11 +429,14 @@ private fun SaveButtonCategoryAdd(
 
 @Composable
 private fun SaveButtonWalletAdd(
-    viewModel: AddViewModel
+    viewModel: AddViewModel,
+    navController: NavHostController
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(onClick = {
             viewModel.addWalletToDb()
+            Thread.sleep(500)
+            navController.navigate("expanses")
         }) {
             Text(text = "Add wallet")
         }

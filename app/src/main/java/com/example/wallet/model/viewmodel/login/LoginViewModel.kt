@@ -32,8 +32,6 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
     val accessToken: LiveData<String> = _accessToken
 
     private var authResult: Boolean = false
-    private var registerResult: String = ""
-    private var loginResult: String = ""
     var showAlertDialog = mutableStateOf(false)
     var dialogText = mutableStateOf("")
 
@@ -90,11 +88,16 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
             showAlertDialog.value = true
         }
 
-        viewModelScope.launch(handler + Dispatchers.IO) {
-            var response = loginRepository.register(registerRequest)
-            if (!response.username.equals("")) {
-                dialogText.value = "Congratulations! User is registered"
+        if (!username.equals("") and !password.equals("")) {
+            viewModelScope.launch(handler + Dispatchers.IO) {
+                var response = loginRepository.register(registerRequest)
+                if (!response.username.equals("")) {
+                    dialogText.value = "Congratulations! User is registered"
+                }
+                showAlertDialog.value = true
             }
+        }else{
+            dialogText.value = "Username or password are too short"
             showAlertDialog.value = true
         }
     }
