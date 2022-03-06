@@ -178,8 +178,6 @@ fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
                 )
                 if (result.equals("Success")) {
                     navController.navigate("expanses")
-                } else {
-
                 }
             }, modifier = Modifier
                 .padding(top = 25.dp)

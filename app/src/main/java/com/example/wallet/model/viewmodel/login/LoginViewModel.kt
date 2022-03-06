@@ -73,27 +73,23 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
 
     fun register(registerRequest: RegisterRequest){
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception while register in: $exception")
-            dialogText.value = "Connection error! Please, try again!"
-            registerResult = Strings.CONNECTION_ERROR
+            if (exception is retrofit2.HttpException) {
+                Log.d("EXCEPTION", "Thread exception while loging in: $exception")
+                dialogText.value = "Registration failed. Please, choose another username"
+
+            }else if(exception is ConnectException){
+                dialogText.value = "Registration failed. Failed to connect"
+            }
             showAlertDialog.value = true
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
             var response = loginRepository.register(registerRequest)
-            when(response.username){
-                Strings.FAILED_REGISTRATION -> registerResult = Strings.FAILED_REGISTRATION
-                null -> registerResult = Strings.CONNECTION_ERROR
-                else -> registerResult = Strings.SUCCESSFUL_REGISTRATION
+            if(!response.username.equals("")){
+                dialogText.value = "Congratulations! User is registered"
             }
+            showAlertDialog.value = true
         }
-        Thread.sleep(1000)
-        when(registerResult) {
-            Strings.SUCCESSFUL_REGISTRATION -> dialogText.value = "Congratulations! User is registered"
-            Strings.FAILED_REGISTRATION -> dialogText.value = "Registration failed! Please, provide another username"
-        }
-        showAlertDialog.value = true
-
     }
 
     fun updateViewModelFieldState(field: String, value: String) {
