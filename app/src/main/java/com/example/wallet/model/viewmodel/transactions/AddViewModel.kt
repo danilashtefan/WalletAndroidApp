@@ -34,7 +34,7 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     var whatToAddstate = mutableStateOf("")
     var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
     var amountFieldTemporaryValueBeforeSavingtoDB: String? = null
-    var dateFieldTemporaryValueBeforeSavingtoDB: String? = null
+    var dateFieldTemporaryValueBeforeSavingtoDB: String = "Date"
     var commentsFieldTemporaryValueBeforeSavingtoDB: String? = null
     var locationFieldTemporaryValueBeforeSavingtoDB: String? = null
     //var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
@@ -48,6 +48,8 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
     var dataLoaded = mutableStateOf(false)
+    var expandedCalendar = mutableStateOf(false)
+    var datePicked = mutableStateOf("1000-01-01")
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
     var iconCategoryFieldTemporaryValueBeforeSavingtoDB: String? = ""

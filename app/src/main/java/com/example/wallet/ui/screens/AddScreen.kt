@@ -1,5 +1,6 @@
 package com.example.wallet.ui.screens
 
+import android.widget.CalendarView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.helpers.EmojiProvider
@@ -30,6 +32,7 @@ import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpense
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
 import com.example.wallet.model.viewmodel.transactions.AddViewModel
 import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
+import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.ui.theme.PurpleBasic
 import java.util.*
 
@@ -283,6 +286,7 @@ fun CategoryAddSection(viewModel: AddViewModel, navController: NavHostController
 }
 
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostController) {
 
@@ -349,13 +353,19 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
         )
 
 
-        EditableFieldTransactionAdd(
-            padding = 20,
-            field = dateFieldName,
-            labelText = "Date",
-            value = "",
-            viewModel = viewModel
-        )
+//        EditableFieldTransactionAdd(
+//            padding = 20,
+//            field = dateFieldName,
+//            labelText = "Date",
+//            value = "",
+//            viewModel = viewModel
+//        )
+        OutlinedButton(onClick = {viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value}) {
+            Text(text = viewModel.datePicked.value)
+        }
+        AnimatedVisibility(visible = viewModel.expandedCalendar.value) {
+            AddCalendarDatePicker(viewModel)
+        }
 
         EditableFieldTransactionAdd(
             padding = 20,
@@ -380,6 +390,20 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
         )
 
     }
+}
+
+@Composable
+private fun AddCalendarDatePicker(viewModel: AddViewModel) {
+    AndroidView(
+        { CalendarView(it) },
+        modifier = Modifier.wrapContentWidth(),
+        update = { views ->
+            views.setOnDateChangeListener { calendarView, year, month, day ->
+                    viewModel.datePicked.value = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
+                viewModel.updateTemporaryFieldValueBeforeSavingToDB("date", viewModel.datePicked.value)
+            }
+        }
+    )
 }
 
 @Composable
