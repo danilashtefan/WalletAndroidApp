@@ -9,6 +9,7 @@ import androidx.datastore.core.DataStore
 import androidx.lifecycle.*
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.example.wallet.helpers.Strings
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.LoginRepository
 import com.example.wallet.requests.LoginRequest
@@ -25,11 +26,13 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
     private val loginRepository: LoginRepository = LoginRepository()
     lateinit var username:String
     lateinit var password:String
-    private val _accessToken = MutableLiveData("")
+    private val _accessToken = MutableLiveData(Strings.SUCCESSFUL_REGISTRATION)
     val accessToken: LiveData<String> = _accessToken
 
     private var authResult: Boolean = false
-    private var registerResult: Boolean = false
+    private var registerResult: String = ""
+    var showAlertDialog = mutableStateOf(false)
+    var dialogText = mutableStateOf("")
     init {
         Log.d("INFO:", "Login ViewModel initialized")
 
@@ -60,22 +63,29 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
         return "Failure"
     }
 
-    fun register(registerRequest: RegisterRequest):String{
+    fun register(registerRequest: RegisterRequest){
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while register in: $exception")
+            dialogText.value = "Connection error! Please, try again!"
+            registerResult = Strings.CONNECTION_ERROR
+            showAlertDialog.value = true
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
             var response = loginRepository.register(registerRequest)
-            if(!response.username.equals(null)){
-                registerResult = true
+            when(response.username){
+                Strings.FAILED_REGISTRATION -> registerResult = Strings.FAILED_REGISTRATION
+                null -> registerResult = Strings.CONNECTION_ERROR
+                else -> registerResult = Strings.SUCCESSFUL_REGISTRATION
             }
         }
         Thread.sleep(1000)
-        if(registerResult){
-            return "Success"
+        when(registerResult) {
+            Strings.SUCCESSFUL_REGISTRATION -> dialogText.value = "Congratulations! User is registered"
+            Strings.FAILED_REGISTRATION -> dialogText.value = "Registration failed! Please, provide another username"
         }
-        return "Failure"
+        showAlertDialog.value = true
+
     }
 
     fun updateViewModelFieldState(field: String, value: String) {

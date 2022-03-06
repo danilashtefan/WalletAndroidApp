@@ -1,14 +1,13 @@
 package com.example.wallet.ui.screens
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -48,7 +48,13 @@ fun LoginScreen(
             modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            var showAlertDialog=  viewModel.showAlertDialog.value
+            if(showAlertDialog) {
+                AlertDialogComponent(
+                    bodyText = viewModel.dialogText.value,
+                    buttonText = "DISMISS",
+                    onDismiss = { viewModel.showAlertDialog.value = false })
+            }
             WelcomeText()
             PurposeImage()
             text_field(
@@ -58,10 +64,11 @@ fun LoginScreen(
                 viewModel
             )
             SignIn(viewModel, navController)
-            ForgotPasswordText()
         }
     }
 }
+
+
 
 @Composable
 fun WelcomeText() {
@@ -73,73 +80,32 @@ fun WelcomeText() {
     )
 }
 
+
 @Composable
-fun AlertDialogComponent() {
-    // below line is use to get
-    // the context for our app.
+fun AlertDialogComponent(
+    onDismiss: () -> Unit,
+    bodyText: String,
+    buttonText: String
+) {
     val context = LocalContext.current
-
-    // below line is use to set our state
-    // of dialog box to open as true.
-    val openDialog = remember { mutableStateOf(true) }
-
-    // below line is to check if the
-    // dialog box is open or not.
-    if (openDialog.value) {
-        // below line is use to
-        // display a alert dialog.
         AlertDialog(
-            // on dialog dismiss we are setting
-            // our dialog value to false.
-            onDismissRequest = { openDialog.value = false },
+            onDismissRequest = onDismiss,
+            title = { Text(text = "Wallet", color = Color.White) },
 
-            // below line is use to display title of our dialog
-            // box and we are setting text color to white.
-            title = { Text(text = "Geeks for Geeks", color = Color.White) },
+            text = { Text(bodyText, color = Color.White) },
 
-            // below line is use to display
-            // description to our alert dialog.
-            text = { Text("Hello! This is our Alert Dialog..", color = Color.White) },
-
-            // in below line we are displaying
-            // our confirm button.
             confirmButton = {
-                // below line we are adding on click
-                // listener for our confirm button.
-                TextButton(
-                    onClick = {
-                        openDialog.value = false
-                        Toast.makeText(context, "Confirm Button Click", Toast.LENGTH_LONG).show()
-                    }
-                ) {
-                    // in this line we are adding
-                    // text for our confirm button.
-                    Text("Confirm", color = Color.White)
-                }
-            },
-            // in below line we are displaying
-            // our dismiss button.
-            dismissButton = {
-                // in below line we are displaying
-                // our text button
-                TextButton(
-                    // adding on click listener for this button
-                    onClick = {
-                        openDialog.value = false
-                        Toast.makeText(context, "Dismiss Button Click", Toast.LENGTH_LONG).show()
-                    }
-                ) {
-                    // adding text to our button.
-                    Text("Dismiss", color = Color.White)
-                }
-            },
-            // below line is use to add background color to our alert dialog
-            backgroundColor = colorResource(id = R.color.teal_200),
 
-            // below line is use to add content color for our alert dialog.
+                TextButton(
+                    onClick = onDismiss
+                ) {
+
+                    Text(buttonText, color = Color.White)
+                }
+            },
+            backgroundColor = colorResource(id = R.color.purple_200),
             contentColor = Color.White
         )
-    }
 }
 
 @Composable
@@ -234,6 +200,7 @@ fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
                 if (result.equals("Success")) {
                     //navController.navigate("expanses")
                 } else {
+
                 }
             }, modifier = Modifier
                 .padding(top = 25.dp)
@@ -245,10 +212,3 @@ fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
     }
 }
 
-@Composable
-fun ForgotPasswordText() {
-    Text(
-        text = "Forgot Password ?", color = MaterialTheme.colors.TextFieldTextColor,
-        modifier = Modifier.padding(top = 70.dp)
-    )
-}
