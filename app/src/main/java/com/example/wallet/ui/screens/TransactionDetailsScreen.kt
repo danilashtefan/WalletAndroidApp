@@ -1,5 +1,6 @@
 package com.example.wallet.ui.screens
 
+import android.widget.CalendarView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
@@ -16,9 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.R
@@ -28,6 +33,7 @@ import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpense
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
 import com.example.wallet.model.response.transactions.Wallet
+import com.example.wallet.model.viewmodel.transactions.AddViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModelFactory
 
@@ -122,13 +128,16 @@ fun TransactionDetailsScreen(
             )
 
         }
-        EditableFieldTransactionDetails(
-            20,
-            field = dateFieldName,
-            labelText = "Date",
-            value = transaction.date,
-            viewModel = viewModel
-        )
+//        EditableFieldTransactionDetails(
+//            20,
+//            field = dateFieldName,
+//            labelText = "Date",
+//            value = transaction.date,
+//            viewModel = viewModel
+//        )
+
+        DatePicker(viewModel = viewModel, padding = 20)
+
         EditableFieldTransactionDetails(
             20,
             field = commentsFieldName,
@@ -167,6 +176,43 @@ private fun SaveButtonTransactionDetails(
             Text(text = "Save the changes")
         }
     }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun DatePicker(viewModel: TransactionDetailsViewModel, padding: Int){
+    Row(
+        modifier = Modifier
+            .padding(top = padding.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ){
+        OutlinedButton(onClick = {viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value}) {
+            viewModel.datePicked.value?.let { Text(text = it) }
+        }
+
+    }
+    Row(horizontalArrangement = Arrangement.Center){
+        AnimatedVisibility(visible = viewModel.expandedCalendar.value) {
+            EditCalendarDatePicker(viewModel)
+        }
+
+    }
+}
+
+@Composable
+private fun EditCalendarDatePicker(viewModel: TransactionDetailsViewModel) {
+    AndroidView(
+        { CalendarView(it) },
+        modifier = Modifier.wrapContentWidth(),
+        update = { views ->
+            views.setOnDateChangeListener { calendarView, year, month, day ->
+                viewModel.datePicked.value = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
+                viewModel.updateTemporaryFieldValueBeforeSavingToDB("date", viewModel.datePicked.value)
+            }
+        }
+    )
 }
 
 

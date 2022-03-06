@@ -352,20 +352,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             viewModel = viewModel
         )
 
-
-//        EditableFieldTransactionAdd(
-//            padding = 20,
-//            field = dateFieldName,
-//            labelText = "Date",
-//            value = "",
-//            viewModel = viewModel
-//        )
-        OutlinedButton(onClick = {viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value}) {
-            Text(text = viewModel.datePicked.value)
-        }
-        AnimatedVisibility(visible = viewModel.expandedCalendar.value) {
-            AddCalendarDatePicker(viewModel)
-        }
+        DatePicker(viewModel = viewModel, padding = 20)
 
         EditableFieldTransactionAdd(
             padding = 20,
@@ -388,6 +375,29 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             viewModel = viewModel,
             navController = navController
         )
+
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun DatePicker(viewModel: AddViewModel, padding: Int){
+    Row(
+        modifier = Modifier
+            .padding(top = padding.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ){
+        OutlinedButton(onClick = {viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value}) {
+            Text(text = viewModel.datePicked.value)
+        }
+
+    }
+    Row(horizontalArrangement = Arrangement.Center){
+        AnimatedVisibility(visible = viewModel.expandedCalendar.value) {
+            AddCalendarDatePicker(viewModel)
+        }
 
     }
 }

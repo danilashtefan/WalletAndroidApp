@@ -50,6 +50,9 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
     var categoryIconTemporaryValueBeforeSavingtoDB: String? = null
 
+    var expandedCalendar = mutableStateOf(false)
+    var datePicked = mutableStateOf("")
+
     var username: String = ""
     var authToken = ""
 
@@ -179,6 +182,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
             LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
         this.walletLinkTemporaryValueBeforeSavingtoDB =
             LinkBuilder.buildWalletLinkForAddingToExpanse(transaction.walletId)
+        this.datePicked.value = dateFieldTemporaryValueBeforeSavingtoDB as String
 
 
         val handler = CoroutineExceptionHandler { _, exception ->
