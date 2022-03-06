@@ -167,18 +167,18 @@ fun text_field(
 @Composable
 fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
     Column() {
-
         Button(
             onClick = {
-                var result = viewModel.login(
-                    LoginRequest(
-                        username = viewModel.username,
-                        password = viewModel.password
+                    var result = viewModel.login(
+                        LoginRequest(
+                            username = viewModel.username,
+                            password = viewModel.password
+                        )
                     )
-                )
-                if (result.equals("Success")) {
-                    navController.navigate("expanses")
-                }
+                    if (result.equals("Success")) {
+                        navController.navigate("expanses")
+                    }
+
             }, modifier = Modifier
                 .padding(top = 25.dp)
                 .requiredWidth(277.dp),
