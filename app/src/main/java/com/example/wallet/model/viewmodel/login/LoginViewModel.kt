@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 import java.util.prefs.Preferences
 
 
@@ -31,6 +32,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
 
     private var authResult: Boolean = false
     private var registerResult: String = ""
+    private var loginResult: String = ""
     var showAlertDialog = mutableStateOf(false)
     var dialogText = mutableStateOf("")
     init {
@@ -41,19 +43,25 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
     fun login(loginRequest: LoginRequest): String {
 
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception while loging in: $exception")
+            if (exception is retrofit2.HttpException) {
+                Log.d("EXCEPTION", "Thread exception while loging in: $exception")
+                dialogText.value = "Login failed. Username and password are incorrect"
+
+            }else if(exception is ConnectException){
+                dialogText.value = "Login failed. Failed to connect"
+            }
+            showAlertDialog.value = true
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
             var tokens = loginRepository.login(loginRequest)
-            dataStorePreferenceRepository.setTokens(tokens.access_token, tokens.refresh_token)
-            dataStorePreferenceRepository.setUsername(username)
-            Log.d("INFO","Access token is: ${accessToken.value}")
-            Log.d("INFO","Username: $username")
-            if(!tokens.access_token.equals("")) {
-                authResult = true
-            }
-
+                dataStorePreferenceRepository.setTokens(tokens.access_token, tokens.refresh_token)
+                dataStorePreferenceRepository.setUsername(username)
+                Log.d("INFO", "Access token is: ${accessToken.value}")
+                Log.d("INFO", "Username: $username")
+                if(!tokens.access_token.equals("")){
+                    authResult = true
+                }
         }
         //Sleep is to wait for the server's response about the authentication
         Thread.sleep(1000)

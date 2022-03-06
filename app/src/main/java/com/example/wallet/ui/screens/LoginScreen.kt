@@ -179,6 +179,7 @@ fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
                 if (result.equals("Success")) {
                     navController.navigate("expanses")
                 } else {
+
                 }
             }, modifier = Modifier
                 .padding(top = 25.dp)
@@ -190,18 +191,13 @@ fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
 
         Button(
             onClick = {
-                var result = viewModel.register(
+                viewModel.register(
                     RegisterRequest(
                         name = viewModel.username,
                         username = viewModel.username,
                         password = viewModel.password
                     )
                 )
-                if (result.equals("Success")) {
-                    //navController.navigate("expanses")
-                } else {
-
-                }
             }, modifier = Modifier
                 .padding(top = 25.dp)
                 .requiredWidth(277.dp),
