@@ -22,15 +22,22 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import com.example.wallet.BuildConfig
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.ui.navigationBar.BottomNavigationBar
 import com.example.wallet.ui.navigationBar.BottomNavigationItem
 import com.example.wallet.ui.screens.*
 import com.example.wallet.ui.theme.WalletTheme
+import com.google.android.libraries.places.api.Places
+import java.io.File
+import java.io.FileInputStream
+import java.nio.file.Paths
+import java.util.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Places.initialize(applicationContext,"AIzaSyBU6eLqByvGm88Ez8UxQR6NNVzfis4rudI")
         setContent {
             WalletTheme {
                 val navController = rememberNavController()

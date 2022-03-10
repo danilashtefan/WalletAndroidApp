@@ -1,6 +1,12 @@
 package com.example.wallet.ui.screens
 
+import android.graphics.Bitmap
+import android.os.Bundle
+import android.util.Log
 import android.widget.CalendarView
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
@@ -24,6 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.app.ActivityCompat.startIntentSenderForResult
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.helpers.EmojiProvider
@@ -33,7 +41,11 @@ import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWallets
 import com.example.wallet.model.viewmodel.transactions.AddViewModel
 import com.example.wallet.model.viewmodel.transactions.AddViewModelFactory
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
+import com.example.wallet.ui.MainActivity
 import com.example.wallet.ui.theme.PurpleBasic
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import java.util.*
 
 @Composable
@@ -362,13 +374,14 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             viewModel = viewModel
         )
 
-        EditableFieldTransactionAdd(
+        EditableFieldLocation(
             padding = 20,
             field = locationFieldName,
             labelText = "Location",
             value = "",
             viewModel = viewModel
         )
+
         Spacer(modifier = Modifier.size(20.dp))
         SaveButtonTransactionAdd(
             fieldsOnTheScreen = fieldsOnTheScreen,
@@ -381,20 +394,22 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun DatePicker(viewModel: AddViewModel, padding: Int){
+private fun DatePicker(viewModel: AddViewModel, padding: Int) {
     Row(
         modifier = Modifier
             .padding(top = padding.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
-    ){
-        OutlinedButton(onClick = {viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value}) {
+    ) {
+        OutlinedButton(onClick = {
+            viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value
+        }) {
             Text(text = viewModel.datePicked.value)
         }
 
     }
-    Row(horizontalArrangement = Arrangement.Center){
+    Row(horizontalArrangement = Arrangement.Center) {
         AnimatedVisibility(visible = viewModel.expandedCalendar.value) {
             AddCalendarDatePicker(viewModel)
         }
@@ -409,8 +424,12 @@ private fun AddCalendarDatePicker(viewModel: AddViewModel) {
         modifier = Modifier.wrapContentWidth(),
         update = { views ->
             views.setOnDateChangeListener { calendarView, year, month, day ->
-                    viewModel.datePicked.value = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
-                viewModel.updateTemporaryFieldValueBeforeSavingToDB("date", viewModel.datePicked.value)
+                viewModel.datePicked.value =
+                    year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
+                viewModel.updateTemporaryFieldValueBeforeSavingToDB(
+                    "date",
+                    viewModel.datePicked.value
+                )
             }
         }
     )
@@ -605,6 +624,68 @@ fun TypeSelectorTransactionAdd(
 
 }
 
+@Composable
+fun EditableFieldLocation(
+    padding: Int,
+    field: String,
+    labelText: String,
+    value: Any?,
+    viewModel: AddViewModel,
+    enabled: Boolean = true,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
+) {
+    val listOfPlaces = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
+    var context = LocalContext.current
+    val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, listOfPlaces).build(
+        context
+    )
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            var place = Autocomplete.getPlaceFromIntent(it.data)
+            Log.d("INFO", "Address: ${place.address}")
+        }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Start
+    ) {
+        OutlinedButton(onClick = {
+
+            launcher.launch(intent)
+
+        }) {
+            Text(text = "Search location")
+        }
+
+
+        /*val settingResultRequest =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartIntentSenderForResult()) {activityResult->
+            if (activityResult.resultCode == RESULT_OK)
+                Log.d("appDebug", "Accepted")
+            else {
+                Log.d("appDebug", "Denied")
+            }
+        }
+
+    task.addOnFailureListener { exception ->
+        if (exception is ResolvableApiException) {
+            try {
+                val intentSenderRequest = IntentSenderRequest.Builder(exception.resolution).build()
+                settingResultRequest.launch(intentSenderRequest)
+            } catch (sendEx: IntentSender.SendIntentException) {
+                // Ignore the error.
+            }
+        }
+    }*/
+        EditableFieldTransactionAdd(
+            padding = padding,
+            field = field,
+            labelText = labelText,
+            value = "",
+            viewModel = viewModel
+        )
+    }
+
+}
 
 @Composable
 fun EditableFieldTransactionAdd(
