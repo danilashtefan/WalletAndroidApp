@@ -1,22 +1,30 @@
 package com.example.wallet.ui.screens
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.CalendarView
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,6 +37,7 @@ import com.example.wallet.helpers.DateFormatter
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.viewmodel.transactions.ExpensesViewModelFactory
+import com.example.wallet.ui.theme.Purple500
 import java.text.SimpleDateFormat
 
 @Composable
@@ -36,14 +45,19 @@ fun ExpansesScreen(
     navController: NavHostController,
     dataStorePreferenceRepository: DataStorePreferenceRepository
 ) {
-    val viewModel: ExpansesViewModel = viewModel(factory = ExpensesViewModelFactory(DataStorePreferenceRepository(
-        LocalContext.current))
+    val viewModel: ExpansesViewModel = viewModel(
+        factory = ExpensesViewModelFactory(
+            DataStorePreferenceRepository(
+                LocalContext.current
+            )
+        )
     ) //ViewModel is bound to a composable
     val expanses = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
     val accessToken = viewModel.authToken
     val totalExpenses = viewModel.totalExpenses
     val totalIncome = viewModel.totalIncome
+    val sortBy = viewModel.sortedBy
 
     if (!dataLoaded) {
         return;
@@ -54,17 +68,18 @@ fun ExpansesScreen(
             .background(Color(0xFFBB87E4))
     ) {
         TransactionListSection(viewModel, totalExpenses, totalIncome)
-        ExpanseSection(expanses ,navController,viewModel)
+        ExpanseSection(expanses, navController, viewModel, sortBy.value)
     }
 
 }
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun TransactionListSection(
     viewModel: ExpansesViewModel,
-    totalExpenses:Int,
-    totalIncome:Int
-){
+    totalExpenses: Int,
+    totalIncome: Int
+) {
 
     Column() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -78,11 +93,15 @@ fun TransactionListSection(
         }
 
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
-            Text(text = "Period: ",style =MaterialTheme.typography.h6, color = Color.White )
-            OutlinedButton(onClick = {viewModel.expandedCalendarMin.value = !viewModel.expandedCalendarMin.value}, enabled = !viewModel.expandedCalendarMax.value) {
+            Text(text = "Period: ", style = MaterialTheme.typography.h6, color = Color.White)
+            OutlinedButton(onClick = {
+                viewModel.expandedCalendarMin.value = !viewModel.expandedCalendarMin.value
+            }, enabled = !viewModel.expandedCalendarMax.value) {
                 Text(text = viewModel.minDatePicked.value.toString())
             }
-            OutlinedButton(onClick = {viewModel.expandedCalendarMax.value = !viewModel.expandedCalendarMax.value},enabled = !viewModel.expandedCalendarMin.value) {
+            OutlinedButton(onClick = {
+                viewModel.expandedCalendarMax.value = !viewModel.expandedCalendarMax.value
+            }, enabled = !viewModel.expandedCalendarMin.value) {
                 Text(text = viewModel.maxDatePicked.value.toString())
             }
         }
@@ -90,21 +109,40 @@ fun TransactionListSection(
             CalendarDatePicker(viewModel, "minimum")
         }
         AnimatedVisibility(visible = viewModel.expandedCalendarMax.value) {
-            CalendarDatePicker(viewModel,"maximum")
+            CalendarDatePicker(viewModel, "maximum")
         }
 
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
-            Text(text = "Total expenses: ${totalExpenses}",style =MaterialTheme.typography.h6, color = Color.White )
+            Text(
+                text = "Total expenses: ${totalExpenses}",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
         }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
-            Text(text = "Total income: ${totalIncome}",style =MaterialTheme.typography.h6, color = Color.White )
+            Text(
+                text = "Total income: ${totalIncome}",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+        }
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 25.dp)
+        ) {
+            Text(
+                text = "Sort by:",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+            SpinnerView()
         }
     }
 }
 
 @Composable
 fun LogoSection(pictureSize: Int) {
-    Spacer(modifier = Modifier.padding(5.dp))
     Row() {
         Image(
             painter = painterResource(id = R.drawable.wallet_no_background_cropped),
@@ -117,18 +155,21 @@ fun LogoSection(pictureSize: Int) {
 }
 
 @Composable
-private fun CalendarDatePicker(viewModel: ExpansesViewModel,
-                               dateType:String) {
+private fun CalendarDatePicker(
+    viewModel: ExpansesViewModel,
+    dateType: String
+) {
     AndroidView(
         { CalendarView(it) },
         modifier = Modifier.wrapContentWidth(),
         update = { views ->
             views.setOnDateChangeListener { calendarView, year, month, day ->
-                if(dateType == "minimum") {
-                    viewModel.minDatePicked.value = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
-                }
-                else{
-                    viewModel.maxDatePicked.value = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
+                if (dateType == "minimum") {
+                    viewModel.minDatePicked.value =
+                        year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
+                } else {
+                    viewModel.maxDatePicked.value =
+                        year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
                 }
             }
         }
@@ -139,20 +180,114 @@ private fun CalendarDatePicker(viewModel: ExpansesViewModel,
 @Composable
 fun ExpanseSection(
     expanses: List<SecondAllExpensesItem>, navController: NavHostController,
-    viewModel: ExpansesViewModel){
+    viewModel: ExpansesViewModel,
+    sortBy: String
+) {
 
-    var filteredTransactions = expanses.filter {SimpleDateFormat("yyyy-MM-dd").parse(DateFormatter.formatDate(it.date)) >= SimpleDateFormat("yyyy-MM-dd").parse(viewModel.minDatePicked.value) &&
-            SimpleDateFormat("yyyy-MM-dd").parse(DateFormatter.formatDate(it.date)) <= SimpleDateFormat("yyyy-MM-dd").parse(viewModel.maxDatePicked.value)
+    var filteredTransactions = expanses.filter {
+        SimpleDateFormat("yyyy-MM-dd").parse(DateFormatter.formatDate(it.date)) >= SimpleDateFormat(
+            "yyyy-MM-dd"
+        ).parse(viewModel.minDatePicked.value) &&
+                SimpleDateFormat("yyyy-MM-dd").parse(DateFormatter.formatDate(it.date)) <= SimpleDateFormat(
+            "yyyy-MM-dd"
+        ).parse(viewModel.maxDatePicked.value)
+
     }
+
+//    when(sortBy){
+//        "Location" ->
+//    }
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(filteredTransactions) { expanse ->
             val expanseId = expanse.id
-            ReusableRow(categoryIcon = expanse.categoryIcon,categoryName = expanse.categoryName, walletName= expanse.walletName, date = expanse.date, location = expanse.location, amount = expanse.amount, comments = expanse.comments as String, type = expanse.type, editClickAction = {
-                navController.navigate("transactionDetails/$expanseId")
-            },deleteClickAction = {
-                Log.d("INFO", "Delete button pressed")
-                viewModel.deleteExpense(expanse)
-            })
+            ReusableRow(
+                categoryIcon = expanse.categoryIcon,
+                categoryName = expanse.categoryName,
+                walletName = expanse.walletName,
+                date = expanse.date,
+                location = expanse.location,
+                amount = expanse.amount,
+                comments = expanse.comments as String,
+                type = expanse.type,
+                editClickAction = {
+                    navController.navigate("transactionDetails/$expanseId")
+                },
+                deleteClickAction = {
+                    Log.d("INFO", "Delete button pressed")
+                    viewModel.deleteExpense(expanse)
+                })
+        }
+    }
+}
+
+@SuppressLint("UnusedTransitionTargetStateParameter")
+@Composable
+fun SpinnerView() {
+    val sampleList = mutableListOf("Category", "Location", "Time", "Date", "Amount", "Wallet")
+    var sampleName: String by remember { mutableStateOf(sampleList[0]) }
+    var expanded by remember { mutableStateOf(false) }
+    val transitionState = remember {
+        MutableTransitionState(expanded).apply {
+            targetState = !expanded
+        }
+    }
+    val transition = updateTransition(targetState = transitionState, label = "transition")
+    val arrowRotationDegree by transition.animateFloat({
+        tween(durationMillis = 300)
+    }, label = "rotationDegree") {
+        if (expanded) 180f else 0f
+    }
+    val context = LocalContext.current
+
+    Column(
+    ) {
+
+        Spacer(modifier = Modifier.height(5.dp))
+        Column {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .clickable {
+                            expanded = !expanded
+                        },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = sampleName,
+                        style = MaterialTheme.typography.h6,
+                        color = Color.White
+                    )
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropDown,
+                        contentDescription = "Spinner",
+                        modifier = Modifier.rotate(arrowRotationDegree)
+                    )
+
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = {
+                            expanded = false
+                        }
+                    ) {
+                        sampleList.forEach { data ->
+                            DropdownMenuItem(
+                                onClick = {
+                                    expanded = false
+                                    sampleName = data
+                                }
+                            ) {
+                                Text(
+                                    text = data,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -160,10 +295,21 @@ fun ExpanseSection(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ReusableRow(categoryIcon:String, categoryName: String, walletName:String, date: String, location: String?, amount: Int, comments: String?, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit) {
+fun ReusableRow(
+    categoryIcon: String,
+    categoryName: String,
+    walletName: String,
+    date: String,
+    location: String?,
+    amount: Int,
+    comments: String?,
+    type: String,
+    editClickAction: () -> Unit,
+    deleteClickAction: () -> Unit
+) {
     val currency = "$"
     var sign = "+"
-    if(type == "Expense") {
+    if (type == "Expense") {
         sign = "-"
     }
 
@@ -172,15 +318,15 @@ fun ReusableRow(categoryIcon:String, categoryName: String, walletName:String, da
         modifier = Modifier.padding(6.dp)
     ) {
         var expanded by remember { mutableStateOf(false) }
-        Column(Modifier.clickable{expanded= !expanded}) {
+        Column(Modifier.clickable { expanded = !expanded }) {
             Row(
                 modifier = Modifier
                     .height(68.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                ) {
+            ) {
                 Spacer(Modifier.width(12.dp))
                 Column(Modifier) {
-                    CategoryImage(categoryIcon,30)
+                    CategoryImage(categoryIcon, 30)
                     Spacer(Modifier.width(15.dp))
                     Text(text = categoryName)
                 }
@@ -220,17 +366,17 @@ fun ReusableRow(categoryIcon:String, categoryName: String, walletName:String, da
             }
             AnimatedVisibility(visible = expanded) {
                 Column() {
-                    Text(text = "Location: " +location)
-                    Text(text= "Date: " + date)
+                    Text(text = "Location: " + location)
+                    Text(text = "Date: " + date)
                     Text(text = "Comment: " + comments)
-                    Text(text="Type: " +type)
-                    Text(text="Wallet: " + walletName)
-                    Row(){
-                        OutlinedButton(onClick = {editClickAction.invoke()}) {
+                    Text(text = "Type: " + type)
+                    Text(text = "Wallet: " + walletName)
+                    Row() {
+                        OutlinedButton(onClick = { editClickAction.invoke() }) {
                             Text(text = "Edit")
                         }
                         Spacer(modifier = Modifier.size(20.dp))
-                        OutlinedButton(onClick = {deleteClickAction.invoke()}) {
+                        OutlinedButton(onClick = { deleteClickAction.invoke() }) {
                             Text(text = "Delete", color = Color.Red)
                         }
                     }
@@ -239,6 +385,7 @@ fun ReusableRow(categoryIcon:String, categoryName: String, walletName:String, da
         }
     }
 }
+
 @Composable
 fun CategoryImage(categoryIcon: String, size: Int) {
     Emoji(emojiCode = categoryIcon, size = size)

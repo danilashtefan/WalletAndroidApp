@@ -33,6 +33,7 @@ class ExpansesViewModel(
     var dataLoaded = mutableStateOf(false)
     var totalExpenses = 0
     var totalIncome = 0
+    var sortedBy = mutableStateOf("No sort")
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
