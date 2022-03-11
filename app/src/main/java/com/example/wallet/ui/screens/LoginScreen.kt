@@ -137,7 +137,7 @@ fun text_field(
                 contentDescription = "email"
             )
         },
-        label = { Text(text = "E-mail address", color = MaterialTheme.colors.TextFieldTextColor) },
+        label = { Text(text = "Login", color = MaterialTheme.colors.TextFieldTextColor) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         modifier = Modifier
             .padding(top = 0.dp)
