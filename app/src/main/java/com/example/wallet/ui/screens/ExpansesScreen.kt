@@ -181,6 +181,7 @@ private fun CalendarDatePicker(
 }
 
 
+
 @Composable
 fun ExpanseSection(
     expanses: List<SecondAllExpensesItem>, navController: NavHostController,
@@ -246,7 +247,7 @@ fun ExpanseSection(
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
 fun SpinnerView(viewModel: ExpansesViewModel) {
-    val sampleList = mutableListOf("Category", "Location", "Time", "Date", "Amount", "Wallet")
+    val sampleList = mutableListOf("Category", "Location", "Date", "Amount", "Wallet")
     var sampleName: String by remember { mutableStateOf("No sort") }
     var expanded by remember { mutableStateOf(false) }
     val transitionState = remember {
