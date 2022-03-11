@@ -39,6 +39,8 @@ import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpense
 import com.example.wallet.model.viewmodel.transactions.ExpensesViewModelFactory
 import com.example.wallet.ui.theme.Purple500
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ExpansesScreen(
@@ -55,6 +57,8 @@ fun ExpansesScreen(
     val expanses = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
     val accessToken = viewModel.authToken
+    var expenseItems = viewModel.expanseState.value
+    var incomeItems = viewModel.incomeState.value
     val totalExpenses = viewModel.totalExpenses
     val totalIncome = viewModel.totalIncome
     val sortBy = viewModel.sortedBy
@@ -136,7 +140,7 @@ fun TransactionListSection(
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
-            SpinnerView()
+            SpinnerView(viewModel = viewModel)
         }
     }
 }
@@ -193,12 +197,27 @@ fun ExpanseSection(
         ).parse(viewModel.maxDatePicked.value)
 
     }
+    val dateStrToLocalDate: (String) -> LocalDate = {
+        LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+    }
+//"Category", "Location", "Time", "Date", "Amount", "Wallet"
+    var sortedTransactions = filteredTransactions
+    if(!sortedTransactions.isEmpty()) {
+        when (sortBy) {
+            "Location" -> sortedTransactions =
+                filteredTransactions.sortedBy { it.location } as MutableList<SecondAllExpensesItem>
+            "Category" -> sortedTransactions =
+                filteredTransactions.sortedBy { it.categoryName } as MutableList<SecondAllExpensesItem>
+            "Date" -> sortedTransactions =
+                filteredTransactions.sortedBy { LocalDate.parse(it.date, DateTimeFormatter.ISO_DATE) } as MutableList<SecondAllExpensesItem>
+            "Amount" -> {
 
-//    when(sortBy){
-//        "Location" ->
-//    }
+                sortedTransactions = filteredTransactions.sortedBy { it.amount } as MutableList<SecondAllExpensesItem>
+            }
+        }
+    }
     LazyColumn(modifier = Modifier.padding(16.dp)) {
-        items(filteredTransactions) { expanse ->
+        items(sortedTransactions) { expanse ->
             val expanseId = expanse.id
             ReusableRow(
                 categoryIcon = expanse.categoryIcon,
@@ -222,9 +241,9 @@ fun ExpanseSection(
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable
-fun SpinnerView() {
+fun SpinnerView(viewModel: ExpansesViewModel) {
     val sampleList = mutableListOf("Category", "Location", "Time", "Date", "Amount", "Wallet")
-    var sampleName: String by remember { mutableStateOf(sampleList[0]) }
+    var sampleName: String by remember { mutableStateOf("No sort") }
     var expanded by remember { mutableStateOf(false) }
     val transitionState = remember {
         MutableTransitionState(expanded).apply {
@@ -278,6 +297,7 @@ fun SpinnerView() {
                                 onClick = {
                                     expanded = false
                                     sampleName = data
+                                    viewModel.updateSortBy(data)
                                 }
                             ) {
                                 Text(

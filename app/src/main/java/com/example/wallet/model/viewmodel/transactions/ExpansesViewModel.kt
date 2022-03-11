@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.wallet.model.CategoryWrapperWithColor
 import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
@@ -30,6 +31,8 @@ class ExpansesViewModel(
     var expandedCalendarMax = mutableStateOf(false)
     //val transactionState = mutableStateOf((emptyList<Expanse>()))
     val transactionState = mutableStateOf((emptyList<SecondAllExpensesItem>()))
+    var expanseState = mutableStateOf((emptyList<SecondAllExpensesItem>()))
+    var incomeState = mutableStateOf((emptyList<SecondAllExpensesItem>()))
     var dataLoaded = mutableStateOf(false)
     var totalExpenses = 0
     var totalIncome = 0
@@ -68,17 +71,22 @@ class ExpansesViewModel(
             for (expense in expanses){
                 if(expense.type.equals("Expense")) {
                     totalExpensesTemp += expense.amount
+                    expanseState.value += expense
                 }
                 if(expense.type.equals("Income")){
                     totalIncomeTemp += expense.amount
+                    incomeState.value += expense
                 }
             }
-            totalExpenses=  totalExpensesTemp
+            totalExpenses =  totalExpensesTemp
             totalIncome = totalIncomeTemp
         }
         dataLoaded.value = true
     }
 
+    fun updateSortBy(value: String){
+        sortedBy.value = value
+    }
     //Method to get expenses from the JpaRepository default API, there is no filtering by username avalable
     suspend fun getExpanses(): List<Expanse> {
         Log.d("INFO","getExpanses is called")
