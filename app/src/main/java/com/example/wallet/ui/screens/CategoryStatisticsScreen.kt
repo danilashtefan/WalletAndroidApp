@@ -89,6 +89,7 @@ fun CategoryStatisticsScreen(
                     color = item.color,
                     categoryIcon = item.transaction.categoryIcon,
                     categoryName = item.transaction.categoryName ,
+                    walletName = item.transaction.walletName,
                     date = item.transaction.date,
                     location = item.transaction.location,
                     amount = item.transaction.amount,
@@ -101,12 +102,13 @@ fun CategoryStatisticsScreen(
 }
 
 @Composable
-fun StatisticsRow(color:Color, categoryIcon:String, categoryName: String, date: String, location: String?, amount: Int, comments: String?, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit){
+fun StatisticsRow(color:Color, categoryIcon:String, categoryName: String, walletName: String, date: String, location: String?, amount: Int, comments: String?, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit){
     Row(){
         Spacer(Modifier.size(10.dp, 20.dp).background(color = color))
         ReusableRow(
             categoryIcon = categoryIcon,
             categoryName = categoryName ,
+            walletName= walletName,
             date = date,
             location = location,
             amount = amount,

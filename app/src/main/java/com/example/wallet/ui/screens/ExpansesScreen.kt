@@ -147,7 +147,7 @@ fun ExpanseSection(
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(filteredTransactions) { expanse ->
             val expanseId = expanse.id
-            ReusableRow(categoryIcon = expanse.categoryIcon,categoryName = expanse.categoryName, date = expanse.date, location = "Location", amount = expanse.amount, comments = expanse.comments as String, type = expanse.type, editClickAction = {
+            ReusableRow(categoryIcon = expanse.categoryIcon,categoryName = expanse.categoryName, walletName= expanse.walletName, date = expanse.date, location = expanse.location, amount = expanse.amount, comments = expanse.comments as String, type = expanse.type, editClickAction = {
                 navController.navigate("transactionDetails/$expanseId")
             },deleteClickAction = {
                 Log.d("INFO", "Delete button pressed")
@@ -160,7 +160,7 @@ fun ExpanseSection(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun ReusableRow(categoryIcon:String, categoryName: String, date: String, location: String?, amount: Int, comments: String?, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit) {
+fun ReusableRow(categoryIcon:String, categoryName: String, walletName:String, date: String, location: String?, amount: Int, comments: String?, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit) {
     val currency = "$"
     var sign = "+"
     if(type == "Expense") {
@@ -185,11 +185,7 @@ fun ReusableRow(categoryIcon:String, categoryName: String, date: String, locatio
                     Text(text = categoryName)
                 }
                 Spacer(Modifier.weight(0.4f))
-                Column(Modifier) {
-                    Text("Wallet")
-                    Text("Date")
-                    Text("Location")
-                }
+                Text("Press for details")
                 Spacer(Modifier.weight(0.3f))
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -227,7 +223,8 @@ fun ReusableRow(categoryIcon:String, categoryName: String, date: String, locatio
                     Text(text = "Location: " +location)
                     Text(text= "Date: " + date)
                     Text(text = "Comment: " + comments)
-                    Text(text="Type: " +type )
+                    Text(text="Type: " +type)
+                    Text(text="Wallet: " + walletName)
                     Row(){
                         OutlinedButton(onClick = {editClickAction.invoke()}) {
                             Text(text = "Edit")
