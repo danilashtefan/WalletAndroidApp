@@ -197,6 +197,11 @@ fun ExpanseSection(
         ).parse(viewModel.maxDatePicked.value)
 
     }
+    for(transaction in filteredTransactions){
+        if(transaction.type.equals("Expense")) {
+            transaction.amount *= -1
+        }
+    }
     val dateStrToLocalDate: (String) -> LocalDate = {
         LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     }
@@ -211,7 +216,6 @@ fun ExpanseSection(
             "Date" -> sortedTransactions =
                 filteredTransactions.sortedBy { LocalDate.parse(it.date, DateTimeFormatter.ISO_DATE) } as MutableList<SecondAllExpensesItem>
             "Amount" -> {
-
                 sortedTransactions = filteredTransactions.sortedBy { it.amount } as MutableList<SecondAllExpensesItem>
             }
         }
@@ -329,8 +333,10 @@ fun ReusableRow(
 ) {
     val currency = "$"
     var sign = "+"
-    if (type == "Expense") {
+    if (type == "Expense" && amount > 0) {
         sign = "-"
+    }else if(type == "Expense" && amount <= 0){
+        sign = ""
     }
 
     Card(
