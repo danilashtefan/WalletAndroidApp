@@ -56,6 +56,8 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var username: String = ""
     var authToken = ""
 
+    var locationState = mutableStateOf("Location is not specified")
+
     var authTokenJob : Job
 
     init {
@@ -92,6 +94,9 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         }
     }
 
+    fun updateLocation(value: String){
+       locationState.value = value
+    }
     fun chooseCategory(category: String) {
         val transaction =
             TransactionsRepository.updateExpenseCategory(category, this.transactionId);
@@ -183,6 +188,8 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         this.walletLinkTemporaryValueBeforeSavingtoDB =
             LinkBuilder.buildWalletLinkForAddingToExpanse(transaction.walletId)
         this.datePicked.value = dateFieldTemporaryValueBeforeSavingtoDB as String
+
+        this.locationState.value = if(transaction.location != null) transaction.location else "Location is not specified"
 
 
         val handler = CoroutineExceptionHandler { _, exception ->

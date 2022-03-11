@@ -67,6 +67,8 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     var nameWalletFieldTemporaryValueBeforeSavingtoDB: String? = ""
     var currencyWalletFieldTemporaryValueBeforeSavingtoDB: String? = ""
 
+    var locationState = mutableStateOf("")
+
 
 
 init{
@@ -123,6 +125,9 @@ init{
         return listOfWallets
     }
 
+    fun updateLocation(value: String){
+        locationState.value = value
+    }
     fun updateTemporaryFieldValueBeforeSavingToDB(field: String, value: String) {
         when (field) {
             "amount" -> amountFieldTemporaryValueBeforeSavingtoDB = value

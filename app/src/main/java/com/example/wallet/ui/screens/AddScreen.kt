@@ -1,5 +1,6 @@
 package com.example.wallet.ui.screens
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -321,6 +322,8 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
         walletFieldName
     )
 
+    val location = viewModel.locationState
+
 
     Column(Modifier.verticalScroll(rememberScrollState())) {
         TypeOfElementToAddOrEditText("Add Transaction")
@@ -379,7 +382,8 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             field = locationFieldName,
             labelText = "Location",
             value = "",
-            viewModel = viewModel
+            viewModel = viewModel,
+            location = location.value
         )
 
         Spacer(modifier = Modifier.size(20.dp))
@@ -632,7 +636,8 @@ fun EditableFieldLocation(
     value: Any?,
     viewModel: AddViewModel,
     enabled: Boolean = true,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+    location:String
 ) {
     val listOfPlaces = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
     var context = LocalContext.current
@@ -642,11 +647,15 @@ fun EditableFieldLocation(
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             var place = Autocomplete.getPlaceFromIntent(it.data)
+            viewModel.updateLocation(place.address)
+            viewModel.updateTemporaryFieldValueBeforeSavingToDB(field, place.address)
             Log.d("INFO", "Address: ${place.address}")
         }
     Row(
+        modifier=Modifier.padding(top = padding.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Center
     ) {
         OutlinedButton(onClick = {
 
@@ -656,33 +665,8 @@ fun EditableFieldLocation(
             Text(text = "Search location")
         }
 
+        Text(location)
 
-        /*val settingResultRequest =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartIntentSenderForResult()) {activityResult->
-            if (activityResult.resultCode == RESULT_OK)
-                Log.d("appDebug", "Accepted")
-            else {
-                Log.d("appDebug", "Denied")
-            }
-        }
-
-    task.addOnFailureListener { exception ->
-        if (exception is ResolvableApiException) {
-            try {
-                val intentSenderRequest = IntentSenderRequest.Builder(exception.resolution).build()
-                settingResultRequest.launch(intentSenderRequest)
-            } catch (sendEx: IntentSender.SendIntentException) {
-                // Ignore the error.
-            }
-        }
-    }*/
-        EditableFieldTransactionAdd(
-            padding = padding,
-            field = field,
-            labelText = labelText,
-            value = "",
-            viewModel = viewModel
-        )
     }
 
 }

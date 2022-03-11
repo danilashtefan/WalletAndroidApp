@@ -1,6 +1,10 @@
 package com.example.wallet.ui.screens
 
+import android.text.Editable
+import android.util.Log
 import android.widget.CalendarView
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
@@ -36,6 +40,11 @@ import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.model.viewmodel.transactions.AddViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModelFactory
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import java.util.*
+import kotlin.collections.ArrayList
 
 @Composable
 fun TransactionDetailsScreen(
@@ -75,6 +84,7 @@ fun TransactionDetailsScreen(
         walletFieldName,
         categoryIcon
     )
+
 
     if (dataLoaded === false) {
         return;
@@ -145,7 +155,7 @@ fun TransactionDetailsScreen(
             value = transaction.comments,
             viewModel = viewModel
         )
-        EditableFieldTransactionDetails(
+        EditableFieldLocationTransactionDetails(
             20,
             field = locationFieldName,
             labelText = "Location",
@@ -342,6 +352,45 @@ private fun WalletSelctorTransactionDetails(
 
 }
 
+@Composable
+private fun EditableFieldLocationTransactionDetails(
+    padding: Int,
+    field: String,
+    labelText: String,
+    value: Any?,
+    viewModel: TransactionDetailsViewModel,
+    enabled: Boolean = true,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+){
+    val listOfPlaces = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
+    var context = LocalContext.current
+    val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, listOfPlaces).build(
+        context
+    )
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            var place = Autocomplete.getPlaceFromIntent(it.data)
+            viewModel.updateLocation(place.address)
+            viewModel.updateTemporaryFieldValueBeforeSavingToDB(field, place.address)
+            Log.d("INFO", "Address: ${place.address}")
+        }
+    Row(modifier=Modifier.padding(top = padding.dp)
+        .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
+    ) {
+        OutlinedButton(onClick = {
+
+            launcher.launch(intent)
+
+        }) {
+            var buttonText =  viewModel.locationState.value
+            Text(buttonText)
+        }
+
+    }
+
+}
 
 @Composable
 private fun EditableFieldTransactionDetails(
