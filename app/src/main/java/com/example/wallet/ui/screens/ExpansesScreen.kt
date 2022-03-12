@@ -25,7 +25,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -40,7 +39,6 @@ import com.example.wallet.helpers.DateFormatter
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.viewmodel.transactions.ExpensesViewModelFactory
-import com.example.wallet.ui.theme.Purple500
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -149,10 +147,10 @@ fun TransactionListSection(
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
-            var showAlertDialog = viewModel.showAlertDialog.value
+            var showAlertDialog = viewModel.showBudgetSetDialog.value
             if (showAlertDialog) {
                 OneButtonAlertDialogComponent(onDismiss = {
-                    viewModel.showAlertDialog.value = false
+                    viewModel.showBudgetSetDialog.value = false
                 }, bodyText = {
                     val textState = remember { mutableStateOf(TextFieldValue("")) }
                     TextField(
