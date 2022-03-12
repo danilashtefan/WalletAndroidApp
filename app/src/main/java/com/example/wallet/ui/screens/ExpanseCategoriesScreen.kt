@@ -18,10 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.wallet.R
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
@@ -57,9 +59,39 @@ fun ExpanseCategoriesScreen(
         modifier = Modifier
             .background(Color(0xFFBB87E4))
     ) {
+        var showCategoryAlertDialog = viewModel.showCategoryAlertDialog.value
+        var showWalletAlertDialog = viewModel.showWalletAlertDialog.value
+        if (showCategoryAlertDialog) {
+            TwoButtonAlertDialogComponent(
+                onDismiss = { viewModel.showCategoryAlertDialog.value = false },
+                bodyText = viewModel.dialogText.value,
+                dismissButtonText = "CANCEL",
+                confirmButtonText = "CONFIRM",
+                onConfirm = {
+                    viewModel.showCategoryAlertDialog.value = false
+                    viewModel.deleteCategory(viewModel.categoryToDelete.value)
+                }
+            )
+        }
+        if(showWalletAlertDialog){
+            TwoButtonAlertDialogComponent(
+                onDismiss = { viewModel.showWalletAlertDialog.value = false },
+                bodyText = viewModel.dialogText.value,
+                dismissButtonText = "CANCEL",
+                confirmButtonText = "CONFIRM",
+                onConfirm = {
+                    viewModel.showCategoryAlertDialog.value = false
+                    viewModel.deleteWallet(viewModel.walletToDelete.value)}
+            )
+        }
         LogoSection(pictureSize = 93)
         ChooseWhatToSeeSection(listOfButtons = listOfButtons, viewModel = viewModel)
-        DetailsSection(viewModel, transactionsCategories, transactionsWallets, navController = navHostController)
+        DetailsSection(
+            viewModel,
+            transactionsCategories,
+            transactionsWallets,
+            navController = navHostController
+        )
     }
 
 
@@ -88,7 +120,11 @@ fun DetailsSection(
 
 ) {
     when (viewModel.whatToSeeState.value) {
-        "category" -> CategoriesListSection(viewModel, transactionsCategories, navController = navController)
+        "category" -> CategoriesListSection(
+            viewModel,
+            transactionsCategories,
+            navController = navController
+        )
         "wallet" -> WalletsListSection(viewModel, transactionWallets, navController)
     }
 }
@@ -115,7 +151,8 @@ fun CategoriesListSection(
                 },
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")
-                    viewModel.deleteCategory(category)
+                    viewModel.categoryToDelete.value = category
+                    viewModel.deleteCategoryDialogShow()
                 },
                 navController = navController
             )
@@ -135,25 +172,58 @@ fun WalletsListSection(
             val walletId = wallet.id
             ReusableCategoryAndWalletRow(
                 icon = wallet.icon,
-                route= "walletStatistics/$walletId",
+                route = "walletStatistics/$walletId",
                 name = wallet.walletName,
                 type = wallet.currency,
                 id = walletId,
                 editClickAction = {
-
                     navController.navigate("walletsDetails/$walletId")
                 },
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")
-                    viewModel.deleteWallet(wallet)
+                    viewModel.walletToDelete.value = wallet
+                    viewModel.deleteWalletDialogShow()
                 },
                 navController = navController
             )
         }
     }
-
 }
 
+@Composable
+fun TwoButtonAlertDialogComponent(
+    onDismiss: () -> Unit,
+    bodyText: String,
+    dismissButtonText: String,
+    confirmButtonText: String,
+    onConfirm: () -> Unit
+) {
+    val context = LocalContext.current
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Wallet", color = Color.White) },
+
+        text = { Text(bodyText, color = Color.White) },
+
+        confirmButton = {
+            TextButton(
+                onClick = onConfirm
+            ) {
+                Text(confirmButtonText, color = Color.White)
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss
+            ) {
+
+                Text(dismissButtonText, color = Color.White)
+            }
+        },
+        backgroundColor = colorResource(id = R.color.purple_200),
+        contentColor = Color.White
+    )
+}
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -162,7 +232,7 @@ private fun ReusableCategoryAndWalletRow(
     name: String,
     type: String,
     id: Int,
-    route:String,
+    route: String,
     editClickAction: () -> Unit,
     deleteClickAction: () -> Unit,
     navController: NavHostController
@@ -198,7 +268,7 @@ private fun ReusableCategoryAndWalletRow(
 
                 Spacer(Modifier.weight(0.3f))
                 Spacer(Modifier.width(16.dp))
-                IconButton(onClick = { navController.navigate(route)}) {
+                IconButton(onClick = { navController.navigate(route) }) {
                     Icon(
                         imageVector = Icons.Filled.ChevronRight,
                         contentDescription = null,

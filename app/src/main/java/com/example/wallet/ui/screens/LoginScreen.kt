@@ -1,7 +1,5 @@
 package com.example.wallet.ui.screens
 
-import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -27,7 +24,6 @@ import com.example.wallet.model.viewmodel.login.LoginViewModel
 import com.example.wallet.model.viewmodel.login.LoginViewModelFactory
 import com.example.wallet.requests.LoginRequest
 import com.example.wallet.requests.RegisterRequest
-import com.example.wallet.ui.theme.BackgroundColor
 import com.example.wallet.ui.theme.ButtonColor
 import com.example.wallet.ui.theme.TextFieldColor
 import com.example.wallet.ui.theme.TextFieldTextColor
@@ -50,7 +46,7 @@ fun LoginScreen(
         ) {
             var showAlertDialog=  viewModel.showAlertDialog.value
             if(showAlertDialog) {
-                AlertDialogComponent(
+                OneButtonAlertDialogComponent(
                     bodyText = viewModel.dialogText.value,
                     buttonText = "DISMISS",
                     onDismiss = { viewModel.showAlertDialog.value = false })
@@ -82,7 +78,7 @@ fun WelcomeText() {
 
 
 @Composable
-fun AlertDialogComponent(
+fun OneButtonAlertDialogComponent(
     onDismiss: () -> Unit,
     bodyText: String,
     buttonText: String
@@ -107,6 +103,8 @@ fun AlertDialogComponent(
             contentColor = Color.White
         )
 }
+
+
 
 @Composable
 fun PurposeImage() {

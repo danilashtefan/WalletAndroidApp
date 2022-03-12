@@ -33,7 +33,12 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
     var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
     var userName = ""
     var authToken = ""
+    var categoryToDelete = mutableStateOf(SecondAllExpenseCategoriesResponseItem())
+    var walletToDelete =  mutableStateOf(SecondAllWalletsResponseItem())
 
+    var showCategoryAlertDialog = mutableStateOf(false)
+    var showWalletAlertDialog = mutableStateOf(false)
+    var dialogText = mutableStateOf("By deleting this element you delete all the transactions associated with it")
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Network exception in Expense Categories screen: $exception")
@@ -85,6 +90,9 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
         return listOfWallets
     }
 
+    fun deleteCategoryDialogShow(){
+        showCategoryAlertDialog.value = true
+    }
     fun deleteCategory(category : SecondAllExpenseCategoriesResponseItem){
         transactionCetegoriesState.value = transactionCetegoriesState.value.toMutableList().also{it.remove(category)}
 
@@ -100,6 +108,9 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
         }
     }
 
+    fun deleteWalletDialogShow(){
+        showWalletAlertDialog.value = true
+    }
 
     fun deleteWallet(wallet : SecondAllWalletsResponseItem){
         transactionWalletsState.value = transactionWalletsState.value.toMutableList().also{it.remove(wallet)}
