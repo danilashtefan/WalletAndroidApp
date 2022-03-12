@@ -37,6 +37,8 @@ class ExpansesViewModel(
     var totalExpenses = 0
     var totalIncome = 0
     var sortedBy = mutableStateOf("No sort")
+    var budgetSet = mutableStateOf(0)
+    var budgetLeft = mutableStateOf(0)
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
@@ -80,6 +82,7 @@ class ExpansesViewModel(
             }
             totalExpenses =  totalExpensesTemp
             totalIncome = totalIncomeTemp
+
         }
         dataLoaded.value = true
     }
@@ -117,14 +120,6 @@ class ExpansesViewModel(
             }
         }
         throw Exception("No transaction found!");
-    }
-
-    fun getCurrency(expanse: Expanse) {
-
-    }
-
-    fun getSign(expanse: Expanse) {
-
     }
 
     fun deleteExpense(expanse: SecondAllExpensesItem) {

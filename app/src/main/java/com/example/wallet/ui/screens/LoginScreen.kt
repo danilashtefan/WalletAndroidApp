@@ -47,7 +47,7 @@ fun LoginScreen(
             var showAlertDialog=  viewModel.showAlertDialog.value
             if(showAlertDialog) {
                 OneButtonAlertDialogComponent(
-                    bodyText = viewModel.dialogText.value,
+                    bodyText = { Text(viewModel.dialogText.value, color = Color.White) },
                     buttonText = "DISMISS",
                     onDismiss = { viewModel.showAlertDialog.value = false })
             }
@@ -80,7 +80,7 @@ fun WelcomeText() {
 @Composable
 fun OneButtonAlertDialogComponent(
     onDismiss: () -> Unit,
-    bodyText: String,
+    bodyText:@Composable () -> Unit,
     buttonText: String
 ) {
     val context = LocalContext.current
@@ -88,7 +88,7 @@ fun OneButtonAlertDialogComponent(
             onDismissRequest = onDismiss,
             title = { Text(text = "Wallet", color = Color.White) },
 
-            text = { Text(bodyText, color = Color.White) },
+            text = bodyText,
 
             confirmButton = {
 

@@ -61,6 +61,8 @@ fun ExpansesScreen(
     var incomeItems = viewModel.incomeState.value
     val totalExpenses = viewModel.totalExpenses
     val totalIncome = viewModel.totalIncome
+    val budgetSet = viewModel.budgetSet
+    val budgetLeft = viewModel.budgetLeft
     val sortBy = viewModel.sortedBy
 
     if (!dataLoaded) {
@@ -71,7 +73,7 @@ fun ExpansesScreen(
         modifier = Modifier
             .background(Color(0xFFBB87E4))
     ) {
-        TransactionListSection(viewModel, totalExpenses, totalIncome)
+        TransactionListSection(viewModel, totalExpenses, totalIncome, budgetSet.value, budgetLeft.value)
         ExpanseSection(expanses, navController, viewModel, sortBy.value)
     }
 
@@ -82,7 +84,9 @@ fun ExpansesScreen(
 fun TransactionListSection(
     viewModel: ExpansesViewModel,
     totalExpenses: Int,
-    totalIncome: Int
+    totalIncome: Int,
+    budgetSet: Int,
+    budgetLeft: Int
 ) {
 
     Column() {
@@ -126,6 +130,24 @@ fun TransactionListSection(
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
                 text = "Total income: ${totalIncome}",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+        }
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+            Text(
+                text = "Budget set: ${budgetSet}",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+            OneButtonAlertDialogComponent(onDismiss = { /*TODO*/ }, bodyText = {} , buttonText = "Confirm")
+            OutlinedButton(onClick = {}) {
+
+            }
+        }
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+            Text(
+                text = "Budget left: ${budgetLeft}",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
