@@ -51,5 +51,9 @@ object WalletRepository {
         return service.editWalletInDb(id, walletData, authToken)
     }
 
+    suspend fun deleteWallet(walletId: Int, authToken: String) {
+        return service.deleteWalletFromDb(walletId, authToken)
+    }
+
 
 }

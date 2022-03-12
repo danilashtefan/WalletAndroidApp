@@ -86,7 +86,7 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
     }
 
     fun deleteCategory(category : SecondAllExpenseCategoriesResponseItem){
-        expanseCategoriesState.value = expanseCategoriesState.value.toMutableList().also{it.remove(category)}
+        transactionCetegoriesState.value = transactionCetegoriesState.value.toMutableList().also{it.remove(category)}
 
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while deleting the category : $exception")
@@ -97,6 +97,22 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
             Thread.sleep(500)
             Log.d("INFO", "Auth token for delete is $authToken")
             ExpanseCategoriesRepository.deleteCategory(category.id, authToken)
+        }
+    }
+
+
+    fun deleteWallet(wallet : SecondAllWalletsResponseItem){
+        transactionWalletsState.value = transactionWalletsState.value.toMutableList().also{it.remove(wallet)}
+
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Thread exception while deleting the wallet : $exception")
+        }
+
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            //authTokenJob.join()
+            Thread.sleep(500)
+            Log.d("INFO", "Auth token for delete is $authToken")
+            WalletRepository.deleteWallet(wallet.id, authToken)
         }
     }
 

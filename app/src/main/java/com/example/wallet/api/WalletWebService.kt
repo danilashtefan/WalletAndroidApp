@@ -103,6 +103,11 @@ class WalletWebService {
         return api.deleteCategoryFromDb(categoryId, authHeader)
     }
 
+    suspend fun deleteWalletFromDb(walletId: Int, authToken: String) {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.deleteWalletFromDb(walletId, authHeader)
+    }
+
     suspend fun getCategoryForExpanse(expenseId: Int): SingleExpanseCategoryResponse {
         return api.getCategoryForExpanse(expenseId)
     }
@@ -202,6 +207,12 @@ class WalletWebService {
             @Header("Authorization") authHeader: String,
             @Path("id") walletId: Int
         ): SecondAllExpensesResponse
+
+        @DELETE("wallets2/{id}")
+        suspend fun deleteWalletFromDb(
+            @Path("id") categoryId: Int,
+            @Header("Authorization") authHeader: String
+        )
 
         @GET("expanseCategories")
         suspend fun getExpanseCategories(): AllExpanseCategoriesResponse

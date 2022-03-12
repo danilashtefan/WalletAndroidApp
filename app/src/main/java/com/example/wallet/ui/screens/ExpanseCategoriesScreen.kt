@@ -145,6 +145,7 @@ fun WalletsListSection(
                 },
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")
+                    viewModel.deleteWallet(wallet)
                 },
                 navController = navController
             )
