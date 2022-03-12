@@ -13,6 +13,7 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -25,6 +26,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,7 +76,13 @@ fun ExpansesScreen(
         modifier = Modifier
             .background(Color(0xFFBB87E4))
     ) {
-        TransactionListSection(viewModel, totalExpenses, totalIncome, budgetSet.value, budgetLeft.value)
+        TransactionListSection(
+            viewModel,
+            totalExpenses,
+            totalIncome,
+            budgetSet.value,
+            budgetLeft.value
+        )
         ExpanseSection(expanses, navController, viewModel, sortBy.value)
     }
 
@@ -140,9 +149,26 @@ fun TransactionListSection(
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
-            OneButtonAlertDialogComponent(onDismiss = { /*TODO*/ }, bodyText = {} , buttonText = "Confirm")
-            OutlinedButton(onClick = {}) {
+            var showAlertDialog = viewModel.showAlertDialog.value
+            if (showAlertDialog) {
+                OneButtonAlertDialogComponent(onDismiss = {
+                    viewModel.showAlertDialog.value = false
+                }, bodyText = {
+                    val textState = remember { mutableStateOf(TextFieldValue("")) }
+                    TextField(
+                        value = textState.value,
+                        onValueChange = {
+                            textState.value = it
+                            viewModel.updateBudgetSet(textState.value.text.toInt())
+                            viewModel.updateBudgetLeft()
+                        },
+                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                    )
+                }, buttonText = "Confirm")
+            }
 
+            OutlinedButton(onClick = { viewModel.showBudgetSetAlertDialog() }) {
+                Text(text = "Set the budget")
             }
         }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
@@ -203,7 +229,6 @@ private fun CalendarDatePicker(
 }
 
 
-
 @Composable
 fun ExpanseSection(
     expanses: List<SecondAllExpensesItem>, navController: NavHostController,
@@ -220,8 +245,8 @@ fun ExpanseSection(
         ).parse(viewModel.maxDatePicked.value)
 
     }
-    for(transaction in filteredTransactions){
-        if(transaction.type.equals("Expense")) {
+    for (transaction in filteredTransactions) {
+        if (transaction.type.equals("Expense")) {
             transaction.amount *= -1
         }
     }
@@ -230,16 +255,22 @@ fun ExpanseSection(
     }
 //"Category", "Location", "Time", "Date", "Amount", "Wallet"
     var sortedTransactions = filteredTransactions
-    if(!sortedTransactions.isEmpty()) {
+    if (!sortedTransactions.isEmpty()) {
         when (sortBy) {
             "Location" -> sortedTransactions =
                 filteredTransactions.sortedBy { it.location } as MutableList<SecondAllExpensesItem>
             "Category" -> sortedTransactions =
                 filteredTransactions.sortedBy { it.categoryName } as MutableList<SecondAllExpensesItem>
             "Date" -> sortedTransactions =
-                filteredTransactions.sortedBy { LocalDate.parse(it.date, DateTimeFormatter.ISO_DATE) } as MutableList<SecondAllExpensesItem>
+                filteredTransactions.sortedBy {
+                    LocalDate.parse(
+                        it.date,
+                        DateTimeFormatter.ISO_DATE
+                    )
+                } as MutableList<SecondAllExpensesItem>
             "Amount" -> {
-                sortedTransactions = filteredTransactions.sortedBy { it.amount } as MutableList<SecondAllExpensesItem>
+                sortedTransactions =
+                    filteredTransactions.sortedBy { it.amount } as MutableList<SecondAllExpensesItem>
             }
         }
     }
@@ -358,7 +389,7 @@ fun ReusableRow(
     var sign = "+"
     if (type == "Expense" && amount > 0) {
         sign = "-"
-    }else if(type == "Expense" && amount <= 0){
+    } else if (type == "Expense" && amount <= 0) {
         sign = ""
     }
 

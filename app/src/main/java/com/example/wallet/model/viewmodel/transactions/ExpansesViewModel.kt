@@ -40,6 +40,8 @@ class ExpansesViewModel(
     var budgetSet = mutableStateOf(0)
     var budgetLeft = mutableStateOf(0)
 
+    var showAlertDialog = mutableStateOf(false)
+
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while fetching expanses to the initial screen")
@@ -87,8 +89,19 @@ class ExpansesViewModel(
         dataLoaded.value = true
     }
 
+    fun showBudgetSetAlertDialog(){
+        showAlertDialog.value = true
+    }
     fun updateSortBy(value: String){
         sortedBy.value = value
+    }
+
+    fun updateBudgetSet(value : Int){
+        budgetSet.value = value
+    }
+
+    fun updateBudgetLeft(){
+        budgetLeft.value = budgetSet.value + totalIncome - totalExpenses
     }
     //Method to get expenses from the JpaRepository default API, there is no filtering by username avalable
     suspend fun getExpanses(): List<Expanse> {

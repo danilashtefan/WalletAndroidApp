@@ -100,8 +100,6 @@ init{
         dataLoaded.value = true;
     }
 
-
-
 }
 
     //Method to get from default API. To be deleted
