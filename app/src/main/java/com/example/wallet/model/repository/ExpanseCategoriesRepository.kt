@@ -48,5 +48,9 @@ object ExpanseCategoriesRepository {
         return service.editCategoryInDb(id, categoryData, authToken)
     }
 
+    suspend fun deleteCategory(categoryId: Int, authToken: String) {
+        return ExpanseCategoriesRepository.service.deleteCategoryFromDb(categoryId, authToken)
+    }
+
 
 }

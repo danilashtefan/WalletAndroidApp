@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
+import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
@@ -82,6 +83,21 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
     suspend fun getFilteredWallets(): SecondAllWalletsResponse {
         var listOfWallets = WalletRepository.getFilteredWallets(authToken)
         return listOfWallets
+    }
+
+    fun deleteCategory(category : SecondAllExpenseCategoriesResponseItem){
+        expanseCategoriesState.value = expanseCategoriesState.value.toMutableList().also{it.remove(category)}
+
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d("EXCEPTION", "Thread exception while deleting the category : $exception")
+        }
+
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            //authTokenJob.join()
+            Thread.sleep(500)
+            Log.d("INFO", "Auth token for delete is $authToken")
+            ExpanseCategoriesRepository.deleteCategory(category.id, authToken)
+        }
     }
 
 }

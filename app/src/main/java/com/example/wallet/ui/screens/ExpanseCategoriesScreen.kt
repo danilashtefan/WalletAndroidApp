@@ -102,19 +102,20 @@ fun CategoriesListSection(
 
 
     LazyColumn(modifier = Modifier.padding(16.dp)) {
-        items(transactionsCategories) { expanse ->
-            val categoryId = expanse.id
+        items(transactionsCategories) { category ->
+            val categoryId = category.id
             ReusableCategoryAndWalletRow(
                 route = "categoryStatistics/$categoryId",
-                icon = expanse.icon,
-                name = expanse.expanseCategoryName,
-                type = expanse.type,
+                icon = category.icon,
+                name = category.expanseCategoryName,
+                type = category.type,
                 id = categoryId,
                 editClickAction = {
                     navController.navigate("categoriesDetails/$categoryId")
                 },
                 deleteClickAction = {
                     Log.d("INFO", "Delete button pressed")
+                    viewModel.deleteCategory(category)
                 },
                 navController = navController
             )
