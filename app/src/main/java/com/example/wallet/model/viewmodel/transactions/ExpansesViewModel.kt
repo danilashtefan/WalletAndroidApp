@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.lang.Math.abs
 
 class ExpansesViewModel(
     private val dataStorePreferenceRepository: DataStorePreferenceRepository
@@ -37,13 +38,20 @@ class ExpansesViewModel(
     var totalExpenses = mutableStateOf(0)
     var totalIncome = mutableStateOf(0)
     var sortedBy = mutableStateOf("No sort")
-    var budgetSetString = ""
     var budgetSet = mutableStateOf(0)
     var budgetLeft = mutableStateOf(0)
 
     var showBudgetSetDialog = mutableStateOf(false)
+    var showLowBudgetAlertDialog = mutableStateOf(false)
+    var userAknowledgedAboutLowBudget = mutableStateOf(false)
+
+    val lowBugetDialogText = mutableStateOf("You have exceeded the budget set!")
+
 
     init {
+        if (budgetLeft.value < 0){
+            showLowBudgetAlertDialog.value = true
+        }
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while fetching expanses to the initial screen: $exception")
         }
@@ -90,20 +98,31 @@ class ExpansesViewModel(
             }
             totalExpenses.value = totalExpensesTemp
             totalIncome.value = totalIncomeTemp
-        }
 
-        viewModelScope.launch(handler + Dispatchers.Main) {
             dataStorePreferenceRepository.getBudget.
             catch { Log.d("ERROR","Could not get Budget from Data Store on Expenses screen") }
                 .collect{
-                    Log.d("INFO","Budget on Expenses screen: $it")
                     budgetSet.value = it.toInt()
-                    budgetLeft.value = budgetSet.value + totalIncome.value - totalExpenses.value
+                    budgetLeft.value = budgetSet.value - abs(totalExpenses.value)
+                    if (budgetLeft.value < 0){
+                        showLowBudgetAlertDialog.value = true
+                    }
+                    Log.d("INFO","Budget left on Expenses screen: ${budgetLeft.value} ")
                 }
         }
+
+
         dataLoaded.value = true
     }
 
+    fun dismissLowBudgetAlertDialog(){
+        showLowBudgetAlertDialog.value = false
+        setUserAknowledgedAboutLowBudgetValue()
+    }
+
+    fun setUserAknowledgedAboutLowBudgetValue(){
+        userAknowledgedAboutLowBudget.value = true
+    }
     fun showBudgetSetAlertDialog() {
         showBudgetSetDialog.value = true
     }
@@ -126,7 +145,7 @@ class ExpansesViewModel(
     }
 
     fun updateBudgetLeft() {
-        budgetLeft.value = budgetSet.value + totalIncome.value - totalExpenses.value
+        budgetLeft.value = budgetSet.value - abs(totalExpenses.value)
     }
 
     //Method to get expenses from the JpaRepository default API, there is no filtering by username avalable

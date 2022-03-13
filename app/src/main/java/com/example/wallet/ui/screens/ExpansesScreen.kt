@@ -65,6 +65,7 @@ fun ExpansesScreen(
     val budgetSet = viewModel.budgetSet
     val budgetLeft = viewModel.budgetLeft
     val sortBy = viewModel.sortedBy
+    viewModel.updateBudgetLeft()
 
     if (!dataLoaded) {
         return;
@@ -147,9 +148,18 @@ fun TransactionListSection(
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
-            var showAlertDialog = viewModel.showBudgetSetDialog.value
+
+            var showBudgetSetDialog = viewModel.showBudgetSetDialog.value
+            var showLowBudgetAlertDialog = viewModel.showLowBudgetAlertDialog.value
+            var userAknowledgedAboutLowBudget = viewModel.userAknowledgedAboutLowBudget.value
             val budgetSetTextState = remember { mutableStateOf(TextFieldValue("")) }
-            if (showAlertDialog) {
+            if(showLowBudgetAlertDialog){
+                OneButtonAlertDialogComponent(onDismiss = {
+                    viewModel.dismissLowBudgetAlertDialog()
+                },bodyText = { Text(viewModel.lowBugetDialogText.value, color = Color.White) },
+                    buttonText = "DISMISS")
+            }
+            if (showBudgetSetDialog) {
                 OneButtonAlertDialogComponent(onDismiss = {
                     viewModel.showBudgetSetDialog.value = false
                     viewModel.updateBudgetSet(budgetSetTextState.value.text.toInt())
