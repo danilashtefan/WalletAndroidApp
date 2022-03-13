@@ -20,12 +20,14 @@ class DataStorePreferenceRepository(private val context: Context) {
     private val accessTokenDefault = "default"
     private val refreshTokenDefault = "default"
     private val usernameDefault = "defaultUsername"
+    private val budgetDefault = "10"
 
     companion object{
         val Context.dataStore by preferencesDataStore("app_preferences")
         val PREF_ACCESS_TOKEN = stringPreferencesKey("access_token")
         val PREF_REFRESH_TOKEN = stringPreferencesKey("refresh_token")
         val PREF_USERNAME = stringPreferencesKey("username")
+        val PREF_BUDGET_SET = stringPreferencesKey("budget_set")
 
         private var INSTANCE: DataStorePreferenceRepository? = null
 
@@ -47,6 +49,12 @@ class DataStorePreferenceRepository(private val context: Context) {
             preferences[PREF_ACCESS_TOKEN] = accessToken
             preferences[PREF_REFRESH_TOKEN] = refreshToken
         }
+    }
+
+    suspend fun setBudget(budget: String){
+        context.dataStore.edit { preferences ->
+            preferences[PREF_BUDGET_SET] = budget
+        }
 
     }
 
@@ -66,6 +74,10 @@ class DataStorePreferenceRepository(private val context: Context) {
 
     val getUsername: Flow<String> = context.dataStore.data.map {
             preferences -> preferences[PREF_USERNAME] ?: usernameDefault
+    }
+
+    val getBudget: Flow<String> = context.dataStore.data.map {
+            preferences -> preferences[PREF_BUDGET_SET] ?: budgetDefault
     }
     suspend fun<T> getToken() :
             Flow<String> = context.dataStore.data.catch { exception ->

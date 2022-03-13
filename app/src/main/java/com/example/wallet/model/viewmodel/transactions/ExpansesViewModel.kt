@@ -34,9 +34,10 @@ class ExpansesViewModel(
     var expanseState = mutableStateOf((emptyList<SecondAllExpensesItem>()))
     var incomeState = mutableStateOf((emptyList<SecondAllExpensesItem>()))
     var dataLoaded = mutableStateOf(false)
-    var totalExpenses = 0
-    var totalIncome = 0
+    var totalExpenses = mutableStateOf(0)
+    var totalIncome = mutableStateOf(0)
     var sortedBy = mutableStateOf("No sort")
+    var budgetSetString = ""
     var budgetSet = mutableStateOf(0)
     var budgetLeft = mutableStateOf(0)
 
@@ -44,7 +45,7 @@ class ExpansesViewModel(
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception while fetching expanses to the initial screen")
+            Log.d("EXCEPTION", "Thread exception while fetching expanses to the initial screen: $exception")
         }
         viewModelScope.launch(handler + Dispatchers.IO) {
             dataStorePreferenceRepository.getAccessToken.catch {
@@ -87,9 +88,18 @@ class ExpansesViewModel(
                     incomeState.value += expense
                 }
             }
-            totalExpenses = totalExpensesTemp
-            totalIncome = totalIncomeTemp
-            budgetLeft.value = budgetSet.value + totalIncome - totalExpenses
+            totalExpenses.value = totalExpensesTemp
+            totalIncome.value = totalIncomeTemp
+        }
+
+        viewModelScope.launch(handler + Dispatchers.Main) {
+            dataStorePreferenceRepository.getBudget.
+            catch { Log.d("ERROR","Could not get Budget from Data Store on Expenses screen") }
+                .collect{
+                    Log.d("INFO","Budget on Expenses screen: $it")
+                    budgetSet.value = it.toInt()
+                    budgetLeft.value = budgetSet.value + totalIncome.value - totalExpenses.value
+                }
         }
         dataLoaded.value = true
     }
@@ -104,10 +114,19 @@ class ExpansesViewModel(
 
     fun updateBudgetSet(value: Int) {
         budgetSet.value = value
+        val handler = CoroutineExceptionHandler { _, exception ->
+            Log.d(
+                "EXCEPTION",
+                "Thread exception while setting budget on the expenses screen: $exception"
+            )
+        }
+        viewModelScope.launch(handler + Dispatchers.IO) {
+            dataStorePreferenceRepository.setBudget(value.toString())
+        }
     }
 
     fun updateBudgetLeft() {
-        budgetLeft.value = budgetSet.value + totalIncome - totalExpenses
+        budgetLeft.value = budgetSet.value + totalIncome.value - totalExpenses.value
     }
 
     //Method to get expenses from the JpaRepository default API, there is no filtering by username avalable

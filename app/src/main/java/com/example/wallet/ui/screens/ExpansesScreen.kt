@@ -76,8 +76,8 @@ fun ExpansesScreen(
     ) {
         TransactionListSection(
             viewModel,
-            totalExpenses,
-            totalIncome,
+            totalExpenses.value,
+            totalIncome.value,
             budgetSet.value,
             budgetLeft.value
         )
@@ -98,7 +98,7 @@ fun TransactionListSection(
 
     Column() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            LogoSection(pictureSize = 120)
+            LogoSection(pictureSize = 90)
             Spacer(modifier = Modifier.padding(5.dp))
             Text(
                 text = "Transaction list",
@@ -148,17 +148,18 @@ fun TransactionListSection(
                 color = Color.White
             )
             var showAlertDialog = viewModel.showBudgetSetDialog.value
+            val budgetSetTextState = remember { mutableStateOf(TextFieldValue("")) }
             if (showAlertDialog) {
                 OneButtonAlertDialogComponent(onDismiss = {
                     viewModel.showBudgetSetDialog.value = false
+                    viewModel.updateBudgetSet(budgetSetTextState.value.text.toInt())
+                    viewModel.updateBudgetLeft()
                 }, bodyText = {
-                    val textState = remember { mutableStateOf(TextFieldValue("")) }
+
                     TextField(
-                        value = textState.value,
+                        value = budgetSetTextState.value,
                         onValueChange = {
-                            textState.value = it
-                            viewModel.updateBudgetSet(textState.value.text.toInt())
-                            viewModel.updateBudgetLeft()
+                            budgetSetTextState.value = it
                         },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                     )
