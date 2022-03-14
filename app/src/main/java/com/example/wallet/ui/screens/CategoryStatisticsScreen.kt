@@ -62,7 +62,7 @@ fun CategoryStatisticsScreen(
     var dataLoaded = viewModel.dataLoaded.value
     val listOfButtons = listOf<String>("Expense", "Income")
 
-    while (!dataLoaded){
+    while (!dataLoaded) {
         return
     }
     Column() {
@@ -78,17 +78,24 @@ fun CategoryStatisticsScreen(
             }
         }
 
-        var transactionsToShow = if(viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseItems else incomeItems
-        var totalAmount = if(viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseAmount else incomeAmount
-        StatementBody(listOfButtons = listOfButtons,transactions = transactionsToShow, expenses = expenseItems, incomes = incomeItems, colors = { item -> item.color }, amounts = { item -> item.transaction.amount.toFloat() },
+        var transactionsToShow =
+            if (viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseItems else incomeItems
+        var totalAmount =
+            if (viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseAmount else incomeAmount
+        StatementBody(listOfButtons = listOfButtons,
+            transactions = transactionsToShow,
+            expenses = expenseItems,
+            incomes = incomeItems,
+            colors = { item -> item.color },
+            amounts = { item -> item.transaction.amount.toFloat() },
             totalAmount = totalAmount,
 
-            row = {item ->
+            row = { item ->
                 val itemId = item.transaction.id
                 StatisticsRow(
                     color = item.color,
                     categoryIcon = item.transaction.categoryIcon,
-                    categoryName = item.transaction.categoryName ,
+                    categoryName = item.transaction.categoryName,
                     walletName = item.transaction.walletName,
                     date = item.transaction.date,
                     location = item.transaction.location,
@@ -97,25 +104,42 @@ fun CategoryStatisticsScreen(
                     type = item.transaction.type,
                     editClickAction = { navController.navigate("transactionDetails/$itemId") }) {
 
-                }})
+                }
+            })
     }
 }
 
 @Composable
-fun StatisticsRow(color:Color, categoryIcon:String, categoryName: String, walletName: String, date: String, location: String?, amount: Int, comments: String?, type: String, editClickAction:() -> Unit, deleteClickAction:() -> Unit){
-    Row(){
-        Spacer(Modifier.size(10.dp, 20.dp).background(color = color))
+fun StatisticsRow(
+    color: Color,
+    categoryIcon: String,
+    categoryName: String,
+    walletName: String,
+    date: String,
+    location: String?,
+    amount: Int,
+    comments: String?,
+    type: String,
+    editClickAction: () -> Unit,
+    deleteClickAction: () -> Unit
+) {
+    Row() {
+        Spacer(
+            Modifier
+                .size(10.dp, 20.dp)
+                .background(color = color))
         ReusableRow(
             categoryIcon = categoryIcon,
-            categoryName = categoryName ,
-            walletName= walletName,
+            categoryName = categoryName,
+            walletName = walletName,
             date = date,
             location = location,
             amount = amount,
             comments = comments,
             type = type,
             editClickAction = editClickAction,
-        deleteClickAction = deleteClickAction)
+            deleteClickAction = deleteClickAction
+        )
     }
 
 }
@@ -202,9 +226,9 @@ fun <T> StatementBody(
     incomes: List<T>,
     colors: (T) -> Color,
     amounts: (T) -> Float,
-    totalAmount:Int,
+    totalAmount: Int,
     row: @Composable (T) -> Unit
-    ) {
+) {
     Column() {
         Box(Modifier.padding(16.dp)) {
             val accountsProportion = transactions.extractProportions { amounts(it) }
