@@ -13,6 +13,7 @@ import com.example.wallet.model.response.transactions.AllTransactionWalletsRespo
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponse
+import com.example.wallet.model.response.transactions.SecondAPI.TopExpenseCategoryWithAmountResponse
 import com.example.wallet.requests.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -73,6 +74,16 @@ class WalletWebService {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
         Log.d("INFO", "Authorization header: $authHeader")
         return api.getCategoryFilteredExpenses(authHeader = authHeader, categoryId = categoryId)
+    }
+
+    suspend fun getTopExpenseCategory(authToken: String?):TopExpenseCategoryWithAmountResponse{
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.getTopExpenseCategory(authHeader = authHeader)
+    }
+
+    suspend fun getTopIncomeCategory(authToken: String?):TopExpenseCategoryWithAmountResponse{
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.getTopIncomeCategory(authHeader = authHeader)
     }
 
     suspend fun getWalletFilteredExpenses(
@@ -187,6 +198,15 @@ class WalletWebService {
             @Path("id") categoryId: Int
         ): SecondAllExpensesResponse
 
+        @GET("expanseCategories2/topExpenseCategory")
+        suspend fun getTopExpenseCategory(
+            @Header("Authorization") authHeader: String
+        ): TopExpenseCategoryWithAmountResponse
+
+        @GET("expanseCategories2/topIncomeCategory")
+        suspend fun getTopIncomeCategory(
+            @Header("Authorization") authHeader: String
+        ): TopExpenseCategoryWithAmountResponse
         @DELETE("expanses2/{id}")
         suspend fun deleteTransactionFromDb(
             @Path("id") expanseId: Int,

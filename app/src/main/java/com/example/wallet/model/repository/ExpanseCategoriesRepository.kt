@@ -5,6 +5,7 @@ import com.example.wallet.model.response.AllExpanseCategoriesResponse
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
+import com.example.wallet.model.response.transactions.SecondAPI.TopExpenseCategoryWithAmountResponse
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import java.lang.Exception
 
@@ -38,6 +39,16 @@ object ExpanseCategoriesRepository {
         }
         throw Exception("No category found!")
 
+    }
+
+    suspend fun getTopExpenseCategory(authToken: String?): TopExpenseCategoryWithAmountResponse {
+        val topExpenseCategory = service.getTopExpenseCategory(authToken)
+        return topExpenseCategory
+    }
+
+    suspend fun getTopIncomeCategory(authToken: String?): TopExpenseCategoryWithAmountResponse {
+        val topExpenseCategory = service.getTopIncomeCategory(authToken)
+        return topExpenseCategory
     }
 
     suspend fun editCategoryInDb(

@@ -20,6 +20,7 @@ import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
+import com.example.wallet.model.response.transactions.SecondAPI.TopExpenseCategoryWithAmountResponse
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.model.viewmodel.transactions.ReportViewModel
 import com.example.wallet.model.viewmodel.transactions.ReportViewModelFactory
@@ -61,10 +62,10 @@ fun ReportScreen (navController: NavHostController){
         TopIncomeTransaction(topIncome)
         Spacer(modifier = Modifier.padding(15.dp))
 
-        TopExpenseCategory(topExpenseCategory, 999)
+        TopExpenseCategory(topExpenseCategory)
         //PieChart of categories with respect to expenses
         //List of all categories with colors
-        TopIncomeCategory(topIncomeCategory, 999)
+        TopIncomeCategory(topIncomeCategory)
         //PieChart of categories with respect to Incomes
         //List of all categories with colors
         Spacer(modifier = Modifier.padding(15.dp))
@@ -79,10 +80,10 @@ fun ReportScreen (navController: NavHostController){
 }
 
 @Composable
-fun TopIncomeWallet(topIncomeWallet: SecondAllWalletsResponseItem, amount: Int) {
+fun TopIncomeWallet(topIncomeWallet: SecondAllWalletsResponseItem, amount:Int) {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
 
-        Text("Top income wallet: ${topIncomeWallet.walletName} - ${amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+        Text("Top income wallet: ${topIncomeWallet.walletName} + ${amount} $",style = MaterialTheme.typography.h6, color = Color.White)
     }
 }
 
@@ -95,17 +96,17 @@ fun TopExpenseWallet(topExpenseWallet: SecondAllWalletsResponseItem, amount: Int
 }
 
 @Composable
-fun TopIncomeCategory(topIncomeCategory: SecondAllExpenseCategoriesResponseItem, amount: Int) {
+fun TopIncomeCategory(topIncomeCategory: TopExpenseCategoryWithAmountResponse) {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-        Text("Top income category: ${topIncomeCategory.expanseCategoryName} - ${amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+        Text("Top income category: ${topIncomeCategory.category.expanseCategoryName}${topIncomeCategory.category.icon} + ${topIncomeCategory.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
 
     }
 }
 
 @Composable
-fun TopExpenseCategory(topExpenseCategory: SecondAllExpenseCategoriesResponseItem, amount: Int) {
+fun TopExpenseCategory(topExpenseCategory: TopExpenseCategoryWithAmountResponse) {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-        Text("Top expense category: ${topExpenseCategory.expanseCategoryName} - ${amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+        Text("Top expense category: ${topExpenseCategory.category.expanseCategoryName}${topExpenseCategory.category.icon} - ${topExpenseCategory.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
     }
 
 }
