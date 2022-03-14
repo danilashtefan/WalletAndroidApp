@@ -17,7 +17,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.repository.DataStorePreferenceRepository
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.model.viewmodel.transactions.ReportViewModel
 import com.example.wallet.model.viewmodel.transactions.ReportViewModelFactory
@@ -37,6 +39,12 @@ fun ReportScreen (navController: NavHostController){
     var topExpense = viewModel.topExpense.value
     var topIncome = viewModel.topIncome.value
 
+    var topExpenseCategory = viewModel.topExpenseCategory.value
+    var topIncomeCategory = viewModel.topIncomeCategory.value
+
+    var topExpenseWallet = viewModel.topExpenseWallet.value
+    var topIncomeWallet = viewModel.topIncomeWallet.value
+
     if (!dataLoaded) {
         return;
     }
@@ -53,42 +61,52 @@ fun ReportScreen (navController: NavHostController){
         TopIncomeTransaction(topIncome)
         Spacer(modifier = Modifier.padding(15.dp))
 
-        TopExpenseCategory()
+        TopExpenseCategory(topExpenseCategory, 999)
         //PieChart of categories with respect to expenses
         //List of all categories with colors
-        TopIncomeCategory()
+        TopIncomeCategory(topIncomeCategory, 999)
         //PieChart of categories with respect to Incomes
         //List of all categories with colors
         Spacer(modifier = Modifier.padding(15.dp))
-        TopExpenseWallet()
+        TopExpenseWallet(topExpenseWallet, 999)
         //PieChart of Wallets with respect to expenses and total expenses indicated
         //List of of Wallets with Colors
-        TopIncomeWallet()
+        TopIncomeWallet(topIncomeWallet, 999)
         //PieChart of Wallets with respect to incomes and total incomes indicated
         //List of of Wallets with Colors
-
-
     }
 
 }
 
 @Composable
-fun TopIncomeWallet() {
+fun TopIncomeWallet(topIncomeWallet: SecondAllWalletsResponseItem, amount: Int) {
+    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+
+        Text("Top income wallet: ${topIncomeWallet.walletName} - ${amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    }
+}
+
+@Composable
+fun TopExpenseWallet(topExpenseWallet: SecondAllWalletsResponseItem, amount: Int) {
+    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+        Text("Top expense wallet: ${topExpenseWallet.walletName} - ${amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    }
 
 }
 
 @Composable
-fun TopExpenseWallet() {
+fun TopIncomeCategory(topIncomeCategory: SecondAllExpenseCategoriesResponseItem, amount: Int) {
+    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+        Text("Top income category: ${topIncomeCategory.expanseCategoryName} - ${amount} $",style = MaterialTheme.typography.h6, color = Color.White)
 
+    }
 }
 
 @Composable
-fun TopIncomeCategory() {
-
-}
-
-@Composable
-fun TopExpenseCategory() {
+fun TopExpenseCategory(topExpenseCategory: SecondAllExpenseCategoriesResponseItem, amount: Int) {
+    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+        Text("Top expense category: ${topExpenseCategory.expanseCategoryName} - ${amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    }
 
 }
 
