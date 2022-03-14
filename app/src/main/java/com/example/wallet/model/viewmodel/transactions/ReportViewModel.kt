@@ -2,13 +2,12 @@ package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
+import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.transactions.SecondAPI.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -32,13 +31,14 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
     var topExpenseCategory = mutableStateOf(TopExpenseCategoryWithAmountResponse())
     var topIncomeCategory = mutableStateOf(TopExpenseCategoryWithAmountResponse())
 
-    var topExpenseWallet = mutableStateOf(SecondAllWalletsResponseItem())
-    var topIncomeWallet = mutableStateOf(SecondAllWalletsResponseItem())
+    var topExpenseWallet = mutableStateOf(TopWalletWithAmountResponse())
+    var topIncomeWallet = mutableStateOf(TopWalletWithAmountResponse())
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while fetching to the report screen: $exception")
         }
+
         viewModelScope.launch(handler + Dispatchers.IO) {
             dataStorePreferenceRepository.getAccessToken.catch {
                 Log.d(
@@ -58,18 +58,23 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
             topExpenseCategory.value = getTopExpenseCategory()
             Log.d("INFO", "Top expense category: ${topExpenseCategory.value}")
             topIncomeCategory.value = getTopIncomeCategory()
-        }
+            topExpenseWallet.value = getTopExpenseWallet()
+            }
         dataLoaded.value = true
     }
 
 
     suspend fun getTopExpenseCategory(): TopExpenseCategoryWithAmountResponse {
-        Log.d("INFO", "getFiltered expenses is called")
         return ExpanseCategoriesRepository.getTopExpenseCategory(authToken)
     }
 
     suspend fun getTopIncomeCategory(): TopExpenseCategoryWithAmountResponse {
-        Log.d("INFO", "getFiltered expenses is called")
         return ExpanseCategoriesRepository.getTopIncomeCategory(authToken)
     }
+
+    suspend fun getTopExpenseWallet(): TopWalletWithAmountResponse{
+        return WalletRepository.getTopExpenseWallet(authToken)
+    }
+
+
 }

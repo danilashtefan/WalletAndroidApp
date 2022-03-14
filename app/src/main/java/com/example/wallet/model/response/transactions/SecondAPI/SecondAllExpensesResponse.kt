@@ -30,6 +30,7 @@ data class SecondAllExpensesItem(
 
 data class Wallet(
     val currency: String= "",
+    val icon:String = "\uD83D\uDCB0",
     val id: Int = 0,
     val walletName: String= ""
 )

@@ -3,10 +3,7 @@ package com.example.wallet.model.repository
 import com.example.wallet.api.WalletWebService
 import com.example.wallet.model.response.SingleTransactionWalletResponse
 import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponse
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
+import com.example.wallet.model.response.transactions.SecondAPI.*
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditWalletRequest
 import java.lang.Exception
@@ -53,6 +50,11 @@ object WalletRepository {
 
     suspend fun deleteWallet(walletId: Int, authToken: String) {
         return service.deleteWalletFromDb(walletId, authToken)
+    }
+
+    suspend fun getTopExpenseWallet(authToken: String?): TopWalletWithAmountResponse {
+        val topExpenseCategory = service.getTopExpenseWallet(authToken)
+        return topExpenseCategory
     }
 
 

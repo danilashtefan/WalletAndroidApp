@@ -10,10 +10,7 @@ import com.example.wallet.model.response.SingleTransactionWalletResponse
 import com.example.wallet.model.response.login.LoginResponse
 import com.example.wallet.model.response.login.RegisterResponse
 import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
-import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponse
-import com.example.wallet.model.response.transactions.SecondAPI.TopExpenseCategoryWithAmountResponse
+import com.example.wallet.model.response.transactions.SecondAPI.*
 import com.example.wallet.requests.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -79,6 +76,11 @@ class WalletWebService {
     suspend fun getTopExpenseCategory(authToken: String?):TopExpenseCategoryWithAmountResponse{
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
         return api.getTopExpenseCategory(authHeader = authHeader)
+    }
+
+    suspend fun getTopExpenseWallet(authToken: String?): TopWalletWithAmountResponse {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.getTopExpenseWallet(authHeader = authHeader)
     }
 
     suspend fun getTopIncomeCategory(authToken: String?):TopExpenseCategoryWithAmountResponse{
@@ -207,6 +209,7 @@ class WalletWebService {
         suspend fun getTopIncomeCategory(
             @Header("Authorization") authHeader: String
         ): TopExpenseCategoryWithAmountResponse
+
         @DELETE("expanses2/{id}")
         suspend fun deleteTransactionFromDb(
             @Path("id") expanseId: Int,
@@ -233,6 +236,11 @@ class WalletWebService {
             @Path("id") categoryId: Int,
             @Header("Authorization") authHeader: String
         )
+
+        @GET("wallets2/topExpenseWallet")
+        suspend fun getTopExpenseWallet(
+            @Header("Authorization") authHeader: String
+        ): TopWalletWithAmountResponse
 
         @GET("expanseCategories")
         suspend fun getExpanseCategories(): AllExpanseCategoriesResponse
