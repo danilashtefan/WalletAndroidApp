@@ -12,9 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Book
-import androidx.compose.material.icons.filled.Money
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.rememberDrawerState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -98,12 +96,16 @@ fun BottomBar(navController: NavHostController, bottomBarState: MutableState<Boo
                         icon = Icons.Default.Add
                     ),
                     BottomNavigationItem(
-                        "Categories",
-                        route = "categories",
+                        "Statistics",
+                        route = "statistics",
                         icon = Icons.Default.Book
-                    )
+                    ),
+                    BottomNavigationItem(
+                        "Report",
+                        route = "report",
+                        icon = Icons.Filled.PieChart
+                    )),
 
-                ),
                 navController = navController,
                 onItemClick = {
                     navController.navigate(it.route)
@@ -124,12 +126,17 @@ fun UsersApplication(navController: NavHostController) {
             ExpansesScreen(navController, DataStorePreferenceRepository(LocalContext.current))
         }
 
-        composable("categories") {
+        composable("statistics") {
             ExpanseCategoriesScreen(
                 navHostController = navController,
                 DataStorePreferenceRepository(LocalContext.current)
             )
         }
+
+        composable("report") {
+            ReportScreen(navController = navController)
+        }
+
 
         composable("add") {
             AddScreen(
@@ -138,7 +145,8 @@ fun UsersApplication(navController: NavHostController) {
             )
         }
 
-        composable("categoryStatistics/{categoryId}",
+        composable(
+            "categoryStatistics/{categoryId}",
             arguments = listOf(navArgument("categoryId") {
                 type = NavType.IntType
             })
@@ -152,7 +160,8 @@ fun UsersApplication(navController: NavHostController) {
             }
         }
 
-        composable("walletStatistics/{walletId}",
+        composable(
+            "walletStatistics/{walletId}",
             arguments = listOf(navArgument("walletId") {
                 type = NavType.IntType
             })
@@ -166,7 +175,8 @@ fun UsersApplication(navController: NavHostController) {
             }
         }
 
-        composable("transactionDetails/{transactionId}",
+        composable(
+            "transactionDetails/{transactionId}",
             arguments = listOf(navArgument("transactionId") {
                 type = NavType.IntType
             })
@@ -180,7 +190,8 @@ fun UsersApplication(navController: NavHostController) {
             }
         }
 
-        composable("categoriesDetails/{categoryId}",
+        composable(
+            "categoriesDetails/{categoryId}",
             arguments = listOf(navArgument("categoryId") {
                 type = NavType.IntType
             })
@@ -193,7 +204,8 @@ fun UsersApplication(navController: NavHostController) {
                 )
             }
         }
-        composable("walletsDetails/{walletId}",
+        composable(
+            "walletsDetails/{walletId}",
             arguments = listOf(navArgument("walletId") {
                 type = NavType.IntType
             })

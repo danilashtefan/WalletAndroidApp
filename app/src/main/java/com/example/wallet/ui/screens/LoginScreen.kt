@@ -44,8 +44,8 @@ fun LoginScreen(
             modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            var showAlertDialog=  viewModel.showAlertDialog.value
-            if(showAlertDialog) {
+            var showAlertDialog = viewModel.showAlertDialog.value
+            if (showAlertDialog) {
                 OneButtonAlertDialogComponent(
                     bodyText = { Text(viewModel.dialogText.value, color = Color.White) },
                     buttonText = "DISMISS",
@@ -65,7 +65,6 @@ fun LoginScreen(
 }
 
 
-
 @Composable
 fun WelcomeText() {
     Text(
@@ -80,30 +79,29 @@ fun WelcomeText() {
 @Composable
 fun OneButtonAlertDialogComponent(
     onDismiss: () -> Unit,
-    bodyText:@Composable () -> Unit,
+    bodyText: @Composable () -> Unit,
     buttonText: String
 ) {
     val context = LocalContext.current
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            title = { Text(text = "Wallet", color = Color.White) },
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(text = "Wallet", color = Color.White) },
 
-            text = bodyText,
+        text = bodyText,
 
-            confirmButton = {
+        confirmButton = {
 
-                TextButton(
-                    onClick = onDismiss
-                ) {
+            TextButton(
+                onClick = onDismiss
+            ) {
 
-                    Text(buttonText, color = Color.White)
-                }
-            },
-            backgroundColor = colorResource(id = R.color.purple_200),
-            contentColor = Color.White
-        )
+                Text(buttonText, color = Color.White)
+            }
+        },
+        backgroundColor = colorResource(id = R.color.purple_200),
+        contentColor = Color.White
+    )
 }
-
 
 
 @Composable
@@ -167,15 +165,15 @@ fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
     Column() {
         Button(
             onClick = {
-                    var result = viewModel.login(
-                        LoginRequest(
-                            username = viewModel.username,
-                            password = viewModel.password
-                        )
+                var result = viewModel.login(
+                    LoginRequest(
+                        username = viewModel.username,
+                        password = viewModel.password
                     )
-                    if (result.equals("Success")) {
-                        navController.navigate("expanses")
-                    }
+                )
+                if (result.equals("Success")) {
+                    navController.navigate("expanses")
+                }
 
             }, modifier = Modifier
                 .padding(top = 25.dp)
