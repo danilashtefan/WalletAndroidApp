@@ -79,7 +79,7 @@ fun ReportScreen (navController: NavHostController){
 @Composable
 fun TopIncomeWallet(topIncomeWallet: TopWalletWithAmountResponse) {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-        Text("Top income wallet: ${topIncomeWallet.wallet.walletName} + ${topIncomeWallet.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+        Text("Top income wallet: ${topIncomeWallet.wallet.walletName}${topIncomeWallet.wallet.icon} + ${topIncomeWallet.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
     }
 }
 

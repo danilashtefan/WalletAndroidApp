@@ -57,5 +57,9 @@ object WalletRepository {
         return topExpenseCategory
     }
 
+    suspend fun getTopIncomeWallet(authToken: String?): TopWalletWithAmountResponse {
+        val topExpenseCategory = service.getTopIncomeWallet(authToken)
+        return topExpenseCategory
+    }
 
 }

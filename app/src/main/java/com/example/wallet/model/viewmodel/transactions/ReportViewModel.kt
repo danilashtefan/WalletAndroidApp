@@ -11,12 +11,13 @@ import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.transactions.SecondAPI.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class ReportViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository):
-    ViewModel(){
+class ReportViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
+    ViewModel() {
     var dataLoaded = mutableStateOf(false)
     var minDatePicked = mutableStateOf("1000-01-01")
     var maxDatePicked = mutableStateOf("3000-12-12")
@@ -34,11 +35,11 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
     var topExpenseWallet = mutableStateOf(TopWalletWithAmountResponse())
     var topIncomeWallet = mutableStateOf(TopWalletWithAmountResponse())
 
+
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while fetching to the report screen: $exception")
         }
-
         viewModelScope.launch(handler + Dispatchers.IO) {
             dataStorePreferenceRepository.getAccessToken.catch {
                 Log.d(
@@ -50,16 +51,18 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
                     Log.d("TOKEN", "Access token on report screen: $it")
                     authToken = it
                 }
+            dataLoaded.value = true;
         }
-            viewModelScope.launch(handler + Dispatchers.IO) {
-                while (authToken.equals("")) {
-                    Log.d("INFO", "Access token is not set up yet")
-                }
+
+        val dataFetchingJob: Job = viewModelScope.launch(handler + Dispatchers.IO) {
+            while (authToken.equals("")) {
+                Log.d("INFO", "Access token is not set up yet")
+            }
             topExpenseCategory.value = getTopExpenseCategory()
-            Log.d("INFO", "Top expense category: ${topExpenseCategory.value}")
             topIncomeCategory.value = getTopIncomeCategory()
             topExpenseWallet.value = getTopExpenseWallet()
-            }
+            topIncomeWallet.value = getTopIncomeWallet()
+        }
         dataLoaded.value = true
     }
 
@@ -72,8 +75,12 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
         return ExpanseCategoriesRepository.getTopIncomeCategory(authToken)
     }
 
-    suspend fun getTopExpenseWallet(): TopWalletWithAmountResponse{
+    suspend fun getTopExpenseWallet(): TopWalletWithAmountResponse {
         return WalletRepository.getTopExpenseWallet(authToken)
+    }
+
+    suspend fun getTopIncomeWallet(): TopWalletWithAmountResponse {
+        return WalletRepository.getTopIncomeWallet(authToken)
     }
 
 

@@ -88,6 +88,11 @@ class WalletWebService {
         return api.getTopIncomeCategory(authHeader = authHeader)
     }
 
+    suspend fun getTopIncomeWallet(authToken: String?):TopWalletWithAmountResponse{
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.getTopIncomeWallet(authHeader = authHeader)
+    }
+
     suspend fun getWalletFilteredExpenses(
         authToken: String?,
         walletId: Int
@@ -239,6 +244,11 @@ class WalletWebService {
 
         @GET("wallets2/topExpenseWallet")
         suspend fun getTopExpenseWallet(
+            @Header("Authorization") authHeader: String
+        ): TopWalletWithAmountResponse
+
+        @GET("wallets2/topIncomeWallet")
+        suspend fun getTopIncomeWallet(
             @Header("Authorization") authHeader: String
         ): TopWalletWithAmountResponse
 
