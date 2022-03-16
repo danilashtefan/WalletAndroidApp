@@ -3,7 +3,7 @@ package com.example.wallet.model.response.transactions.SecondAPI
 class SecondAllExpensesResponse : ArrayList<SecondAllExpensesItem>()
 
 data class Category(
-    val expanseCategoryName: String ="",
+    val expanseCategoryName: String = "",
     val icon: String ="",
     val id: Int = 0,
     val type: String = ""

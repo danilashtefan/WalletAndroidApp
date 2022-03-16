@@ -78,31 +78,76 @@ fun ReportScreen (navController: NavHostController){
 
 @Composable
 fun TopIncomeWallet(topIncomeWallet: TopWalletWithAmountResponse) {
-    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-        Text("Top income wallet: ${topIncomeWallet.wallet.walletName}${topIncomeWallet.wallet.icon} + ${topIncomeWallet.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    if(topIncomeWallet.wallet != null){
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+            Text("Top income wallet: ${topIncomeWallet.wallet.walletName}${topIncomeWallet.wallet.icon} + ${topIncomeWallet.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+        }
+    }else{
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+
+            Text(
+                "User has no wallets to determine top income wallet",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+        }
     }
 }
 
 @Composable
 fun TopExpenseWallet(topExpenseWallet: TopWalletWithAmountResponse) {
-    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
-        Text("Top expense wallet: ${topExpenseWallet.wallet.walletName}${topExpenseWallet.wallet.icon} - ${topExpenseWallet.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    if(topExpenseWallet.wallet != null){
+
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+            Text("Top expense wallet: ${topExpenseWallet.wallet.walletName}${topExpenseWallet.wallet.icon} - ${topExpenseWallet.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+        }
+    }else{
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+            Text(
+                "User has no wallets to determine top expense wallet",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+        }
     }
 
 }
 
 @Composable
 fun TopIncomeCategory(topIncomeCategory: TopExpenseCategoryWithAmountResponse) {
-    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-        Text("Top income category: ${topIncomeCategory.category.expanseCategoryName}${topIncomeCategory.category.icon} + ${topIncomeCategory.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
-
+    if(topIncomeCategory.category != null){
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+            Text("Top income category: ${topIncomeCategory.category.expanseCategoryName}${topIncomeCategory.category.icon} + ${topIncomeCategory.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+        }
+    }else{
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+            Text(
+                "User has no categories to determine top income category",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+        }
     }
 }
 
 @Composable
 fun TopExpenseCategory(topExpenseCategory: TopExpenseCategoryWithAmountResponse) {
-    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-        Text("Top expense category: ${topExpenseCategory.category.expanseCategoryName}${topExpenseCategory.category.icon} - ${topExpenseCategory.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    if (topExpenseCategory.category != null) {
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+            Text(
+                "Top expense category: ${topExpenseCategory.category.expanseCategoryName}${topExpenseCategory.category.icon} - ${topExpenseCategory.amount} $",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+        }
+    }else{
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+            Text(
+                "User has no categories to determine top expense category",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
+        }
     }
 
 }

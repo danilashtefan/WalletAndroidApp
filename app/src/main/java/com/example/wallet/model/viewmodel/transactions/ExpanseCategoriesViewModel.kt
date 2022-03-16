@@ -76,7 +76,8 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
             val transactionWallets = getFilteredWallets()
             transactionCetegoriesState.value = transactionCategories
             transactionWalletsState.value = transactionWallets
-            dataLoaded.value = true;
+            dataLoaded.value = true
+
         }
     }
 

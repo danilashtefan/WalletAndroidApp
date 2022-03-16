@@ -29,7 +29,7 @@ class WalletWebService {
             //OFFICE
             //baseUrl("http://192.168.0.116:8080/api/")
             //Iulia
-            .baseUrl("http://192.168.1.70:8080/api/")
+            .baseUrl("http://192.168.1.67:8080/api/")
             //.baseUrl("http://192.168.1.80:8080/api/")
             //.baseUrl("http://152.66.156.198:8080/api/")
             .addConverterFactory(GsonConverterFactory.create())

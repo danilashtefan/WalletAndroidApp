@@ -9,12 +9,9 @@ import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.transactions.SecondAPI.*
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class ReportViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
     ViewModel() {
@@ -40,6 +37,8 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while fetching to the report screen: $exception")
         }
+
+
         viewModelScope.launch(handler + Dispatchers.IO) {
             dataStorePreferenceRepository.getAccessToken.catch {
                 Log.d(
@@ -51,7 +50,6 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
                     Log.d("TOKEN", "Access token on report screen: $it")
                     authToken = it
                 }
-            dataLoaded.value = true;
         }
 
         val dataFetchingJob: Job = viewModelScope.launch(handler + Dispatchers.IO) {
@@ -62,8 +60,8 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
             topIncomeCategory.value = getTopIncomeCategory()
             topExpenseWallet.value = getTopExpenseWallet()
             topIncomeWallet.value = getTopIncomeWallet()
+            dataLoaded.value = true;
         }
-        dataLoaded.value = true
     }
 
 
