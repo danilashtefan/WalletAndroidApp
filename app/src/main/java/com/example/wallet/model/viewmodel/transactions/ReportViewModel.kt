@@ -23,6 +23,8 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
 
     var expandedCalendarMin = mutableStateOf(false)
     var expandedCalendarMax = mutableStateOf(false)
+
+    var allCategories = mutableStateOf(ArrayList<TopExpenseCategoryWithAmountResponse>())
     var topExpense = mutableStateOf(SecondAllExpensesItem())
     var topIncome = mutableStateOf(SecondAllExpensesItem())
 
@@ -60,11 +62,14 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
             topIncomeCategory.value = getTopIncomeCategory()
             topExpenseWallet.value = getTopExpenseWallet()
             topIncomeWallet.value = getTopIncomeWallet()
+            allCategories.value = getCategoriesWithExpenses() as ArrayList<TopExpenseCategoryWithAmountResponse>
             dataLoaded.value = true;
         }
     }
 
-
+    suspend fun getCategoriesWithExpenses():List<TopExpenseCategoryWithAmountResponse>{
+        return ExpanseCategoriesRepository.getCategoriesWithExpenses(authToken)
+    }
     suspend fun getTopExpenseCategory(): TopExpenseCategoryWithAmountResponse {
         return ExpanseCategoriesRepository.getTopExpenseCategory(authToken)
     }

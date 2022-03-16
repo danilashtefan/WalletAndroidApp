@@ -37,6 +37,7 @@ fun ReportScreen (navController: NavHostController){
     var topExpense = viewModel.topExpense.value
     var topIncome = viewModel.topIncome.value
 
+    var allCategories = viewModel.allCategories.value
     var topExpenseCategory = viewModel.topExpenseCategory.value
     var topIncomeCategory = viewModel.topIncomeCategory.value
 

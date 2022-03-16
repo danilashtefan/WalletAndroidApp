@@ -73,7 +73,12 @@ class WalletWebService {
         return api.getCategoryFilteredExpenses(authHeader = authHeader, categoryId = categoryId)
     }
 
-    suspend fun getTopExpenseCategory(authToken: String?):TopExpenseCategoryWithAmountResponse{
+    suspend fun getCategoriesWithExpenses(authToken: String?): List<TopExpenseCategoryWithAmountResponse> {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.getCategoriesWithExpenses(authHeader = authHeader)
+    }
+
+    suspend fun getTopExpenseCategory(authToken: String?): TopExpenseCategoryWithAmountResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
         return api.getTopExpenseCategory(authHeader = authHeader)
     }
@@ -83,12 +88,12 @@ class WalletWebService {
         return api.getTopExpenseWallet(authHeader = authHeader)
     }
 
-    suspend fun getTopIncomeCategory(authToken: String?):TopExpenseCategoryWithAmountResponse{
+    suspend fun getTopIncomeCategory(authToken: String?): TopExpenseCategoryWithAmountResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
         return api.getTopIncomeCategory(authHeader = authHeader)
     }
 
-    suspend fun getTopIncomeWallet(authToken: String?):TopWalletWithAmountResponse{
+    suspend fun getTopIncomeWallet(authToken: String?): TopWalletWithAmountResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
         return api.getTopIncomeWallet(authHeader = authHeader)
     }
@@ -204,6 +209,9 @@ class WalletWebService {
             @Header("Authorization") authHeader: String,
             @Path("id") categoryId: Int
         ): SecondAllExpensesResponse
+
+        @GET("expanseCategories2/expenseCategoriesWithExpenses")
+        suspend fun getCategoriesWithExpenses(@Header("Authorization") authHeader: String): List<TopExpenseCategoryWithAmountResponse>
 
         @GET("expanseCategories2/topExpenseCategory")
         suspend fun getTopExpenseCategory(

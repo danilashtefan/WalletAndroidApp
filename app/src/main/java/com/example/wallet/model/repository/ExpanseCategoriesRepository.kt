@@ -41,6 +41,11 @@ object ExpanseCategoriesRepository {
 
     }
 
+    suspend fun getCategoriesWithExpenses(authToken: String?): List<TopExpenseCategoryWithAmountResponse> {
+        val expenseCategories = service.getCategoriesWithExpenses(authToken)
+        return expenseCategories
+    }
+
     suspend fun getTopExpenseCategory(authToken: String?): TopExpenseCategoryWithAmountResponse {
         val topExpenseCategory = service.getTopExpenseCategory(authToken)
         return topExpenseCategory
