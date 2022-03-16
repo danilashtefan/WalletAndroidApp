@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.wallet.model.CategoryWrapperWithColor
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.*
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
@@ -62,6 +63,30 @@ fun ReportScreen (navController: NavHostController){
 
         TopExpenseCategory(topExpenseCategory)
         //PieChart of categories with respect to expenses
+//        StatementBody(listOfButtons = ArrayList<String>(),
+//            transactions = allCategories,
+//            expenses = ArrayList<CategoryWrapperWithColor>(),
+//            incomes = ArrayList<CategoryWrapperWithColor>(),
+//            colors ={item ->item.color},
+//            amounts = { item -> item.category.expenseAmount.toFloat() },
+//            totalAmount = totalAmount,
+//
+//            row = { item ->
+//                val itemId = item.transaction.id
+//                StatisticsRow(
+//                    color = item.color,
+//                    categoryIcon = item.transaction.categoryIcon,
+//                    categoryName = item.transaction.categoryName,
+//                    walletName = item.transaction.walletName,
+//                    date = item.transaction.date,
+//                    location = item.transaction.location,
+//                    amount = item.transaction.amount,
+//                    comments = item.transaction.comments,
+//                    type = item.transaction.type,
+//                    editClickAction = { navController.navigate("transactionDetails/$itemId") }) {
+//
+//                }
+//            })
         //List of all categories with colors
         TopIncomeCategory(topIncomeCategory)
         //PieChart of categories with respect to Incomes
@@ -76,6 +101,8 @@ fun ReportScreen (navController: NavHostController){
     }
 
 }
+
+
 
 @Composable
 fun TopIncomeWallet(topIncomeWallet: TopWalletWithAmountResponse) {
@@ -118,7 +145,7 @@ fun TopExpenseWallet(topExpenseWallet: TopWalletWithAmountResponse) {
 fun TopIncomeCategory(topIncomeCategory: TopExpenseCategoryWithAmountResponse) {
     if(topIncomeCategory.category != null){
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-            Text("Top income category: ${topIncomeCategory.category.expanseCategoryName}${topIncomeCategory.category.icon} + ${topIncomeCategory.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+            Text("Top income category: ${topIncomeCategory.category.expanseCategoryName}${topIncomeCategory.category.icon} + ${topIncomeCategory.incomeAmount} $",style = MaterialTheme.typography.h6, color = Color.White)
         }
     }else{
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
@@ -136,7 +163,7 @@ fun TopExpenseCategory(topExpenseCategory: TopExpenseCategoryWithAmountResponse)
     if (topExpenseCategory.category != null) {
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                "Top expense category: ${topExpenseCategory.category.expanseCategoryName}${topExpenseCategory.category.icon} - ${topExpenseCategory.amount} $",
+                "Top expense category: ${topExpenseCategory.category.expanseCategoryName}${topExpenseCategory.category.icon} - ${topExpenseCategory.expenseAmount} $",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )

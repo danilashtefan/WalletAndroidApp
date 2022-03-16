@@ -2,9 +2,12 @@ package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.wallet.model.CategoryWrapperWithColor
+import com.example.wallet.model.TransactionWrapperWithColor
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.WalletRepository
@@ -24,7 +27,9 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
     var expandedCalendarMin = mutableStateOf(false)
     var expandedCalendarMax = mutableStateOf(false)
 
-    var allCategories = mutableStateOf(ArrayList<TopExpenseCategoryWithAmountResponse>())
+    var allCategories = mutableStateOf(emptyList<CategoryWrapperWithColor>())
+    var totalCategoriesExpenses = mutableStateOf(0)
+    var totalCategoriesIncomes = mutableStateOf(0)
     var topExpense = mutableStateOf(SecondAllExpensesItem())
     var topIncome = mutableStateOf(SecondAllExpensesItem())
 
@@ -62,7 +67,23 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
             topIncomeCategory.value = getTopIncomeCategory()
             topExpenseWallet.value = getTopExpenseWallet()
             topIncomeWallet.value = getTopIncomeWallet()
-            allCategories.value = getCategoriesWithExpenses() as ArrayList<TopExpenseCategoryWithAmountResponse>
+            var categoriesWithExpenses = getCategoriesWithExpenses() as ArrayList<TopExpenseCategoryWithAmountResponse>
+            var wrappedCategoriesWithExpenses = arrayListOf<CategoryWrapperWithColor>()
+            for(category in categoriesWithExpenses){
+                wrappedCategoriesWithExpenses.add(CategoryWrapperWithColor(
+                    category = category, Color(
+                        (0..255).random(),
+                        (0..255).random(),
+                        (0..255).random())
+                ))
+            }
+            allCategories.value = wrappedCategoriesWithExpenses
+
+
+
+
+
+
             dataLoaded.value = true;
         }
     }

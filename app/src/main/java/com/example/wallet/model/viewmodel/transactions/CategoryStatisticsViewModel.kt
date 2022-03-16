@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.wallet.model.CategoryWrapperWithColor
+import com.example.wallet.model.TransactionWrapperWithColor
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
@@ -25,9 +25,9 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
     var dataLoaded = mutableStateOf(false)
 
     //Transactions of the particular wallet
-    val transactionState = mutableStateOf((emptyList<CategoryWrapperWithColor>()))
-    var expanseState = mutableStateOf((emptyList<CategoryWrapperWithColor>()))
-    var incomeState = mutableStateOf((emptyList<CategoryWrapperWithColor>()))
+    val transactionState = mutableStateOf((emptyList<TransactionWrapperWithColor>()))
+    var expanseState = mutableStateOf((emptyList<TransactionWrapperWithColor>()))
+    var incomeState = mutableStateOf((emptyList<TransactionWrapperWithColor>()))
     var typeOfTransactionsToDisplay = mutableStateOf("expense")
 
     //Total amount to show on the screen
@@ -63,7 +63,7 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
                 Log.d("INFO", "Access token is not set up yet")
             }
             var transactions = getFilteredExpenses()
-            var wrappedTransactions = arrayListOf<CategoryWrapperWithColor>()
+            var wrappedTransactions = arrayListOf<TransactionWrapperWithColor>()
             val rnd = Random()
             for (transaction in transactions){
                 val transactionCategoryNameAndIdAndIcon = getAndSetCategoriesForTransactions(transaction.id)
@@ -73,7 +73,7 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
                 val transactionWalletNameAndId = getAndSetWalletForTransactions(transaction.id)
                 transaction.walletName = transactionWalletNameAndId.first
                 transaction.walletId = transactionWalletNameAndId.second
-                wrappedTransactions.add(CategoryWrapperWithColor(
+                wrappedTransactions.add(TransactionWrapperWithColor(
                     transaction = transaction, Color(
                     (0..255).random(),
                     (0..255).random(),
