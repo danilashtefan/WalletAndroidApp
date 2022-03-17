@@ -27,7 +27,7 @@ import com.example.wallet.model.viewmodel.transactions.ReportViewModel
 import com.example.wallet.model.viewmodel.transactions.ReportViewModelFactory
 
 @Composable
-fun ReportScreen (navController: NavHostController){
+fun ReportScreen(navController: NavHostController) {
 
     val viewModel: ReportViewModel = viewModel(
         factory = ReportViewModelFactory(
@@ -49,6 +49,7 @@ fun ReportScreen (navController: NavHostController){
     var topIncomeWallet = viewModel.topIncomeWallet.value
 
     var totalCategoriesExpenses = viewModel.totalCategoriesExpenses.value
+    var totalCategoriesIncomes = viewModel.totalCategoriesIncomes.value
 
     if (!dataLoaded) {
         return;
@@ -87,7 +88,7 @@ fun ReportScreen (navController: NavHostController){
                                 name = item.category.category.expanseCategoryName,
                                 type = item.category.category.type,
                                 id = itemId,
-                                route = "categoriesDetails/$itemId",
+                                route = "categoryStatistics/$itemId",
                                 editClickAction = { navController.navigate("categoriesDetails/$itemId") },
                                 deleteClickAction = { },
                                 navController = navController
@@ -99,8 +100,36 @@ fun ReportScreen (navController: NavHostController){
         //List of all categories with colors
         item {
             TopIncomeCategory(topIncomeCategory)
-            //PieChart of categories with respect to Incomes
-            //List of all categories with colors
+        }
+        item {
+            StatementBody(listOfButtons = ArrayList<String>(),
+                transactions = allCategories,
+                expenses = ArrayList<CategoryWrapperWithColor>(),
+                incomes = ArrayList<CategoryWrapperWithColor>(),
+                colors = { item -> item.color },
+                amounts = { item -> item.category.incomeAmount.toFloat() },
+                totalAmount = totalCategoriesIncomes,
+                list = {
+                    LazyRow(modifier = Modifier.padding(12.dp)) {
+                        items(allCategories) { item ->
+                            val itemId = item.category.category.id
+                            CategoryAndWalletStatisticsRow(
+                                color = item.color,
+                                icon = item.category.category.icon,
+                                amount = item.category.incomeAmount,
+                                name = item.category.category.expanseCategoryName,
+                                type = item.category.category.type,
+                                id = itemId,
+                                route = "categoryStatistics/$itemId",
+                                editClickAction = { navController.navigate("categoriesDetails/$itemId") },
+                                deleteClickAction = { },
+                                navController = navController
+                            )
+                        }
+                    }
+                })
+        }
+        item {
             Spacer(modifier = Modifier.padding(15.dp))
             TopExpenseWallet(topExpenseWallet)
             //PieChart of Wallets with respect to expenses and total expenses indicated
@@ -110,8 +139,9 @@ fun ReportScreen (navController: NavHostController){
             //List of of Wallets with Colors
         }
     }
-
 }
+
+
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -126,12 +156,13 @@ private fun CategoryAndWalletStatisticsRow(
     editClickAction: () -> Unit,
     deleteClickAction: () -> Unit,
     navController: NavHostController
-){
+) {
     Row() {
         Spacer(
             Modifier
                 .size(10.dp, 20.dp)
-                .background(color = color))
+                .background(color = color)
+        )
         ReusableCategoryAndWalletRow(
             icon = icon,
             name = name,
@@ -149,12 +180,16 @@ private fun CategoryAndWalletStatisticsRow(
 
 @Composable
 fun TopIncomeWallet(topIncomeWallet: TopWalletWithAmountResponse) {
-    if(topIncomeWallet.wallet != null){
-        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-            Text("Top income wallet: ${topIncomeWallet.wallet.walletName}${topIncomeWallet.wallet.icon} + ${topIncomeWallet.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    if (topIncomeWallet.wallet != null) {
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+            Text(
+                "Top income wallet: ${topIncomeWallet.wallet.walletName}${topIncomeWallet.wallet.icon} + ${topIncomeWallet.amount} $",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
         }
-    }else{
-        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+    } else {
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
 
             Text(
                 "User has no wallets to determine top income wallet",
@@ -167,13 +202,17 @@ fun TopIncomeWallet(topIncomeWallet: TopWalletWithAmountResponse) {
 
 @Composable
 fun TopExpenseWallet(topExpenseWallet: TopWalletWithAmountResponse) {
-    if(topExpenseWallet.wallet != null){
+    if (topExpenseWallet.wallet != null) {
 
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
-            Text("Top expense wallet: ${topExpenseWallet.wallet.walletName}${topExpenseWallet.wallet.icon} - ${topExpenseWallet.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+            Text(
+                "Top expense wallet: ${topExpenseWallet.wallet.walletName}${topExpenseWallet.wallet.icon} - ${topExpenseWallet.amount} $",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
         }
-    }else{
-        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+    } else {
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
                 "User has no wallets to determine top expense wallet",
                 style = MaterialTheme.typography.h6,
@@ -186,12 +225,16 @@ fun TopExpenseWallet(topExpenseWallet: TopWalletWithAmountResponse) {
 
 @Composable
 fun TopIncomeCategory(topIncomeCategory: TopExpenseCategoryWithAmountResponse) {
-    if(topIncomeCategory.category != null){
-        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-            Text("Top income category: ${topIncomeCategory.category.expanseCategoryName}${topIncomeCategory.category.icon} + ${topIncomeCategory.incomeAmount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    if (topIncomeCategory.category != null) {
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+            Text(
+                "Top income category: ${topIncomeCategory.category.expanseCategoryName}${topIncomeCategory.category.icon} + ${topIncomeCategory.incomeAmount} $",
+                style = MaterialTheme.typography.h6,
+                color = Color.White
+            )
         }
-    }else{
-        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
+    } else {
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
                 "User has no categories to determine top income category",
                 style = MaterialTheme.typography.h6,
@@ -211,7 +254,7 @@ fun TopExpenseCategory(topExpenseCategory: TopExpenseCategoryWithAmountResponse)
                 color = Color.White
             )
         }
-    }else{
+    } else {
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
                 "User has no categories to determine top expense category",
@@ -225,21 +268,29 @@ fun TopExpenseCategory(topExpenseCategory: TopExpenseCategoryWithAmountResponse)
 
 @Composable
 fun TopIncomeTransaction(income: SecondAllExpensesItem) {
-    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-        Text("Top income transaction: ${income.name} - ${income.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+        Text(
+            "Top income transaction: ${income.name} - ${income.amount} $",
+            style = MaterialTheme.typography.h6,
+            color = Color.White
+        )
     }
 }
 
 @Composable
 fun TopExpenseTransaction(expense: SecondAllExpensesItem) {
-    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)){
-        Text("Top expense transaction: ${expense.name} - ${expense.amount} $",style = MaterialTheme.typography.h6, color = Color.White)
+    Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+        Text(
+            "Top expense transaction: ${expense.name} - ${expense.amount} $",
+            style = MaterialTheme.typography.h6,
+            color = Color.White
+        )
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun PeriodPicking(viewModel: ReportViewModel){
+fun PeriodPicking(viewModel: ReportViewModel) {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
         Text(text = "Period: ", style = MaterialTheme.typography.h6, color = Color.White)
         OutlinedButton(onClick = {
