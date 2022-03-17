@@ -83,6 +83,7 @@ fun ReportScreen (navController: NavHostController){
                             CategoryAndWalletStatisticsRow(
                                 color = item.color,
                                 icon = item.category.category.icon,
+                                amount = item.category.expenseAmount,
                                 name = item.category.category.expanseCategoryName,
                                 type = item.category.category.type,
                                 id = itemId,
@@ -116,6 +117,7 @@ fun ReportScreen (navController: NavHostController){
 @Composable
 private fun CategoryAndWalletStatisticsRow(
     color: Color,
+    amount: Int,
     icon: String,
     name: String,
     type: String,
@@ -133,6 +135,8 @@ private fun CategoryAndWalletStatisticsRow(
         ReusableCategoryAndWalletRow(
             icon = icon,
             name = name,
+            amount = amount,
+            displayAmount = true,
             type = type,
             id = id,
             route = route,

@@ -144,6 +144,8 @@ fun CategoriesListSection(
                 route = "categoryStatistics/$categoryId",
                 icon = category.icon,
                 name = category.expanseCategoryName,
+                amount = 0,
+                displayAmount = false,
                 type = category.type,
                 id = categoryId,
                 editClickAction = {
@@ -174,6 +176,8 @@ fun WalletsListSection(
                 icon = wallet.icon,
                 route = "walletStatistics/$walletId",
                 name = wallet.walletName,
+                amount = 0,
+                displayAmount = false,
                 type = wallet.currency,
                 id = walletId,
                 editClickAction = {
@@ -229,6 +233,8 @@ fun TwoButtonAlertDialogComponent(
 @Composable
 fun ReusableCategoryAndWalletRow(
     icon: String,
+    amount: Int,
+    displayAmount : Boolean,
     name: String,
     type: String,
     id: Int,
@@ -268,6 +274,9 @@ fun ReusableCategoryAndWalletRow(
 
                 Spacer(Modifier.weight(0.3f))
                 Spacer(Modifier.width(16.dp))
+                if(displayAmount){
+                    Text("$amount $")
+                }
                 IconButton(onClick = { navController.navigate(route) }) {
                     Icon(
                         imageVector = Icons.Filled.ChevronRight,
