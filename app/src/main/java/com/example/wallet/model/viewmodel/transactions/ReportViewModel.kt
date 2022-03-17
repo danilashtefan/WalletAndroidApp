@@ -79,10 +79,15 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
             }
             allCategories.value = wrappedCategoriesWithExpenses
 
+            var expenseAmountTemp = 0
+            var incomeAmountTemp = 0
 
-
-
-
+            for(category in allCategories.value){
+                expenseAmountTemp += category.category.expenseAmount
+                incomeAmountTemp += category.category.incomeAmount
+            }
+            totalCategoriesExpenses.value = expenseAmountTemp
+            totalCategoriesIncomes.value = incomeAmountTemp
 
             dataLoaded.value = true;
         }

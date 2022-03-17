@@ -7,13 +7,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,8 +27,6 @@ import androidx.navigation.NavHostController
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.viewmodel.transactions.CategoryStatisticsViewModel
 import com.example.wallet.model.viewmodel.transactions.CategoryStatisticsViewModelFactory
-import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModel
-import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModelFactory
 import java.util.*
 
 private const val DividerLengthInDegrees = 1.8f
@@ -89,28 +84,29 @@ fun CategoryStatisticsScreen(
             colors = { item -> item.color },
             amounts = { item -> item.transaction.amount.toFloat() },
             totalAmount = totalAmount,
+            list = { LazyColumn(modifier = Modifier.padding(12.dp)) {
+                items(transactionsToShow) { item ->
+                    val itemId = item.transaction.id
+                    TransactionStatisticsRow(
+                        color = item.color,
+                        categoryIcon = item.transaction.categoryIcon,
+                        categoryName = item.transaction.categoryName,
+                        walletName = item.transaction.walletName,
+                        date = item.transaction.date,
+                        location = item.transaction.location,
+                        amount = item.transaction.amount,
+                        comments = item.transaction.comments,
+                        type = item.transaction.type,
+                        editClickAction = { navController.navigate("transactionDetails/$itemId") }) {
 
-            row = { item ->
-                val itemId = item.transaction.id
-                StatisticsRow(
-                    color = item.color,
-                    categoryIcon = item.transaction.categoryIcon,
-                    categoryName = item.transaction.categoryName,
-                    walletName = item.transaction.walletName,
-                    date = item.transaction.date,
-                    location = item.transaction.location,
-                    amount = item.transaction.amount,
-                    comments = item.transaction.comments,
-                    type = item.transaction.type,
-                    editClickAction = { navController.navigate("transactionDetails/$itemId") }) {
-
+                    }
                 }
-            })
+            }})
     }
 }
 
 @Composable
-fun StatisticsRow(
+fun TransactionStatisticsRow(
     color: Color,
     categoryIcon: String,
     categoryName: String,
@@ -227,7 +223,7 @@ fun <T> StatementBody(
     colors: (T) -> Color,
     amounts: (T) -> Float,
     totalAmount: Int,
-    row: @Composable (T) -> Unit
+    list:@Composable () -> Unit
 ) {
     Column() {
         Box(Modifier.padding(16.dp)) {
@@ -254,11 +250,7 @@ fun <T> StatementBody(
                 )
             }
         }
-        LazyColumn(modifier = Modifier.padding(12.dp)) {
-            items(transactions) { item ->
-                row(item)
-            }
-        }
+            list()
 
     }
 

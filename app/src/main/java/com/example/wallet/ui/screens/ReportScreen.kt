@@ -5,6 +5,9 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
@@ -45,64 +48,100 @@ fun ReportScreen (navController: NavHostController){
     var topExpenseWallet = viewModel.topExpenseWallet.value
     var topIncomeWallet = viewModel.topIncomeWallet.value
 
+    var totalCategoriesExpenses = viewModel.totalCategoriesExpenses.value
+
     if (!dataLoaded) {
         return;
     }
 
-    Column(
+    LazyColumn(
         modifier = Modifier
             .background(Color(0xFFBB87E4))
     ) {
-        LogoSection(pictureSize = 90)
-        Spacer(modifier = Modifier.padding(5.dp))
-        PeriodPicking(viewModel = viewModel)
-        Spacer(modifier = Modifier.padding(15.dp))
-        TopExpenseTransaction(topExpense)
-        TopIncomeTransaction(topIncome)
-        Spacer(modifier = Modifier.padding(15.dp))
-
-        TopExpenseCategory(topExpenseCategory)
-        //PieChart of categories with respect to expenses
-//        StatementBody(listOfButtons = ArrayList<String>(),
-//            transactions = allCategories,
-//            expenses = ArrayList<CategoryWrapperWithColor>(),
-//            incomes = ArrayList<CategoryWrapperWithColor>(),
-//            colors ={item ->item.color},
-//            amounts = { item -> item.category.expenseAmount.toFloat() },
-//            totalAmount = totalAmount,
-//
-//            row = { item ->
-//                val itemId = item.transaction.id
-//                StatisticsRow(
-//                    color = item.color,
-//                    categoryIcon = item.transaction.categoryIcon,
-//                    categoryName = item.transaction.categoryName,
-//                    walletName = item.transaction.walletName,
-//                    date = item.transaction.date,
-//                    location = item.transaction.location,
-//                    amount = item.transaction.amount,
-//                    comments = item.transaction.comments,
-//                    type = item.transaction.type,
-//                    editClickAction = { navController.navigate("transactionDetails/$itemId") }) {
-//
-//                }
-//            })
+        item {
+            LogoSection(pictureSize = 90)
+            Spacer(modifier = Modifier.padding(5.dp))
+            PeriodPicking(viewModel = viewModel)
+            Spacer(modifier = Modifier.padding(15.dp))
+            TopExpenseTransaction(topExpense)
+            TopIncomeTransaction(topIncome)
+            Spacer(modifier = Modifier.padding(15.dp))
+            TopExpenseCategory(topExpenseCategory)
+        }
+        item { //PieChart of categories with respect to expenses
+            StatementBody(listOfButtons = ArrayList<String>(),
+                transactions = allCategories,
+                expenses = ArrayList<CategoryWrapperWithColor>(),
+                incomes = ArrayList<CategoryWrapperWithColor>(),
+                colors = { item -> item.color },
+                amounts = { item -> item.category.expenseAmount.toFloat() },
+                totalAmount = totalCategoriesExpenses,
+                list = {
+                    LazyRow(modifier = Modifier.padding(12.dp)) {
+                        items(allCategories) { item ->
+                            val itemId = item.category.category.id
+                            CategoryAndWalletStatisticsRow(
+                                color = item.color,
+                                icon = item.category.category.icon,
+                                name = item.category.category.expanseCategoryName,
+                                type = item.category.category.type,
+                                id = itemId,
+                                route = "categoriesDetails/$itemId",
+                                editClickAction = { navController.navigate("categoriesDetails/$itemId") },
+                                deleteClickAction = { },
+                                navController = navController
+                            )
+                        }
+                    }
+                })
+        }
         //List of all categories with colors
-        TopIncomeCategory(topIncomeCategory)
-        //PieChart of categories with respect to Incomes
-        //List of all categories with colors
-        Spacer(modifier = Modifier.padding(15.dp))
-        TopExpenseWallet(topExpenseWallet)
-        //PieChart of Wallets with respect to expenses and total expenses indicated
-        //List of of Wallets with Colors
-        TopIncomeWallet(topIncomeWallet)
-        //PieChart of Wallets with respect to incomes and total incomes indicated
-        //List of of Wallets with Colors
+        item {
+            TopIncomeCategory(topIncomeCategory)
+            //PieChart of categories with respect to Incomes
+            //List of all categories with colors
+            Spacer(modifier = Modifier.padding(15.dp))
+            TopExpenseWallet(topExpenseWallet)
+            //PieChart of Wallets with respect to expenses and total expenses indicated
+            //List of of Wallets with Colors
+            TopIncomeWallet(topIncomeWallet)
+            //PieChart of Wallets with respect to incomes and total incomes indicated
+            //List of of Wallets with Colors
+        }
     }
 
 }
 
-
+@OptIn(ExperimentalAnimationApi::class)
+@Composable
+private fun CategoryAndWalletStatisticsRow(
+    color: Color,
+    icon: String,
+    name: String,
+    type: String,
+    id: Int,
+    route: String,
+    editClickAction: () -> Unit,
+    deleteClickAction: () -> Unit,
+    navController: NavHostController
+){
+    Row() {
+        Spacer(
+            Modifier
+                .size(10.dp, 20.dp)
+                .background(color = color))
+        ReusableCategoryAndWalletRow(
+            icon = icon,
+            name = name,
+            type = type,
+            id = id,
+            route = route,
+            editClickAction = editClickAction,
+            deleteClickAction = deleteClickAction,
+            navController = navController
+        )
+    }
+}
 
 @Composable
 fun TopIncomeWallet(topIncomeWallet: TopWalletWithAmountResponse) {

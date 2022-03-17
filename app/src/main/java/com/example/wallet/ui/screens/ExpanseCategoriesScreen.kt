@@ -227,7 +227,7 @@ fun TwoButtonAlertDialogComponent(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun ReusableCategoryAndWalletRow(
+fun ReusableCategoryAndWalletRow(
     icon: String,
     name: String,
     type: String,
