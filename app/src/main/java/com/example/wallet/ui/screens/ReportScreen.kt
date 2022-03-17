@@ -20,6 +20,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.CategoryWrapperWithColor
+import com.example.wallet.model.WalletWrapperWithColor
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.*
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
@@ -45,11 +46,15 @@ fun ReportScreen(navController: NavHostController) {
     var topExpenseCategory = viewModel.topExpenseCategory.value
     var topIncomeCategory = viewModel.topIncomeCategory.value
 
+    var allWallets = viewModel.allWallets.value
     var topExpenseWallet = viewModel.topExpenseWallet.value
     var topIncomeWallet = viewModel.topIncomeWallet.value
 
     var totalCategoriesExpenses = viewModel.totalCategoriesExpenses.value
     var totalCategoriesIncomes = viewModel.totalCategoriesIncomes.value
+
+    var totalWalletsExpenses = viewModel.totalWalletsExpenses.value
+    var totalWalletsIncomes = viewModel.totalWalletsIncomes.value
 
     if (!dataLoaded) {
         return;
@@ -132,15 +137,69 @@ fun ReportScreen(navController: NavHostController) {
         item {
             Spacer(modifier = Modifier.padding(15.dp))
             TopExpenseWallet(topExpenseWallet)
-            //PieChart of Wallets with respect to expenses and total expenses indicated
-            //List of of Wallets with Colors
-            TopIncomeWallet(topIncomeWallet)
-            //PieChart of Wallets with respect to incomes and total incomes indicated
-            //List of of Wallets with Colors
         }
+        item {
+            StatementBody(listOfButtons = ArrayList<String>(),
+                transactions = allWallets,
+                expenses = ArrayList<WalletWrapperWithColor>(),
+                incomes = ArrayList<WalletWrapperWithColor>(),
+                colors = { item -> item.color},
+                amounts = { item -> item.wallet.expenseAmount.toFloat() },
+                totalAmount = totalWalletsExpenses,
+                list = {
+                    LazyRow(modifier = Modifier.padding(12.dp)) {
+                        items(allWallets) { item ->
+                            val itemId = item.wallet.wallet.id
+                            CategoryAndWalletStatisticsRow(
+                                color = item.color,
+                                icon = item.wallet.wallet.icon,
+                                amount = item.wallet.expenseAmount,
+                                name = item.wallet.wallet.walletName,
+                                type = item.wallet.wallet.currency,
+                                id = itemId,
+                                route = "walletStatistics/$itemId",
+                                editClickAction = { navController.navigate("walletsDetails/$itemId") },
+                                deleteClickAction = { },
+                                navController = navController
+                            )
+                        }
+                    }
+                })
+        }
+        item {
+            TopIncomeWallet(topIncomeWallet)
+        }
+        item{
+            StatementBody(listOfButtons = ArrayList<String>(),
+                transactions = allWallets,
+                expenses = ArrayList<WalletWrapperWithColor>(),
+                incomes = ArrayList<WalletWrapperWithColor>(),
+                colors = { item -> item.color},
+                amounts = { item -> item.wallet.incomeAmount.toFloat() },
+                totalAmount = totalWalletsIncomes,
+                list = {
+                    LazyRow(modifier = Modifier.padding(12.dp)) {
+                        items(allWallets) { item ->
+                            val itemId = item.wallet.wallet.id
+                            CategoryAndWalletStatisticsRow(
+                                color = item.color,
+                                icon = item.wallet.wallet.icon,
+                                amount = item.wallet.incomeAmount,
+                                name = item.wallet.wallet.walletName,
+                                type = item.wallet.wallet.currency,
+                                id = itemId,
+                                route = "walletStatistics/$itemId",
+                                editClickAction = { navController.navigate("walletsDetails/$itemId") },
+                                deleteClickAction = { },
+                                navController = navController
+                            )
+                        }
+                    }
+                })
+        }
+
     }
 }
-
 
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -183,7 +242,7 @@ fun TopIncomeWallet(topIncomeWallet: TopWalletWithAmountResponse) {
     if (topIncomeWallet.wallet != null) {
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                "Top income wallet: ${topIncomeWallet.wallet.walletName}${topIncomeWallet.wallet.icon} + ${topIncomeWallet.amount} $",
+                "Top income wallet: ${topIncomeWallet.wallet.walletName}${topIncomeWallet.wallet.icon} + ${topIncomeWallet.incomeAmount} $",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
@@ -206,7 +265,7 @@ fun TopExpenseWallet(topExpenseWallet: TopWalletWithAmountResponse) {
 
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                "Top expense wallet: ${topExpenseWallet.wallet.walletName}${topExpenseWallet.wallet.icon} - ${topExpenseWallet.amount} $",
+                "Top expense wallet: ${topExpenseWallet.wallet.walletName}${topExpenseWallet.wallet.icon} - ${topExpenseWallet.expenseAmount} $",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )

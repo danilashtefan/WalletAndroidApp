@@ -13,6 +13,11 @@ object WalletRepository {
     var walletFiltered = SecondAllWalletsResponse()
 
 
+    suspend fun getWalletsWithExpenses(authToken: String?): List<TopWalletWithAmountResponse> {
+        val wallets = service.getWalletsWithExpenses(authToken)
+        return wallets
+    }
+
     suspend fun getWalletForExpanse(expanseId: Int): SingleTransactionWalletResponse {
         return service.getWalletForExpanse(expanseId)
     }

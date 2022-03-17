@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.wallet.model.CategoryWrapperWithColor
-import com.example.wallet.model.TransactionWrapperWithColor
+import com.example.wallet.model.WalletWrapperWithColor
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.WalletRepository
@@ -27,15 +27,20 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
     var expandedCalendarMin = mutableStateOf(false)
     var expandedCalendarMax = mutableStateOf(false)
 
-    var allCategories = mutableStateOf(emptyList<CategoryWrapperWithColor>())
-    var totalCategoriesExpenses = mutableStateOf(0)
-    var totalCategoriesIncomes = mutableStateOf(0)
     var topExpense = mutableStateOf(SecondAllExpensesItem())
     var topIncome = mutableStateOf(SecondAllExpensesItem())
 
+
+    var allCategories = mutableStateOf(emptyList<CategoryWrapperWithColor>())
+    var totalCategoriesExpenses = mutableStateOf(0)
+    var totalCategoriesIncomes = mutableStateOf(0)
     var topExpenseCategory = mutableStateOf(TopExpenseCategoryWithAmountResponse())
     var topIncomeCategory = mutableStateOf(TopExpenseCategoryWithAmountResponse())
 
+
+    var allWallets = mutableStateOf(emptyList<WalletWrapperWithColor>())
+    var totalWalletsExpenses = mutableStateOf(0)
+    var totalWalletsIncomes = mutableStateOf(0)
     var topExpenseWallet = mutableStateOf(TopWalletWithAmountResponse())
     var topIncomeWallet = mutableStateOf(TopWalletWithAmountResponse())
 
@@ -69,6 +74,10 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
             topIncomeWallet.value = getTopIncomeWallet()
             var categoriesWithExpenses = getCategoriesWithExpenses() as ArrayList<TopExpenseCategoryWithAmountResponse>
             var wrappedCategoriesWithExpenses = arrayListOf<CategoryWrapperWithColor>()
+
+            var walletsWithExpenses = getWalletsWithExpenses() as ArrayList<TopWalletWithAmountResponse>
+            var wrappedWalletsWithExpenses = arrayListOf<WalletWrapperWithColor>()
+
             for(category in categoriesWithExpenses){
                 wrappedCategoriesWithExpenses.add(CategoryWrapperWithColor(
                     category = category, Color(
@@ -77,20 +86,44 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
                         (0..255).random())
                 ))
             }
-            allCategories.value = wrappedCategoriesWithExpenses
 
-            var expenseAmountTemp = 0
-            var incomeAmountTemp = 0
+            for(wallet in walletsWithExpenses){
+                wrappedWalletsWithExpenses.add(
+                    WalletWrapperWithColor(
+                    wallet = wallet,Color(
+                            (0..255).random(),
+                            (0..255).random(),
+                            (0..255).random())
+                ))
+            }
+            allCategories.value = wrappedCategoriesWithExpenses
+            allWallets.value = wrappedWalletsWithExpenses
+
+            var categoryExpenseAmountTemp = 0
+            var categoryIncomeAmountTemp = 0
 
             for(category in allCategories.value){
-                expenseAmountTemp += category.category.expenseAmount
-                incomeAmountTemp += category.category.incomeAmount
+                categoryExpenseAmountTemp += category.category.expenseAmount
+                categoryIncomeAmountTemp += category.category.incomeAmount
             }
-            totalCategoriesExpenses.value = expenseAmountTemp
-            totalCategoriesIncomes.value = incomeAmountTemp
+            totalCategoriesExpenses.value = categoryExpenseAmountTemp
+            totalCategoriesIncomes.value = categoryIncomeAmountTemp
+
+            var walletExpenseAmountTemp = 0
+            var walletIncomeAmountTemp = 0
+
+            for(wallet in allWallets.value){
+                walletExpenseAmountTemp += wallet.wallet.expenseAmount
+                walletIncomeAmountTemp += wallet.wallet.incomeAmount
+            }
+            totalWalletsExpenses.value = walletExpenseAmountTemp
+            totalWalletsIncomes.value = walletIncomeAmountTemp
 
             dataLoaded.value = true;
         }
+    }
+    suspend fun getWalletsWithExpenses():List<TopWalletWithAmountResponse>{
+        return WalletRepository.getWalletsWithExpenses(authToken)
     }
 
     suspend fun getCategoriesWithExpenses():List<TopExpenseCategoryWithAmountResponse>{
