@@ -13,11 +13,6 @@ object TransactionsRepository {
     var expense = AllExpansesResponse()
     var expenseFiltered = SecondAllExpensesResponse()
 
-    suspend fun getExpanses(authToken: String?): AllExpansesResponse {
-        expense = service.getExpanses(authToken)
-        return expense
-    }
-
     suspend fun getFilteredExpanses(authToken: String?): SecondAllExpensesResponse {
         expenseFiltered = service.getFilteredExpanses(authToken)
         return expenseFiltered

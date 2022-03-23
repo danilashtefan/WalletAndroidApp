@@ -1,14 +1,16 @@
 package com.example.wallet.ui.screens
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -39,13 +41,24 @@ fun WalletStatisticsScreen(
     var expenseItems = viewModel.expanseState.value
     var incomeItems = viewModel.incomeState.value
     var dataLoaded = viewModel.dataLoaded.value
+    val walletName = viewModel.walletName
     val listOfButtons = listOf<String>("Expense", "Income")
 
     while (!dataLoaded) {
         return
     }
-    Column() {
-
+    Column()
+        {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ){
+                Text(
+                    "Wallet ${walletName.value}", color = Color.White,
+                    style = MaterialTheme.typography.h6
+                )
+            }
         LazyRow(modifier = Modifier.padding(start = 60.dp)) {
             items(listOfButtons) { element ->
                 OutlinedButton(onClick = {

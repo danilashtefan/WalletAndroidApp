@@ -28,6 +28,7 @@ class WalletStatisticsViewModel(private val dataStorePreferenceRepository: DataS
     var expanseState = mutableStateOf((emptyList<TransactionWrapperWithColor>()))
     var incomeState = mutableStateOf((emptyList<TransactionWrapperWithColor>()))
     var typeOfTransactionsToDisplay = mutableStateOf("expense")
+    var walletName = mutableStateOf("")
 
     //Total amount to show on the screen
     var totalAmount = mutableStateOf(0)
@@ -71,6 +72,7 @@ class WalletStatisticsViewModel(private val dataStorePreferenceRepository: DataS
                 transaction.categoryIcon = transactionCategoryNameAndIdAndIcon.third
                 val transactionWalletNameAndId = getAndSetWalletForTransactions(transaction.id)
                 transaction.walletName = transactionWalletNameAndId.first
+                walletName.value = transactionWalletNameAndId.first
                 transaction.walletId = transactionWalletNameAndId.second
                 wrappedTransactions.add(TransactionWrapperWithColor(
                     transaction = transaction, Color(

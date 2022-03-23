@@ -148,11 +148,6 @@ class ExpansesViewModel(
         budgetLeft.value = budgetSet.value - abs(totalExpenses.value)
     }
 
-    //Method to get expenses from the JpaRepository default API, there is no filtering by username avalable
-    suspend fun getExpanses(): List<Expanse> {
-        Log.d("INFO", "getExpanses is called")
-        return expansesRepository.getExpanses(authToken)._embedded.expanses
-    }
 
     //Method to get expenses filtered by the token used
     suspend fun getFilteredExpenses(): SecondAllExpensesResponse {

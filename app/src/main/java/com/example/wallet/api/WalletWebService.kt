@@ -52,12 +52,6 @@ class WalletWebService {
         return api.getFilteredWallets(authHeader)
     }
 
-    suspend fun getExpanses(authToken: String?): AllExpansesResponse {
-        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
-        Log.d("INFO", "Authorization header: $authHeader")
-        return api.getExpanses(authHeader = authHeader)
-    }
-
     suspend fun getFilteredExpanses(authToken: String?): SecondAllExpensesResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
         Log.d("INFO", "Authorization header: $authHeader")
@@ -213,9 +207,6 @@ class WalletWebService {
 
         @POST("user/save")
         suspend fun register(@Body registerRequest: RegisterRequest): RegisterResponse
-
-        @GET("expanses")
-        suspend fun getExpanses(@Header("Authorization") authHeader: String): AllExpansesResponse
 
         @PATCH("expanseCategories2/{id}")
         suspend fun updateCategoryInDb(
