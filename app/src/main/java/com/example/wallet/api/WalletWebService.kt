@@ -131,9 +131,6 @@ class WalletWebService {
         return api.getWalletFilteredExpenses(authHeader = authHeader, walletId = walletId)
     }
 
-    suspend fun getExpanseCategories(): AllExpanseCategoriesResponse {
-        return api.getExpanseCategories()
-    }
 
     suspend fun getFilteredExpenseCategories(authToken: String?): SecondAllExpenseCategoriesResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
@@ -300,8 +297,6 @@ class WalletWebService {
             @Query("maxDate") maxDate: String
         ): TopWalletWithAmountResponse
 
-        @GET("expanseCategories")
-        suspend fun getExpanseCategories(): AllExpanseCategoriesResponse
 
         @GET("expanses/{id}/category")
         suspend fun getCategoryForExpanse(@Path("id") expanseId: Int): SingleExpanseCategoryResponse

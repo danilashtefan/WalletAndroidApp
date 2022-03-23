@@ -102,12 +102,6 @@ init{
 
 }
 
-    //Method to get from default API. To be deleted
-    suspend fun getTransactionCategories(): List<ExpanseCategory> {
-        var listOfCategories = ExpanseCategoriesRepository.getExpanseCategories()._embedded.expanseCategories
-        return listOfCategories
-    }
-
     suspend fun getFilteredTransactionCategories(): SecondAllExpenseCategoriesResponse{
         var listOfCategories = ExpanseCategoriesRepository.getFilteredExpenseCategories(authToken)
         return listOfCategories

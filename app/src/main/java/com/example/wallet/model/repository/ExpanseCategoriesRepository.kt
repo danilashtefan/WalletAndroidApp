@@ -12,10 +12,6 @@ import java.lang.Exception
 object ExpanseCategoriesRepository {
     private val service: WalletWebService = WalletWebService()
     var categoriesFiltered = SecondAllExpenseCategoriesResponse()
-    suspend fun getExpanseCategories(): AllExpanseCategoriesResponse {
-
-        return service.getExpanseCategories()
-    }
 
     suspend fun getFilteredExpenseCategories(authToken: String?): SecondAllExpenseCategoriesResponse {
         categoriesFiltered = service.getFilteredExpenseCategories(authToken)

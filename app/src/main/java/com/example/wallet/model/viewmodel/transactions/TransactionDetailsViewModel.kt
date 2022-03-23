@@ -142,12 +142,6 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     init {
     }
 
-    //Method to fetch from default API. Delete later
-    suspend fun getTransactionCategories(): List<ExpanseCategory> {
-        var listOfCategories =
-            ExpanseCategoriesRepository.getExpanseCategories()._embedded.expanseCategories
-        return listOfCategories
-    }
 
     suspend fun getFilteredTransactionCategories(): SecondAllExpenseCategoriesResponse {
         var listOfCategories = ExpanseCategoriesRepository.getFilteredExpenseCategories(authToken)
