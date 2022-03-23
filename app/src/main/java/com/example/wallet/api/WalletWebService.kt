@@ -240,32 +240,32 @@ class WalletWebService {
             @Path("id") categoryId: Int
         ): SecondAllExpensesResponse
 
-        @GET("expanseCategories2/expenseCategoriesWithExpenses/{minDate}/{maxDate}")
+        @GET("expanseCategories2/expenseCategoriesWithExpenses")
         suspend fun getCategoriesWithExpenses(
             @Header("Authorization") authHeader: String,
-            @Path("minDate") minDate: String,
-            @Path("maxDate") maxDate: String
+            @Query("minDate") minDate: String,
+            @Query("maxDate") maxDate: String
         ): List<TopExpenseCategoryWithAmountResponse>
 
-        @GET("wallets2/walletsWithExpenses/{minDate}/{maxDate}")
+        @GET("wallets2/walletsWithExpenses")
         suspend fun getWalletsWithExpenses(
             @Header("Authorization") authHeader: String,
-            @Path("minDate") minDate: String,
-            @Path("maxDate") maxDate: String
+            @Query("minDate") minDate: String,
+            @Query("maxDate") maxDate: String
         ): List<TopWalletWithAmountResponse>
 
-        @GET("expanseCategories2/topExpenseCategory/{minDate}/{maxDate}")
+        @GET("expanseCategories2/topExpenseCategory")
         suspend fun getTopExpenseCategory(
             @Header("Authorization") authHeader: String,
-            @Path("minDate") minDate: String,
-            @Path("maxDate") maxDate: String
+            @Query("minDate") minDate: String,
+            @Query("maxDate") maxDate: String
         ): TopExpenseCategoryWithAmountResponse
 
-        @GET("expanseCategories2/topIncomeCategory/{minDate}/{maxDate}")
+        @GET("expanseCategories2/topIncomeCategory")
         suspend fun getTopIncomeCategory(
             @Header("Authorization") authHeader: String,
-            @Path("minDate") minDate: String,
-            @Path("maxDate") maxDate: String
+            @Query("minDate") minDate: String,
+            @Query("maxDate") maxDate: String
         ): TopExpenseCategoryWithAmountResponse
 
         @DELETE("expanses2/{id}")
@@ -295,18 +295,18 @@ class WalletWebService {
             @Header("Authorization") authHeader: String
         )
 
-        @GET("wallets2/topExpenseWallet/{minDate}/{maxDate}")
+        @GET("wallets2/topExpenseWallet")
         suspend fun getTopExpenseWallet(
             @Header("Authorization") authHeader: String,
-            @Path("minDate") minDate: String,
-            @Path("maxDate") maxDate: String
+            @Query("minDate") minDate: String,
+            @Query("maxDate") maxDate: String
         ): TopWalletWithAmountResponse
 
-        @GET("wallets2/topIncomeWallet/{minDate}/{maxDate}")
+        @GET("wallets2/topIncomeWallet")
         suspend fun getTopIncomeWallet(
             @Header("Authorization") authHeader: String,
-            @Path("minDate") minDate: String,
-            @Path("maxDate") maxDate: String
+            @Query("minDate") minDate: String,
+            @Query("maxDate") maxDate: String
         ): TopWalletWithAmountResponse
 
         @GET("expanseCategories")
