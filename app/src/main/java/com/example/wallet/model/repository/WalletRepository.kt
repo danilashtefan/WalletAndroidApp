@@ -21,9 +21,7 @@ object WalletRepository {
         walletFiltered = service.getFilteredWallets(authToken)
         return walletFiltered
     }
-    suspend fun getWallets(): AllTransactionWalletsResponse{
-        return service.getWallets()
-    }
+
 
     suspend fun addWalletToDb(walletData: AddOrEditWalletRequest) {
         return service.addWalletToDb(walletData)

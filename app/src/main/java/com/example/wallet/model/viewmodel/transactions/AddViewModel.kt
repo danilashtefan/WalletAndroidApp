@@ -112,10 +112,7 @@ init{
         return listOfWallets
     }
 
-    suspend fun getTransactionWallets(): List<Wallet>{
-        var listOfWallets = WalletRepository.getWallets()._embedded.wallets
-        return listOfWallets
-    }
+
 
     fun updateLocation(value: String){
         locationState.value = value

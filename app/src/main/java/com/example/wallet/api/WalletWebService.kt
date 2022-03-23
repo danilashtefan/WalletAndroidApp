@@ -160,9 +160,6 @@ class WalletWebService {
         return api.getWalletForExpanse(expenseId)
     }
 
-    suspend fun getWallets(): AllTransactionWalletsResponse {
-        return api.getWallets()
-    }
 
     suspend fun updateTransactionInDb(
         transactionId: Int,
@@ -312,9 +309,6 @@ class WalletWebService {
 
         @GET("expanses/{id}/wallet")
         suspend fun getWalletForExpanse(@Path("id") expanseId: Int): SingleTransactionWalletResponse
-
-        @GET("wallets")
-        suspend fun getWallets(): AllTransactionWalletsResponse
 
         @POST("expanses")
         suspend fun addTransactionToDb(@Body transactionData: AddOrEditTransactionRequest)

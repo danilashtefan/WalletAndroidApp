@@ -153,10 +153,6 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         return listOfWallets
     }
 
-    suspend fun getTransactionWallets(): List<Wallet> {
-        var listOfWallets = WalletRepository.getWallets()._embedded.wallets
-        return listOfWallets
-    }
 
     fun setTransactionId(transactionId: Int) {
         if (transactionId === this.transactionId) {
