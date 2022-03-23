@@ -13,10 +13,6 @@ object WalletRepository {
     var walletFiltered = SecondAllWalletsResponse()
 
 
-    suspend fun getWalletsWithExpenses(authToken: String?): List<TopWalletWithAmountResponse> {
-        val wallets = service.getWalletsWithExpenses(authToken)
-        return wallets
-    }
 
     suspend fun getWalletForExpanse(expanseId: Int): SingleTransactionWalletResponse {
         return service.getWalletForExpanse(expanseId)
@@ -57,14 +53,20 @@ object WalletRepository {
         return service.deleteWalletFromDb(walletId, authToken)
     }
 
-    suspend fun getTopExpenseWallet(authToken: String?): TopWalletWithAmountResponse {
-        val topExpenseCategory = service.getTopExpenseWallet(authToken)
+    suspend fun getTopExpenseWallet(authToken: String?, minDate: String, maxDate: String): TopWalletWithAmountResponse {
+        val topExpenseCategory = service.getTopExpenseWallet(authToken, minDate, maxDate)
         return topExpenseCategory
     }
 
-    suspend fun getTopIncomeWallet(authToken: String?): TopWalletWithAmountResponse {
-        val topExpenseCategory = service.getTopIncomeWallet(authToken)
+    suspend fun getTopIncomeWallet(authToken: String?, minDate: String, maxDate: String): TopWalletWithAmountResponse {
+        val topExpenseCategory = service.getTopIncomeWallet(authToken, minDate, maxDate)
         return topExpenseCategory
     }
+
+    suspend fun getWalletsWithExpenses(authToken: String?, minDate: String, maxDate: String): List<TopWalletWithAmountResponse> {
+        val wallets = service.getWalletsWithExpenses(authToken, minDate, maxDate)
+        return wallets
+    }
+
 
 }

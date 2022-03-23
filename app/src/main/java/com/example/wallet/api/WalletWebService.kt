@@ -73,34 +73,59 @@ class WalletWebService {
         return api.getCategoryFilteredExpenses(authHeader = authHeader, categoryId = categoryId)
     }
 
-    suspend fun getWalletsWithExpenses(authToken: String?): List<TopWalletWithAmountResponse> {
+
+    suspend fun getCategoriesWithExpenses(
+        authToken: String?,
+        minDate: String,
+        maxDate: String
+    ): List<TopExpenseCategoryWithAmountResponse> {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
-        return api.getWalletsWithExpenses(authHeader = authHeader)
+        return api.getCategoriesWithExpenses(authHeader = authHeader, minDate, maxDate)
     }
 
-    suspend fun getCategoriesWithExpenses(authToken: String?): List<TopExpenseCategoryWithAmountResponse> {
+    suspend fun getTopIncomeCategory(
+        authToken: String?,
+        minDate: String,
+        maxDate: String
+    ): TopExpenseCategoryWithAmountResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
-        return api.getCategoriesWithExpenses(authHeader = authHeader)
+        return api.getTopIncomeCategory(authHeader = authHeader, minDate, maxDate)
     }
 
-    suspend fun getTopExpenseCategory(authToken: String?): TopExpenseCategoryWithAmountResponse {
+    suspend fun getTopExpenseCategory(
+        authToken: String?,
+        minDate: String,
+        maxDate: String
+    ): TopExpenseCategoryWithAmountResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
-        return api.getTopExpenseCategory(authHeader = authHeader)
+        return api.getTopExpenseCategory(authHeader = authHeader, minDate, maxDate)
     }
 
-    suspend fun getTopExpenseWallet(authToken: String?): TopWalletWithAmountResponse {
+    suspend fun getWalletsWithExpenses(
+        authToken: String?,
+        minDate: String,
+        maxDate: String
+    ): List<TopWalletWithAmountResponse> {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
-        return api.getTopExpenseWallet(authHeader = authHeader)
+        return api.getWalletsWithExpenses(authHeader = authHeader, minDate, maxDate)
     }
 
-    suspend fun getTopIncomeCategory(authToken: String?): TopExpenseCategoryWithAmountResponse {
+    suspend fun getTopExpenseWallet(
+        authToken: String?,
+        minDate: String,
+        maxDate: String
+    ): TopWalletWithAmountResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
-        return api.getTopIncomeCategory(authHeader = authHeader)
+        return api.getTopExpenseWallet(authHeader = authHeader, minDate, maxDate)
     }
 
-    suspend fun getTopIncomeWallet(authToken: String?): TopWalletWithAmountResponse {
+    suspend fun getTopIncomeWallet(
+        authToken: String?,
+        minDate: String,
+        maxDate: String
+    ): TopWalletWithAmountResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
-        return api.getTopIncomeWallet(authHeader = authHeader)
+        return api.getTopIncomeWallet(authHeader = authHeader, minDate, maxDate)
     }
 
     suspend fun getWalletFilteredExpenses(
@@ -215,20 +240,32 @@ class WalletWebService {
             @Path("id") categoryId: Int
         ): SecondAllExpensesResponse
 
-        @GET("expanseCategories2/expenseCategoriesWithExpenses")
-        suspend fun getCategoriesWithExpenses(@Header("Authorization") authHeader: String): List<TopExpenseCategoryWithAmountResponse>
+        @GET("expanseCategories2/expenseCategoriesWithExpenses/{minDate}/{maxDate}")
+        suspend fun getCategoriesWithExpenses(
+            @Header("Authorization") authHeader: String,
+            @Path("minDate") minDate: String,
+            @Path("maxDate") maxDate: String
+        ): List<TopExpenseCategoryWithAmountResponse>
 
-        @GET("wallets2/walletsWithExpenses")
-        suspend fun getWalletsWithExpenses(@Header("Authorization") authHeader: String): List<TopWalletWithAmountResponse>
+        @GET("wallets2/walletsWithExpenses/{minDate}/{maxDate}")
+        suspend fun getWalletsWithExpenses(
+            @Header("Authorization") authHeader: String,
+            @Path("minDate") minDate: String,
+            @Path("maxDate") maxDate: String
+        ): List<TopWalletWithAmountResponse>
 
-        @GET("expanseCategories2/topExpenseCategory")
+        @GET("expanseCategories2/topExpenseCategory/{minDate}/{maxDate}")
         suspend fun getTopExpenseCategory(
-            @Header("Authorization") authHeader: String
+            @Header("Authorization") authHeader: String,
+            @Path("minDate") minDate: String,
+            @Path("maxDate") maxDate: String
         ): TopExpenseCategoryWithAmountResponse
 
-        @GET("expanseCategories2/topIncomeCategory")
+        @GET("expanseCategories2/topIncomeCategory/{minDate}/{maxDate}")
         suspend fun getTopIncomeCategory(
-            @Header("Authorization") authHeader: String
+            @Header("Authorization") authHeader: String,
+            @Path("minDate") minDate: String,
+            @Path("maxDate") maxDate: String
         ): TopExpenseCategoryWithAmountResponse
 
         @DELETE("expanses2/{id}")
@@ -258,14 +295,18 @@ class WalletWebService {
             @Header("Authorization") authHeader: String
         )
 
-        @GET("wallets2/topExpenseWallet")
+        @GET("wallets2/topExpenseWallet/{minDate}/{maxDate}")
         suspend fun getTopExpenseWallet(
-            @Header("Authorization") authHeader: String
+            @Header("Authorization") authHeader: String,
+            @Path("minDate") minDate: String,
+            @Path("maxDate") maxDate: String
         ): TopWalletWithAmountResponse
 
-        @GET("wallets2/topIncomeWallet")
+        @GET("wallets2/topIncomeWallet/{minDate}/{maxDate}")
         suspend fun getTopIncomeWallet(
-            @Header("Authorization") authHeader: String
+            @Header("Authorization") authHeader: String,
+            @Path("minDate") minDate: String,
+            @Path("maxDate") maxDate: String
         ): TopWalletWithAmountResponse
 
         @GET("expanseCategories")

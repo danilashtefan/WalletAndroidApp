@@ -42,7 +42,7 @@ fun ReportScreen(navController: NavHostController) {
     var topExpense = viewModel.topExpense.value
     var topIncome = viewModel.topIncome.value
 
-    var allCategories = viewModel.allCategories.value
+    var allCategories = viewModel.filteredAllCategories.value
     var topExpenseCategory = viewModel.topExpenseCategory.value
     var topIncomeCategory = viewModel.topIncomeCategory.value
 
@@ -143,7 +143,7 @@ fun ReportScreen(navController: NavHostController) {
                 transactions = allWallets,
                 expenses = ArrayList<WalletWrapperWithColor>(),
                 incomes = ArrayList<WalletWrapperWithColor>(),
-                colors = { item -> item.color},
+                colors = { item -> item.color },
                 amounts = { item -> item.wallet.expenseAmount.toFloat() },
                 totalAmount = totalWalletsExpenses,
                 list = {
@@ -169,12 +169,12 @@ fun ReportScreen(navController: NavHostController) {
         item {
             TopIncomeWallet(topIncomeWallet)
         }
-        item{
+        item {
             StatementBody(listOfButtons = ArrayList<String>(),
                 transactions = allWallets,
                 expenses = ArrayList<WalletWrapperWithColor>(),
                 incomes = ArrayList<WalletWrapperWithColor>(),
-                colors = { item -> item.color},
+                colors = { item -> item.color },
                 amounts = { item -> item.wallet.incomeAmount.toFloat() },
                 totalAmount = totalWalletsIncomes,
                 list = {
@@ -384,9 +384,11 @@ private fun ReportCalendarDatePicker(
                 if (dateType == "minimum") {
                     viewModel.minDatePicked.value =
                         year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
+                    viewModel.loadScreen()
                 } else {
                     viewModel.maxDatePicked.value =
-                        year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
+                        year.toString() + "-" + (month + 1).toString() + "-" + (day + 1).toString()
+                    viewModel.loadScreen()
                 }
             }
         }

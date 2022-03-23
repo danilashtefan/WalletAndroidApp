@@ -41,18 +41,18 @@ object ExpanseCategoriesRepository {
 
     }
 
-    suspend fun getCategoriesWithExpenses(authToken: String?): List<TopExpenseCategoryWithAmountResponse> {
-        val expenseCategories = service.getCategoriesWithExpenses(authToken)
+    suspend fun getCategoriesWithExpenses(authToken: String?, minDate: String, maxDate: String): List<TopExpenseCategoryWithAmountResponse> {
+        val expenseCategories = service.getCategoriesWithExpenses(authToken, minDate, maxDate)
         return expenseCategories
     }
 
-    suspend fun getTopExpenseCategory(authToken: String?): TopExpenseCategoryWithAmountResponse {
-        val topExpenseCategory = service.getTopExpenseCategory(authToken)
+    suspend fun getTopExpenseCategory(authToken: String?, minDate: String, maxDate: String): TopExpenseCategoryWithAmountResponse {
+        val topExpenseCategory = service.getTopExpenseCategory(authToken, minDate, maxDate)
         return topExpenseCategory
     }
 
-    suspend fun getTopIncomeCategory(authToken: String?): TopExpenseCategoryWithAmountResponse {
-        val topExpenseCategory = service.getTopIncomeCategory(authToken)
+    suspend fun getTopIncomeCategory(authToken: String?, minDate: String, maxDate: String): TopExpenseCategoryWithAmountResponse {
+        val topExpenseCategory = service.getTopIncomeCategory(authToken, minDate, maxDate)
         return topExpenseCategory
     }
 

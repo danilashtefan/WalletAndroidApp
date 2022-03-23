@@ -254,11 +254,11 @@ fun ExpanseSection(
         ).parse(viewModel.maxDatePicked.value)
 
     }
-    for (transaction in filteredTransactions) {
-        if (transaction.type.equals("Expense")) {
-            transaction.amount *= -1
-        }
-    }
+//    for (transaction in filteredTransactions) {
+//        if (transaction.type.equals("Expense")) {
+//            transaction.amount *= -1
+//        }
+//    }
     val dateStrToLocalDate: (String) -> LocalDate = {
         LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     }
