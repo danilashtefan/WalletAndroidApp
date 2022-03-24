@@ -18,8 +18,8 @@ object ExpanseCategoriesRepository {
         return categoriesFiltered
     }
 
-    suspend fun getCategoryForExpanse(expanseId: Int): SingleExpanseCategoryResponse {
-        return service.getCategoryForExpanse(expanseId)
+    suspend fun getCategoryForExpanse(authToken: String, expanseId: Int): SingleExpanseCategoryResponse {
+        return service.getCategoryForExpanse(authToken, expanseId)
     }
 
     suspend fun addCategoryToDb(categoryData: AddOrEditCategoryRequest) {

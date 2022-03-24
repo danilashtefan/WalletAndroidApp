@@ -79,7 +79,7 @@ class ExpansesViewModel(
                 transaction.categoryName = transactionCategoryNameAndIdAndIcon.first
                 transaction.categoryId = transactionCategoryNameAndIdAndIcon.second
                 transaction.categoryIcon = transactionCategoryNameAndIdAndIcon.third
-                val transactionWalletNameAndId = getAndSetWalletForTransactions(transaction.id)
+                val transactionWalletNameAndId = getAndSetWalletForTransactions(authToken,transaction.id)
                 transaction.walletName = transactionWalletNameAndId.first
                 transaction.walletId = transactionWalletNameAndId.second
             }
@@ -157,7 +157,7 @@ class ExpansesViewModel(
 
     // Method to get the category of particular expanse
     suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Triple<String, Int, String> {
-        val categoryResponse = ExpanseCategoriesRepository.getCategoryForExpanse(expanseId)
+        val categoryResponse = ExpanseCategoriesRepository.getCategoryForExpanse(authToken,expanseId)
         return Triple(
             categoryResponse.expanseCategoryName,
             categoryResponse.id,
@@ -165,8 +165,8 @@ class ExpansesViewModel(
         )
     }
 
-    suspend fun getAndSetWalletForTransactions(expanseId: Int): Pair<String, Int> {
-        val walletResponse = WalletRepository.getWalletForExpanse(expanseId)
+    suspend fun getAndSetWalletForTransactions(authToken: String, expanseId: Int): Pair<String, Int> {
+        val walletResponse = WalletRepository.getWalletForExpanse(authToken,expanseId)
         return Pair(walletResponse.walletName, walletResponse.id)
     }
 

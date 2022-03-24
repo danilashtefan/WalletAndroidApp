@@ -114,12 +114,12 @@ class WalletStatisticsViewModel(private val dataStorePreferenceRepository: DataS
     }
 
     suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Triple<String, Int, String> {
-        val categoryResponse = ExpanseCategoriesRepository.getCategoryForExpanse(expanseId)
+        val categoryResponse = ExpanseCategoriesRepository.getCategoryForExpanse(authToken,expanseId)
         return Triple(categoryResponse.expanseCategoryName, categoryResponse.id, categoryResponse.icon)
     }
 
     suspend fun getAndSetWalletForTransactions(expanseId: Int): Pair<String, Int> {
-        val walletResponse = WalletRepository.getWalletForExpanse(expanseId)
+        val walletResponse = WalletRepository.getWalletForExpanse(authToken,expanseId)
         return Pair(walletResponse.walletName, walletResponse.id)
     }
 }

@@ -14,8 +14,8 @@ object WalletRepository {
 
 
 
-    suspend fun getWalletForExpanse(expanseId: Int): SingleTransactionWalletResponse {
-        return service.getWalletForExpanse(expanseId)
+    suspend fun getWalletForExpanse(authToken: String, expanseId: Int): SingleTransactionWalletResponse {
+        return service.getWalletForExpanse(authToken, expanseId)
     }
     suspend fun getFilteredWallets(authToken: String?): SecondAllWalletsResponse {
         walletFiltered = service.getFilteredWallets(authToken)

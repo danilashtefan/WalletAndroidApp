@@ -152,12 +152,14 @@ class WalletWebService {
         return api.deleteWalletFromDb(walletId, authHeader)
     }
 
-    suspend fun getCategoryForExpanse(expenseId: Int): SingleExpanseCategoryResponse {
-        return api.getCategoryForExpanse(expenseId)
+    suspend fun getCategoryForExpanse(authToken: String, expenseId: Int): SingleExpanseCategoryResponse {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.getCategoryForExpanse(authHeader,expenseId)
     }
 
-    suspend fun getWalletForExpanse(expenseId: Int): SingleTransactionWalletResponse {
-        return api.getWalletForExpanse(expenseId)
+    suspend fun getWalletForExpanse(authToken:String, expenseId: Int): SingleTransactionWalletResponse {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.getWalletForExpanse(authHeader,expenseId)
     }
 
 
@@ -294,10 +296,6 @@ class WalletWebService {
             @Query("maxDate") maxDate: String
         ): TopWalletWithAmountResponse
 
-
-        @GET("expanses/{id}/category")
-        suspend fun getCategoryForExpanse(@Path("id") expanseId: Int): SingleExpanseCategoryResponse
-
         @GET("expanseCategories2")
         suspend fun getFilteredExpenseCategories(@Header("Authorization") authHeader: String): SecondAllExpenseCategoriesResponse
 
@@ -308,7 +306,10 @@ class WalletWebService {
         ): Expanse
 
         @GET("expanses/{id}/wallet")
-        suspend fun getWalletForExpanse(@Path("id") expanseId: Int): SingleTransactionWalletResponse
+        suspend fun getWalletForExpanse(@Header("Authorization") authHeader: String,@Path("id") expanseId: Int): SingleTransactionWalletResponse
+
+        @GET("expanses/{id}/category")
+        suspend fun getCategoryForExpanse(@Header("Authorization") authHeader: String, @Path("id") expanseId: Int): SingleExpanseCategoryResponse
 
         @POST("expanses")
         suspend fun addTransactionToDb(@Body transactionData: AddOrEditTransactionRequest)
