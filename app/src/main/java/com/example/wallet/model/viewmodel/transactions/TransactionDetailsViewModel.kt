@@ -173,10 +173,10 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         this.commentsFieldTemporaryValueBeforeSavingtoDB = transaction.comments
         this.locationFieldTemporaryValueBeforeSavingtoDB = transaction.location
         this.photoUrlFieldTemporaryValueBeforeSavingtoDB = transaction.photoUrl
-        this.categoryLinkTemporaryValueBeforeSavingtoDB =
-            LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
-        this.walletLinkTemporaryValueBeforeSavingtoDB =
-            LinkBuilder.buildWalletLinkForAddingToExpanse(transaction.walletId)
+        this.categoryLinkTemporaryValueBeforeSavingtoDB = transaction.categoryId.toString()
+            //LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
+        this.walletLinkTemporaryValueBeforeSavingtoDB = transaction.walletId.toString()
+            //LinkBuilder.buildWalletLinkForAddingToExpanse(transaction.walletId)
         this.datePicked.value = dateFieldTemporaryValueBeforeSavingtoDB as String
 
         this.locationState.value = if(transaction.location != null) transaction.location else "Location is not specified"
@@ -197,14 +197,14 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     }
 
     fun updateCategoryLinkValueBeforeSavingToDB(category: SecondAllExpenseCategoriesResponseItem) {
-        this.categoryLinkTemporaryValueBeforeSavingtoDB =
-            LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
+        this.categoryLinkTemporaryValueBeforeSavingtoDB = category.id.toString()
+            //LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
         updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
     }
 
     fun updateWalletLinkValueBeforeSavingToDB(wallet: SecondAllWalletsResponseItem) {
-        this.walletLinkTemporaryValueBeforeSavingtoDB =
-            LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
+        this.walletLinkTemporaryValueBeforeSavingtoDB = wallet.id.toString()
+            //LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
         updateTemporaryFieldValueBeforeSavingToDB("walletName", wallet.walletName)
     }
 

@@ -168,7 +168,7 @@ class WalletWebService {
         transactionId: Int,
         transactionData: AddOrEditTransactionRequest,
         authToken: String
-    ): Expanse {
+    ){
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
         return api.updateTransactionInDb(transactionId, transactionData, authHeader)
     }
@@ -317,12 +317,12 @@ class WalletWebService {
         @POST("wallets")
         suspend fun addWalletToDb(@Body walletData: AddOrEditWalletRequest)
 
-        @PATCH("expanses/{id}")
+        @PATCH("expanses2/{id}")
         suspend fun updateTransactionInDb(
             @Path("id") transactionId: Int,
             @Body transactionData: AddOrEditTransactionRequest,
             @Header("Authorization") authHeader: String
-        ): Expanse
+        )
 
     }
 }

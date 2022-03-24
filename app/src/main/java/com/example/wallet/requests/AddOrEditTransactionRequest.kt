@@ -7,8 +7,8 @@ data class AddOrEditTransactionRequest (
     var date: String? = null,
     var comments: String? = null,
     var location: String? = null,
-    var wallet: String? = "http://localhost:8080/api/wallet/1",
-    var category: String? = "http://localhost:8080/api/category/2",
+    var wallet: String? = "1",
+    var category: String? = "2",
     var photoUrl: String? = null,
     var username:String?="jack"
 )
