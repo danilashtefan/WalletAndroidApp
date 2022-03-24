@@ -173,16 +173,19 @@ class WalletWebService {
         return api.updateTransactionInDb(transactionId, transactionData, authHeader)
     }
 
-    suspend fun addTransactionToDb(transactionData: AddOrEditTransactionRequest) {
-        return api.addTransactionToDb(transactionData)
+    suspend fun addTransactionToDb(authToken: String, transactionData: AddOrEditTransactionRequest) {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.addTransactionToDb(authHeader,transactionData)
     }
 
-    suspend fun addCategoryToDb(categoryData: AddOrEditCategoryRequest) {
-        return api.addCategoryToDb(categoryData)
+    suspend fun addCategoryToDb(authToken: String, categoryData: AddOrEditCategoryRequest) {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.addCategoryToDb(authHeader, categoryData)
     }
 
-    suspend fun addWalletToDb(walletData: AddOrEditWalletRequest) {
-        return api.addWalletToDb(walletData)
+    suspend fun addWalletToDb(authToken: String, walletData: AddOrEditWalletRequest) {
+        val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
+        return api.addWalletToDb(authHeader, walletData)
     }
 
     suspend fun editCategoryInDb(
@@ -309,13 +312,13 @@ class WalletWebService {
         suspend fun getCategoryForExpanse(@Header("Authorization") authHeader: String, @Path("id") expanseId: Int): SingleExpanseCategoryResponse
 
         @POST("expanses")
-        suspend fun addTransactionToDb(@Body transactionData: AddOrEditTransactionRequest)
+        suspend fun addTransactionToDb(@Header("Authorization") authHeader: String, @Body transactionData: AddOrEditTransactionRequest)
 
         @POST("expanseCategories")
-        suspend fun addCategoryToDb(@Body categoryData: AddOrEditCategoryRequest)
+        suspend fun addCategoryToDb(@Header("Authorization") authHeader: String, @Body categoryData: AddOrEditCategoryRequest)
 
         @POST("wallets")
-        suspend fun addWalletToDb(@Body walletData: AddOrEditWalletRequest)
+        suspend fun addWalletToDb(@Header("Authorization") authHeader: String, @Body walletData: AddOrEditWalletRequest)
 
         @PATCH("expanses2/{id}")
         suspend fun updateTransactionInDb(

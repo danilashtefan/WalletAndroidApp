@@ -222,16 +222,16 @@ init{
 
     }
 
-    suspend fun addTransactionToDb( transactionData: AddOrEditTransactionRequest) {
-        TransactionsRepository.addTransactionToDb(transactionData)
+    suspend fun addTransactionToDb(transactionData: AddOrEditTransactionRequest) {
+        TransactionsRepository.addTransactionToDb(authToken, transactionData)
     }
 
     suspend fun addCategoryToDb(categoryData:AddOrEditCategoryRequest){
-        ExpanseCategoriesRepository.addCategoryToDb(categoryData)
+        ExpanseCategoriesRepository.addCategoryToDb(authToken,categoryData)
     }
 
     suspend fun addWalletToDb(walletData: AddOrEditWalletRequest){
-        WalletRepository.addWalletToDb(walletData)
+        WalletRepository.addWalletToDb(authToken, walletData)
     }
 
 

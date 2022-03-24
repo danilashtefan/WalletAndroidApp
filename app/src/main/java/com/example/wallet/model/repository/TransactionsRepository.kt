@@ -70,8 +70,8 @@ object TransactionsRepository {
         return service.updateTransactionInDb(transactionId,transactionData, authToken)
     }
 
-    suspend fun addTransactionToDb(transactionData:AddOrEditTransactionRequest) {
-        return service.addTransactionToDb(transactionData)
+    suspend fun addTransactionToDb(authToken: String, transactionData:AddOrEditTransactionRequest) {
+        return service.addTransactionToDb(authToken, transactionData)
 
     }
 

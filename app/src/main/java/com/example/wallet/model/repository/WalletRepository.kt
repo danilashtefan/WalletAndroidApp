@@ -23,8 +23,8 @@ object WalletRepository {
     }
 
 
-    suspend fun addWalletToDb(walletData: AddOrEditWalletRequest) {
-        return service.addWalletToDb(walletData)
+    suspend fun addWalletToDb(authToken: String, walletData: AddOrEditWalletRequest) {
+        return service.addWalletToDb(authToken,walletData)
     }
 
 

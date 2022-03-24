@@ -22,8 +22,8 @@ object ExpanseCategoriesRepository {
         return service.getCategoryForExpanse(authToken, expanseId)
     }
 
-    suspend fun addCategoryToDb(categoryData: AddOrEditCategoryRequest) {
-        return service.addCategoryToDb(categoryData)
+    suspend fun addCategoryToDb(authToken: String, categoryData: AddOrEditCategoryRequest) {
+        return service.addCategoryToDb(authToken,categoryData)
     }
 
     fun getCategory(categoryId: Int): SecondAllExpenseCategoriesResponseItem {
