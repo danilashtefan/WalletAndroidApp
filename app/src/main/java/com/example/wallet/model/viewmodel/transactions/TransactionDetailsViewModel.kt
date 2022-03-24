@@ -110,7 +110,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
 
     fun updateTransactionInDb() {
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception when saving transaction to DB")
+            Log.d("EXCEPTION", "Thread exception when saving transaction to DB : $exception")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
@@ -136,7 +136,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         transactionId: Int,
         transactionData: AddOrEditTransactionRequest
     ) {
-        TransactionsRepository.updateTransactionInDb(transactionId, transactionData)
+        TransactionsRepository.updateTransactionInDb(transactionId, transactionData, authToken)
     }
 
     init {

@@ -66,8 +66,8 @@ object TransactionsRepository {
     }
 
 
-    suspend fun updateTransactionInDb(transactionId: Int, transactionData: AddOrEditTransactionRequest):Expanse{
-        return service.updateTransactionInDb(transactionId,transactionData)
+    suspend fun updateTransactionInDb(transactionId: Int, transactionData: AddOrEditTransactionRequest, authToken: String):Expanse{
+        return service.updateTransactionInDb(transactionId,transactionData, authToken)
     }
 
     suspend fun addTransactionToDb(transactionData:AddOrEditTransactionRequest) {
