@@ -154,7 +154,8 @@ class WalletWebService {
 
     suspend fun getCategoryForExpanse(authToken: String, expenseId: Int): SingleExpanseCategoryResponse {
         val authHeader = LinkBuilder.builtAuthorizationHeader(authToken = authToken)
-        return api.getCategoryForExpanse(authHeader,expenseId)
+        var answer = api.getCategoryForExpanse(authHeader,expenseId)
+        return answer
     }
 
     suspend fun getWalletForExpanse(authToken:String, expenseId: Int): SingleTransactionWalletResponse {
@@ -305,10 +306,10 @@ class WalletWebService {
             @Body transactionData: AddOrEditTransactionRequest
         ): Expanse
 
-        @GET("expanses/{id}/wallet")
+        @GET("expanses2/{id}/wallet")
         suspend fun getWalletForExpanse(@Header("Authorization") authHeader: String,@Path("id") expanseId: Int): SingleTransactionWalletResponse
 
-        @GET("expanses/{id}/category")
+        @GET("expanses2/{id}/category")
         suspend fun getCategoryForExpanse(@Header("Authorization") authHeader: String, @Path("id") expanseId: Int): SingleExpanseCategoryResponse
 
         @POST("expanses")
