@@ -164,7 +164,7 @@ init{
     }
 
     fun addTransactionToDb() : Boolean {
-        if(typeCategoryFieldTemporaryValueBeforeSavingtoDB == "Type of transaction" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
+        if(typeFieldTemporaryValueBeforeSavingtoDB == "Type of transaction" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
              walletLinkTemporaryValueBeforeSavingtoDB == null ||
                dateFieldTemporaryValueBeforeSavingtoDB == "Date" ||
                 amountFieldTemporaryValueBeforeSavingtoDB == null){

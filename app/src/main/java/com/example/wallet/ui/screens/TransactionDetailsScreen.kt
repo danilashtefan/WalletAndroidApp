@@ -91,6 +91,14 @@ fun TransactionDetailsScreen(
     }
 
     Column(Modifier.verticalScroll(rememberScrollState())) {
+        var showIncorrectDataAlertDialog = viewModel.showIncorrectDataAlertDialog.value
+        if (showIncorrectDataAlertDialog) {
+            OneButtonAlertDialogComponent(
+                onDismiss = { viewModel.incorrectDataDialogClose() },
+                bodyText = { Text(viewModel.incorrectDataAlertDialogText, color = Color.White) },
+                buttonText = "DISMISS"
+            )
+        }
         LogoTransactionDetailsSection()
         ImageSection(transaction)
         EditableFieldTransactionDetails(
@@ -178,9 +186,11 @@ private fun SaveButtonTransactionDetails(
             for (field in fieldsOnTheScreen) {
                 viewModel.updateField(field, viewModel.getFieldToUpdateInDB(field))
             }
-            viewModel.updateTransactionInDb()
+            val editResult = viewModel.updateTransactionInDb()
             Thread.sleep(500)
-            navController.navigate("expanses")
+            if (editResult) {
+                navController.navigate("expanses")
+            }
 
         }) {
             Text(text = "Save the changes")
@@ -190,20 +200,22 @@ private fun SaveButtonTransactionDetails(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun DatePicker(viewModel: TransactionDetailsViewModel, padding: Int){
+private fun DatePicker(viewModel: TransactionDetailsViewModel, padding: Int) {
     Row(
         modifier = Modifier
             .padding(top = padding.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
-    ){
-        OutlinedButton(onClick = {viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value}) {
+    ) {
+        OutlinedButton(onClick = {
+            viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value
+        }) {
             viewModel.datePicked.value?.let { Text(text = it) }
         }
 
     }
-    Row(horizontalArrangement = Arrangement.Center){
+    Row(horizontalArrangement = Arrangement.Center) {
         AnimatedVisibility(visible = viewModel.expandedCalendar.value) {
             EditCalendarDatePicker(viewModel)
         }
@@ -218,8 +230,12 @@ private fun EditCalendarDatePicker(viewModel: TransactionDetailsViewModel) {
         modifier = Modifier.wrapContentWidth(),
         update = { views ->
             views.setOnDateChangeListener { calendarView, year, month, day ->
-                viewModel.datePicked.value = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
-                viewModel.updateTemporaryFieldValueBeforeSavingToDB("date", viewModel.datePicked.value)
+                viewModel.datePicked.value =
+                    year.toString() + "-" + (month + 1).toString() + "-" + day.toString()
+                viewModel.updateTemporaryFieldValueBeforeSavingToDB(
+                    "date",
+                    viewModel.datePicked.value
+                )
             }
         }
     )
@@ -361,7 +377,7 @@ private fun EditableFieldLocationTransactionDetails(
     viewModel: TransactionDetailsViewModel,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-){
+) {
     val listOfPlaces = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
     var context = LocalContext.current
     val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, listOfPlaces).build(
@@ -374,8 +390,10 @@ private fun EditableFieldLocationTransactionDetails(
             viewModel.updateTemporaryFieldValueBeforeSavingToDB(field, place.address)
             Log.d("INFO", "Address: ${place.address}")
         }
-    Row(modifier=Modifier.padding(top = padding.dp)
-        .fillMaxWidth(),
+    Row(
+        modifier = Modifier
+            .padding(top = padding.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -384,7 +402,7 @@ private fun EditableFieldLocationTransactionDetails(
             launcher.launch(intent)
 
         }) {
-            var buttonText =  viewModel.locationState.value
+            var buttonText = viewModel.locationState.value
             Text(buttonText)
         }
 
@@ -418,18 +436,22 @@ private fun EditableFieldTransactionDetails(
 
         var text = value.toString()
         if (text === null) {
-            text = ""
+            text = "0"
         }
         val textState = remember { mutableStateOf(TextFieldValue(text)) }
+        var textForUpdate = textState.value.text
 
         TextField(
             value = textState.value,
             enabled = enabled,
             onValueChange = {
                 textState.value = it
-                //  viewModel.updateField(field, textState.value.text)
-                viewModel.updateTemporaryFieldValueBeforeSavingToDB(field, textState.value.text)
-
+               if(textState.value.text.equals("") && field.equals("amount")){
+                    textForUpdate = "0"
+                }else{
+                   textForUpdate = textState.value.text
+                }
+                viewModel.updateTemporaryFieldValueBeforeSavingToDB(field, textForUpdate)
             },
             label = { Text(labelText) },
             keyboardOptions = keyboardOptions

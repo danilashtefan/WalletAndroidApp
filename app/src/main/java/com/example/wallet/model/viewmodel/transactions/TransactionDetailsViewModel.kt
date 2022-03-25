@@ -58,7 +58,11 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
 
     var locationState = mutableStateOf("Location is not specified")
 
-    var authTokenJob : Job
+    var showIncorrectDataAlertDialog = mutableStateOf(false)
+    var incorrectDataAlertDialogText = "Some of the fields are empty. Please, introduce:\n\n"+
+            "\u2022" + "Type\n" + "\u2022" + "Category\n" + "\u2022" + "Wallet\n" + "\u2022" + "Date\n"+"\u2022" +"Amount"
+
+    var authTokenJob: Job
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
@@ -94,9 +98,10 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         }
     }
 
-    fun updateLocation(value: String){
-       locationState.value = value
+    fun updateLocation(value: String) {
+        locationState.value = value
     }
+
     fun chooseCategory(category: String) {
         val transaction =
             TransactionsRepository.updateExpenseCategory(category, this.transactionId);
@@ -108,7 +113,16 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         this.transaction.value = transaction
     }
 
-    fun updateTransactionInDb() {
+    fun updateTransactionInDb():Boolean {
+
+        if(typeFieldTemporaryValueBeforeSavingtoDB == "" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
+            walletLinkTemporaryValueBeforeSavingtoDB == null ||
+            dateFieldTemporaryValueBeforeSavingtoDB == "Date" ||
+            amountFieldTemporaryValueBeforeSavingtoDB == null){
+            incorrectDataDialogShow()
+            return false
+        }
+
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception when saving transaction to DB : $exception")
         }
@@ -128,7 +142,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
                 )
             )
         }
-
+        return true
     }
 
 
@@ -174,12 +188,13 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         this.locationFieldTemporaryValueBeforeSavingtoDB = transaction.location
         this.photoUrlFieldTemporaryValueBeforeSavingtoDB = transaction.photoUrl
         this.categoryLinkTemporaryValueBeforeSavingtoDB = transaction.categoryId.toString()
-            //LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
+        //LinkBuilder.buildCategoryLinkForAddingToExpanse(transaction.categoryId)
         this.walletLinkTemporaryValueBeforeSavingtoDB = transaction.walletId.toString()
-            //LinkBuilder.buildWalletLinkForAddingToExpanse(transaction.walletId)
+        //LinkBuilder.buildWalletLinkForAddingToExpanse(transaction.walletId)
         this.datePicked.value = dateFieldTemporaryValueBeforeSavingtoDB as String
 
-        this.locationState.value = if(transaction.location != null) transaction.location else "Location is not specified"
+        this.locationState.value =
+            if (transaction.location != null) transaction.location else "Location is not specified"
 
 
         val handler = CoroutineExceptionHandler { _, exception ->
@@ -198,13 +213,13 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
 
     fun updateCategoryLinkValueBeforeSavingToDB(category: SecondAllExpenseCategoriesResponseItem) {
         this.categoryLinkTemporaryValueBeforeSavingtoDB = category.id.toString()
-            //LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
+        //LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
         updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
     }
 
     fun updateWalletLinkValueBeforeSavingToDB(wallet: SecondAllWalletsResponseItem) {
         this.walletLinkTemporaryValueBeforeSavingtoDB = wallet.id.toString()
-            //LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
+        //LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
         updateTemporaryFieldValueBeforeSavingToDB("walletName", wallet.walletName)
     }
 
@@ -248,6 +263,13 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
             Log.d("INFO", "Auth token for delete is $authToken")
             TransactionsRepository.deleteTransaction(expenseId, authToken)
         }
+    }
+
+    fun incorrectDataDialogShow(){
+        showIncorrectDataAlertDialog.value = true
+    }
+    fun incorrectDataDialogClose(){
+        showIncorrectDataAlertDialog.value = false
     }
 
 
