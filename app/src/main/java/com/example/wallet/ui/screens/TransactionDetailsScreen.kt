@@ -115,11 +115,17 @@ fun TransactionDetailsScreen(
             value = transaction.amount,
             viewModel = viewModel
         )
-        EditableFieldTransactionDetails(
+//        EditableFieldTransactionDetails(
+//            padding = 20,
+//            field = typeFieldName,
+//            labelText = "Type",
+//            value = transaction.type,
+//            viewModel = viewModel
+//        )
+        TypeSelectorTransactionDetails(
             padding = 20,
-            field = typeFieldName,
-            labelText = "Type",
-            value = transaction.type,
+            labelText = viewModel.typeFieldTemporaryValueBeforeSavingtoDB,
+            optionsList = listOf("Expense", "Income"),
             viewModel = viewModel
         )
         //InfoRow(20,"Category")
@@ -327,6 +333,52 @@ private fun CategorySelctorTransactionDetails(
 
 }
 
+@OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
+@Composable
+fun TypeSelectorTransactionDetails(
+    padding: Int,
+    labelText: String?,
+    optionsList: List<String>,
+    enabled: Boolean = true,
+    viewModel: TransactionDetailsViewModel,
+) {
+
+    Column() {
+        var expanded by remember { mutableStateOf(false) }
+        Row(
+            modifier = Modifier
+                .padding(top = padding.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled) {
+                if (labelText != null) {
+                    Text(text = labelText)
+                }
+            }
+        }
+        AnimatedVisibility(visible = expanded) {
+            Row(
+                modifier = Modifier
+                    .horizontalScroll(rememberScrollState())
+                    .fillMaxWidth(), horizontalArrangement = Arrangement.Center
+            ) {
+                for (option in optionsList) {
+                    Card(onClick = {
+                        viewModel.updateTemporaryFieldValueBeforeSavingToDB("type", option)
+                    }, modifier = Modifier.padding(7.dp)) {
+                        Text(option)
+                    }
+                }
+
+            }
+        }
+    }
+
+}
+
 
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
@@ -458,5 +510,8 @@ private fun EditableFieldTransactionDetails(
         )
     }
 }
+
+
+
 
 
