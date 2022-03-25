@@ -139,7 +139,8 @@ init{
     }
 
     fun updateCategoryLinkValueBeforeSavingToDB(category: SecondAllExpenseCategoriesResponseItem) {
-        this.categoryLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
+        this.categoryLinkTemporaryValueBeforeSavingtoDB = category.id.toString()
+            //LinkBuilder.buildCategoryLinkForAddingToExpanse(categoryId = category.id)
         updateTemporaryFieldValueBeforeSavingToDB("categoryName", category.expanseCategoryName)
     }
 
@@ -236,7 +237,8 @@ init{
 
 
     fun updateWalletLinkValueBeforeSavingToDB(wallet: SecondAllWalletsResponseItem) {
-        this.walletLinkTemporaryValueBeforeSavingtoDB = LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
+        this.walletLinkTemporaryValueBeforeSavingtoDB = wallet.id.toString()
+            //LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
         updateTemporaryFieldValueBeforeSavingToDB("walletName", wallet.walletName)
     }
 

@@ -311,7 +311,7 @@ class WalletWebService {
         @GET("expanses2/{id}/category")
         suspend fun getCategoryForExpanse(@Header("Authorization") authHeader: String, @Path("id") expanseId: Int): SingleExpanseCategoryResponse
 
-        @POST("expanses")
+        @POST("expanses2")
         suspend fun addTransactionToDb(@Header("Authorization") authHeader: String, @Body transactionData: AddOrEditTransactionRequest)
 
         @POST("expanseCategories")
