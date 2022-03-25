@@ -314,10 +314,10 @@ class WalletWebService {
         @POST("expanses2")
         suspend fun addTransactionToDb(@Header("Authorization") authHeader: String, @Body transactionData: AddOrEditTransactionRequest)
 
-        @POST("expanseCategories")
+        @POST("expanseCategories2")
         suspend fun addCategoryToDb(@Header("Authorization") authHeader: String, @Body categoryData: AddOrEditCategoryRequest)
 
-        @POST("wallets")
+        @POST("wallets2")
         suspend fun addWalletToDb(@Header("Authorization") authHeader: String, @Body walletData: AddOrEditWalletRequest)
 
         @PATCH("expanses2/{id}")
