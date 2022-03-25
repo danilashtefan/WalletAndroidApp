@@ -355,7 +355,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
 
         TypeSelectorTransactionAdd(
             padding = 20,
-            labelText = viewModel.typeFieldTemporaryValueBeforeSavingtoDB,
+            labelText = viewModel.typeFieldTemporaryValueBeforeSavingtoDB.value,
             optionsList = listOf("Expense", "Income"),
             viewModel = viewModel
         )
@@ -370,7 +370,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
 
         WalletSelectorTransactionAdd(
             padding = 20,
-            labelText = viewModel.walletNameFieldTemporaryValueBeforeSavingtoDB,
+            labelText = viewModel.walletNameFieldTemporaryValueBeforeSavingtoDB.value,
             optionsList = viewModel.transactionWalletsState.value,
             viewModel = viewModel
         )

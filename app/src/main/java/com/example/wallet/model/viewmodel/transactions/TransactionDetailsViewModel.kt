@@ -42,9 +42,9 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var locationFieldTemporaryValueBeforeSavingtoDB: String? = ""
 
     //This is only Category Name Displayed, not the actual Category name!!
-    var categoryNameFieldTemporaryValueBeforeSavingtoDB: String? = null
-    var typeFieldTemporaryValueBeforeSavingtoDB: String? = null
-    var walletNameFieldTemporaryValueBeforeSavingtoDB: String? = null
+    var categoryNameFieldTemporaryValueBeforeSavingtoDB : MutableState<String> = mutableStateOf("")
+    var typeFieldTemporaryValueBeforeSavingtoDB : MutableState<String> = mutableStateOf("")
+    var walletNameFieldTemporaryValueBeforeSavingtoDB : MutableState<String> = mutableStateOf("")
 
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
@@ -115,7 +115,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
 
     fun updateTransactionInDb():Boolean {
 
-        if(typeFieldTemporaryValueBeforeSavingtoDB == "" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
+        if(typeFieldTemporaryValueBeforeSavingtoDB.value == "" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
             walletLinkTemporaryValueBeforeSavingtoDB == null ||
             dateFieldTemporaryValueBeforeSavingtoDB == "Date" ||
             amountFieldTemporaryValueBeforeSavingtoDB == null){
@@ -135,7 +135,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
                     date = dateFieldTemporaryValueBeforeSavingtoDB,
                     comments = commentsFieldTemporaryValueBeforeSavingtoDB,
                     location = locationFieldTemporaryValueBeforeSavingtoDB,
-                    type = typeFieldTemporaryValueBeforeSavingtoDB,
+                    type = typeFieldTemporaryValueBeforeSavingtoDB.value,
                     category = categoryLinkTemporaryValueBeforeSavingtoDB,
                     wallet = walletLinkTemporaryValueBeforeSavingtoDB,
                     username = username
@@ -179,10 +179,10 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
 
         this.nameFieldTemporaryValueBeforeSavingtoDB = transaction.name
         this.amountFieldTemporaryValueBeforeSavingtoDB = transaction.amount.toString()
-        this.typeFieldTemporaryValueBeforeSavingtoDB = transaction.type
-        this.categoryNameFieldTemporaryValueBeforeSavingtoDB = transaction.categoryName
+        this.typeFieldTemporaryValueBeforeSavingtoDB.value = transaction.type
+        this.categoryNameFieldTemporaryValueBeforeSavingtoDB.value = transaction.categoryName
         this.categoryIconTemporaryValueBeforeSavingtoDB = transaction.categoryIcon
-        this.walletNameFieldTemporaryValueBeforeSavingtoDB = transaction.walletName
+        this.walletNameFieldTemporaryValueBeforeSavingtoDB.value = transaction.walletName
         this.dateFieldTemporaryValueBeforeSavingtoDB = transaction.date
         this.commentsFieldTemporaryValueBeforeSavingtoDB = transaction.comments
         this.locationFieldTemporaryValueBeforeSavingtoDB = transaction.location
@@ -230,9 +230,9 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
             "date" -> dateFieldTemporaryValueBeforeSavingtoDB = value
             "location" -> locationFieldTemporaryValueBeforeSavingtoDB = value
             "name" -> nameFieldTemporaryValueBeforeSavingtoDB = value
-            "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB = value
-            "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB = value
-            "type" -> typeFieldTemporaryValueBeforeSavingtoDB = value
+            "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB.value = value
+            "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB.value = value
+            "type" -> typeFieldTemporaryValueBeforeSavingtoDB.value = value
             "categoryIcon" -> categoryIconTemporaryValueBeforeSavingtoDB = value
         }
 
@@ -245,9 +245,9 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
             "date" -> return dateFieldTemporaryValueBeforeSavingtoDB
             "location" -> return locationFieldTemporaryValueBeforeSavingtoDB
             "name" -> return nameFieldTemporaryValueBeforeSavingtoDB
-            "categoryName" -> return categoryNameFieldTemporaryValueBeforeSavingtoDB
-            "walletName" -> return walletNameFieldTemporaryValueBeforeSavingtoDB
-            "type" -> return typeFieldTemporaryValueBeforeSavingtoDB
+            "categoryName" -> return categoryNameFieldTemporaryValueBeforeSavingtoDB.value
+            "walletName" -> return walletNameFieldTemporaryValueBeforeSavingtoDB.value
+            "type" -> return typeFieldTemporaryValueBeforeSavingtoDB.value
             "categoryIcon" -> return categoryIconTemporaryValueBeforeSavingtoDB
         }
         return null

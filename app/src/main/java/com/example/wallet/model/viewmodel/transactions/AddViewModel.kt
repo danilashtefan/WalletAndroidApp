@@ -49,8 +49,8 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
     //This is only Category Name Displayed, not the actual Category name!!
     var categoryNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("Category of transaction")
-    var typeFieldTemporaryValueBeforeSavingtoDB: String? = "Type of transaction"
-    var walletNameFieldTemporaryValueBeforeSavingtoDB: String? = "Wallet"
+    var typeFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf( "Type of transaction")
+    var walletNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("Wallet")
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
     var dataLoaded = mutableStateOf(false)
@@ -130,8 +130,8 @@ init{
             "location" -> locationFieldTemporaryValueBeforeSavingtoDB = value
             "name" -> nameFieldTemporaryValueBeforeSavingtoDB = value
             "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB.value = value
-            "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB = value
-            "type" -> typeFieldTemporaryValueBeforeSavingtoDB = value
+            "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB.value = value
+            "type" -> typeFieldTemporaryValueBeforeSavingtoDB.value = value
             "nameCategory" -> nameCategoryFieldTemporaryValueBeforeSavingtoDB = value
             "typeCategory" -> typeCategoryFieldTemporaryValueBeforeSavingtoDB = value
             "iconCategory" -> iconCategoryFieldTemporaryValueBeforeSavingtoDB = value
@@ -157,14 +157,14 @@ init{
             "location" -> return locationFieldTemporaryValueBeforeSavingtoDB
             "name" -> return nameFieldTemporaryValueBeforeSavingtoDB
             "categoryName" -> return categoryNameFieldTemporaryValueBeforeSavingtoDB.value
-            "walletName" -> return walletNameFieldTemporaryValueBeforeSavingtoDB
-            "type" -> return typeFieldTemporaryValueBeforeSavingtoDB
+            "walletName" -> return walletNameFieldTemporaryValueBeforeSavingtoDB.value
+            "type" -> return typeFieldTemporaryValueBeforeSavingtoDB.value
         }
         return null
     }
 
     fun addTransactionToDb() : Boolean {
-        if(typeFieldTemporaryValueBeforeSavingtoDB == "Type of transaction" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
+        if(typeFieldTemporaryValueBeforeSavingtoDB.value == "Type of transaction" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
              walletLinkTemporaryValueBeforeSavingtoDB == null ||
                dateFieldTemporaryValueBeforeSavingtoDB == "Date" ||
                 amountFieldTemporaryValueBeforeSavingtoDB == null){
@@ -183,7 +183,7 @@ init{
                     date = dateFieldTemporaryValueBeforeSavingtoDB,
                     comments = commentsFieldTemporaryValueBeforeSavingtoDB,
                     location = locationFieldTemporaryValueBeforeSavingtoDB,
-                    type = typeFieldTemporaryValueBeforeSavingtoDB,
+                    type = typeFieldTemporaryValueBeforeSavingtoDB.value,
                     category = categoryLinkTemporaryValueBeforeSavingtoDB,
                     wallet = walletLinkTemporaryValueBeforeSavingtoDB,
                     username = userName

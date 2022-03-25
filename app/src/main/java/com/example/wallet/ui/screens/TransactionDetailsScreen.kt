@@ -124,7 +124,7 @@ fun TransactionDetailsScreen(
 //        )
         TypeSelectorTransactionDetails(
             padding = 20,
-            labelText = viewModel.typeFieldTemporaryValueBeforeSavingtoDB,
+            labelText = viewModel.typeFieldTemporaryValueBeforeSavingtoDB.value,
             optionsList = listOf("Expense", "Income"),
             viewModel = viewModel
         )
@@ -133,7 +133,7 @@ fun TransactionDetailsScreen(
             Text(text = "Category: ")
             CategorySelctorTransactionDetails(
                 padding = 20,
-                labelText = transaction.categoryName,
+                labelText = viewModel.categoryNameFieldTemporaryValueBeforeSavingtoDB.value,
                 optionsList = transactionsCategories,
                 viewModel = viewModel,
                 transactionId = transaction.id
@@ -145,7 +145,7 @@ fun TransactionDetailsScreen(
 
             WalletSelctorTransactionDetails(
                 padding = 20,
-                labelText = transaction.walletName,
+                labelText = viewModel.walletNameFieldTemporaryValueBeforeSavingtoDB.value,
                 optionsList = transactionsWallet,
                 viewModel = viewModel,
                 transactionId = transactionId
