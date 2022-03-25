@@ -153,6 +153,7 @@ fun TransactionListSection(
             var showLowBudgetAlertDialog = viewModel.showLowBudgetAlertDialog.value
             var userAknowledgedAboutLowBudget = viewModel.userAknowledgedAboutLowBudget.value
             val budgetSetTextState = remember { mutableStateOf(TextFieldValue("")) }
+            var budgetForUpdate = "0"
             if(showLowBudgetAlertDialog){
                 OneButtonAlertDialogComponent(onDismiss = {
                     viewModel.dismissLowBudgetAlertDialog()
@@ -162,14 +163,18 @@ fun TransactionListSection(
             if (showBudgetSetDialog) {
                 OneButtonAlertDialogComponent(onDismiss = {
                     viewModel.showBudgetSetDialog.value = false
-                    viewModel.updateBudgetSet(budgetSetTextState.value.text.toInt())
+                    viewModel.updateBudgetSet(budgetForUpdate.toInt())
                     viewModel.updateBudgetLeft()
                 }, bodyText = {
-
                     TextField(
                         value = budgetSetTextState.value,
                         onValueChange = {
                             budgetSetTextState.value = it
+                            if(budgetSetTextState.value.text.equals("")){
+                                budgetForUpdate = "0"
+                            }else{
+                                budgetForUpdate = budgetSetTextState.value.text
+                        }
                         },
                         keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
                     )
