@@ -68,6 +68,11 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     var currencyWalletFieldTemporaryValueBeforeSavingtoDB: String? = ""
 
     var locationState = mutableStateOf("")
+    var showIncorrectDataAlertDialog = mutableStateOf(false)
+
+    var incorrectDataAlertDialogText = "Some of the fields are empty. Please, introduce:\n\n"+
+            "\u2022" + "Type\n" + "\u2022" + "Category\n" + "\u2022" + "Wallet\n" + "\u2022" + "Date\n"+"\u2022" +"Amount"
+//var incorrectDataAlertDialogText = "Some text"
 
 
 
@@ -158,7 +163,14 @@ init{
         return null
     }
 
-    fun addTransactionToDb() {
+    fun addTransactionToDb() : Boolean {
+        if(typeCategoryFieldTemporaryValueBeforeSavingtoDB == "Type of transaction" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
+             walletLinkTemporaryValueBeforeSavingtoDB == null ||
+               dateFieldTemporaryValueBeforeSavingtoDB == "Date" ||
+                amountFieldTemporaryValueBeforeSavingtoDB == null){
+            incorrectDataDialogShow()
+            return false
+        }
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception when saving to DB")
         }
@@ -178,6 +190,7 @@ init{
                 )
             )
         }
+        return true
 
     }
 
@@ -240,6 +253,13 @@ init{
         this.walletLinkTemporaryValueBeforeSavingtoDB = wallet.id.toString()
             //LinkBuilder.buildWalletLinkForAddingToExpanse(walletId = wallet.id)
         updateTemporaryFieldValueBeforeSavingToDB("walletName", wallet.walletName)
+    }
+
+    fun incorrectDataDialogShow(){
+        showIncorrectDataAlertDialog.value = true
+    }
+    fun incorrectDataDialogClose(){
+        showIncorrectDataAlertDialog.value = false
     }
 
 }

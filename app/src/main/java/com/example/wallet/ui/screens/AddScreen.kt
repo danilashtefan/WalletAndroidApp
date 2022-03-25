@@ -65,6 +65,14 @@ fun AddScreen(
         modifier = Modifier
             .background(Color(0xFFBB87E4))
     ) {
+        var showIncorrectDataAlertDialog = viewModel.showIncorrectDataAlertDialog.value
+        if (showIncorrectDataAlertDialog){
+            OneButtonAlertDialogComponent(
+                onDismiss = { viewModel.incorrectDataDialogClose() },
+                bodyText = {Text(viewModel.incorrectDataAlertDialogText, color = Color.White) },
+                buttonText = "DISMISS"
+            )
+        }
         LogoSection(pictureSize = 90)
         ChooseWhatToAddSection(listOfButtons, viewModel)
         AddingSection(viewModel, navController)
@@ -460,9 +468,11 @@ private fun SaveButtonTransactionAdd(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
-            viewModel.addTransactionToDb()
+            val addResult = viewModel.addTransactionToDb()
             Thread.sleep(500)
-            navController.navigate("expanses")
+            if (addResult){
+                navController.navigate("expanses")
+            }
         }) {
             Text(text = "Add transaction")
         }
@@ -652,7 +662,8 @@ fun EditableFieldLocation(
             Log.d("INFO", "Address: ${place.address}")
         }
     Row(
-        modifier=Modifier.padding(top = padding.dp)
+        modifier= Modifier
+            .padding(top = padding.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
