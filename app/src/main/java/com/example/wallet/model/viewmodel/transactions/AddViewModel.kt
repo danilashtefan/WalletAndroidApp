@@ -48,7 +48,7 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     //var transactionWalletsState = mutableStateOf((listOf(Wallet())))
     var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
     //This is only Category Name Displayed, not the actual Category name!!
-    var categoryNameFieldTemporaryValueBeforeSavingtoDB: String? = "Category of transaction"
+    var categoryNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("Category of transaction")
     var typeFieldTemporaryValueBeforeSavingtoDB: String? = "Type of transaction"
     var walletNameFieldTemporaryValueBeforeSavingtoDB: String? = "Wallet"
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
@@ -129,7 +129,7 @@ init{
             "date" -> dateFieldTemporaryValueBeforeSavingtoDB = value
             "location" -> locationFieldTemporaryValueBeforeSavingtoDB = value
             "name" -> nameFieldTemporaryValueBeforeSavingtoDB = value
-            "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB = value
+            "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB.value = value
             "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB = value
             "type" -> typeFieldTemporaryValueBeforeSavingtoDB = value
             "nameCategory" -> nameCategoryFieldTemporaryValueBeforeSavingtoDB = value
@@ -156,7 +156,7 @@ init{
             "date" -> return dateFieldTemporaryValueBeforeSavingtoDB
             "location" -> return locationFieldTemporaryValueBeforeSavingtoDB
             "name" -> return nameFieldTemporaryValueBeforeSavingtoDB
-            "categoryName" -> return categoryNameFieldTemporaryValueBeforeSavingtoDB
+            "categoryName" -> return categoryNameFieldTemporaryValueBeforeSavingtoDB.value
             "walletName" -> return walletNameFieldTemporaryValueBeforeSavingtoDB
             "type" -> return typeFieldTemporaryValueBeforeSavingtoDB
         }

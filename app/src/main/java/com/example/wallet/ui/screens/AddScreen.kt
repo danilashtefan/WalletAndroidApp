@@ -363,7 +363,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
 
         CategorySelectorTransactionAdd(
             padding = 20,
-            labelText = viewModel.categoryNameFieldTemporaryValueBeforeSavingtoDB,
+            labelText = viewModel.categoryNameFieldTemporaryValueBeforeSavingtoDB.value,
             optionsList = viewModel.transactionCetegoriesState.value,
             viewModel = viewModel
         )
