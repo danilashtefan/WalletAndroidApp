@@ -38,11 +38,11 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
     var whatToAddstate = mutableStateOf("")
-    var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
+    var nameFieldTemporaryValueBeforeSavingtoDB: String? = ""
     var amountFieldTemporaryValueBeforeSavingtoDB: String? = null
     var dateFieldTemporaryValueBeforeSavingtoDB: String = "Date"
-    var commentsFieldTemporaryValueBeforeSavingtoDB: String? = null
-    var locationFieldTemporaryValueBeforeSavingtoDB: String? = null
+    var commentsFieldTemporaryValueBeforeSavingtoDB: String? = ""
+    var locationFieldTemporaryValueBeforeSavingtoDB: String? = "No location"
     //var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
     var transactionCetegoriesState = mutableStateOf(emptyList<SecondAllExpenseCategoriesResponseItem>())
     //var transactionWalletsState = mutableStateOf((listOf(Wallet())))

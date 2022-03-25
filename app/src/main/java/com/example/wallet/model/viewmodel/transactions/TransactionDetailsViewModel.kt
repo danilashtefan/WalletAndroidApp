@@ -34,12 +34,12 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
     var transaction = mutableStateOf(SecondAllExpensesItem())
 
-    var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
+    var nameFieldTemporaryValueBeforeSavingtoDB: String? = ""
     var amountFieldTemporaryValueBeforeSavingtoDB: String? = null
     var photoUrlFieldTemporaryValueBeforeSavingtoDB: String? = null
     var dateFieldTemporaryValueBeforeSavingtoDB: String? = null
-    var commentsFieldTemporaryValueBeforeSavingtoDB: String? = null
-    var locationFieldTemporaryValueBeforeSavingtoDB: String? = null
+    var commentsFieldTemporaryValueBeforeSavingtoDB: String? = ""
+    var locationFieldTemporaryValueBeforeSavingtoDB: String? = ""
 
     //This is only Category Name Displayed, not the actual Category name!!
     var categoryNameFieldTemporaryValueBeforeSavingtoDB: String? = null
