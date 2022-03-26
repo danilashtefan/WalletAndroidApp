@@ -28,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -115,6 +116,7 @@ fun TransactionListSection(
             }, enabled = !viewModel.expandedCalendarMax.value) {
                 Text(text = viewModel.minDatePicked.value.toString())
             }
+            Spacer(Modifier.width(12.dp))
             OutlinedButton(onClick = {
                 viewModel.expandedCalendarMax.value = !viewModel.expandedCalendarMax.value
             }, enabled = !viewModel.expandedCalendarMin.value) {
@@ -130,65 +132,79 @@ fun TransactionListSection(
 
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                text = "Total expenses: ${totalExpenses}",
+                text = "Total expenses: ${totalExpenses} HUF",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
         }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                text = "Total income: ${totalIncome}",
+                text = "Total income: ${totalIncome} HUF",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
         }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
-            Text(
-                text = "Budget set: ${budgetSet}",
-                style = MaterialTheme.typography.h6,
-                color = Color.White
-            )
-
-            var showBudgetSetDialog = viewModel.showBudgetSetDialog.value
-            var showLowBudgetAlertDialog = viewModel.showLowBudgetAlertDialog.value
-            var userAknowledgedAboutLowBudget = viewModel.userAknowledgedAboutLowBudget.value
-            val budgetSetTextState = remember { mutableStateOf(TextFieldValue("")) }
-            var budgetForUpdate = "0"
-            if(showLowBudgetAlertDialog){
-                OneButtonAlertDialogComponent(onDismiss = {
-                    viewModel.dismissLowBudgetAlertDialog()
-                },bodyText = { Text(viewModel.lowBugetDialogText.value, color = Color.White) },
-                    buttonText = "DISMISS")
+            Column(modifier = Modifier.weight(2F)) {
+                Text(
+                    text = "Budget set: ${budgetSet} HUF",
+                    style = MaterialTheme.typography.h6,
+                    color = Color.White
+                )
             }
-            if (showBudgetSetDialog) {
-                OneButtonAlertDialogComponent(onDismiss = {
-                    viewModel.showBudgetSetDialog.value = false
-                    viewModel.updateBudgetSet(budgetForUpdate.toInt())
-                    viewModel.updateBudgetLeft()
-                }, bodyText = {
-                    TextField(
-                        value = budgetSetTextState.value,
-                        onValueChange = {
-                            budgetSetTextState.value = it
-                            if(budgetSetTextState.value.text.equals("")){
-                                budgetForUpdate = "0"
-                            }else{
-                                budgetForUpdate = budgetSetTextState.value.text
-                        }
+            Column(modifier = Modifier.weight(1F)) {
+                var showBudgetSetDialog = viewModel.showBudgetSetDialog.value
+                var showLowBudgetAlertDialog = viewModel.showLowBudgetAlertDialog.value
+                var userAknowledgedAboutLowBudget = viewModel.userAknowledgedAboutLowBudget.value
+                val budgetSetTextState = remember { mutableStateOf(TextFieldValue("")) }
+                var budgetForUpdate = "0"
+                if (showLowBudgetAlertDialog) {
+                    OneButtonAlertDialogComponent(onDismiss = {
+                        viewModel.dismissLowBudgetAlertDialog()
+                    },
+                        bodyText = {
+                            Text(
+                                viewModel.lowBugetDialogText.value,
+                                color = Color.White
+                            )
                         },
-                        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                        buttonText = "DISMISS"
                     )
-                }, buttonText = "Confirm")
-            }
+                }
+                if (showBudgetSetDialog) {
+                    OneButtonAlertDialogComponent(onDismiss = {
+                        viewModel.showBudgetSetDialog.value = false
+                        viewModel.updateBudgetSet(budgetForUpdate.toInt())
+                        viewModel.updateBudgetLeft()
+                    }, bodyText = {
+                        TextField(
+                            value = budgetSetTextState.value,
+                            onValueChange = {
+                                budgetSetTextState.value = it
+                                if (budgetSetTextState.value.text.equals("")) {
+                                    budgetForUpdate = "0"
+                                } else {
+                                    budgetForUpdate = budgetSetTextState.value.text
+                                }
+                            },
+                            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+                        )
+                    }, buttonText = "Confirm")
+                }
 
-            OutlinedButton(onClick = { viewModel.showBudgetSetAlertDialog() }, modifier = Modifier.wrapContentSize(
-                Alignment.CenterEnd)) {
-                Text(text = "Set the budget")
+                OutlinedButton(
+                    onClick = { viewModel.showBudgetSetAlertDialog() },
+                    modifier = Modifier.wrapContentSize(
+                        Alignment.TopEnd
+                    )
+                ) {
+                    Text(text = "Set budget")
+                }
             }
         }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                text = "Budget left: ${budgetLeft}",
+                text = "Budget left: ${budgetLeft} HUF",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
@@ -207,6 +223,7 @@ fun TransactionListSection(
         }
     }
 }
+
 
 @Composable
 fun LogoSection(pictureSize: Int) {
@@ -400,7 +417,7 @@ fun ReusableRow(
     editClickAction: () -> Unit,
     deleteClickAction: () -> Unit
 ) {
-    val currency = "$"
+    val currency = " HUF"
     var sign = "+"
     if (type == "Expense" && amount > 0) {
         sign = "-"
@@ -420,47 +437,58 @@ fun ReusableRow(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Spacer(Modifier.width(12.dp))
-                Column(Modifier) {
+                Column(Modifier.weight(0.5f)) {
                     CategoryImage(categoryIcon, 30)
                     Spacer(Modifier.width(15.dp))
-                    Text(text = categoryName)
+                    Text(text = categoryName,maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
-                Spacer(Modifier.weight(0.4f))
-                Text("Press for details"/*, textAlign = TextAlign.Center*/)
-                Spacer(Modifier.weight(0.3f))
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = sign,
-                        modifier = Modifier
-                            .align(Alignment.CenterVertically)
-                            .padding(end = 3.dp)
-                    )
+                //Spacer(Modifier.weight(0.4f))
+               Column(/*Modifier.weight(2f).wrapContentSize(Alignment.Center)*/) {
+                    Text("Press for details")
+                }
 
-                    Text(
-                        text = amount.toString(),
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
-                    Text(
-                        text = currency,
-                        modifier = Modifier.align(Alignment.CenterVertically)
-                    )
+                //Spacer(Modifier.weight(0.3f))
+                Column(Modifier.weight(1f).wrapContentSize(Alignment.CenterEnd)) {
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = sign,
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .padding(end = 3.dp)
+                        )
+
+                        Text(
+                            text = amount.toString(),
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+
+                        Text(
+                            text = currency,
+                            modifier = Modifier.align(Alignment.CenterVertically)
+                        )
+                    }
                 }
-                Spacer(Modifier.width(16.dp))
-                IconButton({expanded = !expanded }) {
-                    Icon(
-                        imageVector = Icons.Filled.ChevronRight,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(end = 12.dp)
-                            .size(24.dp),
-                    )
-                }
+
+                Spacer(Modifier.width(5.dp))
+
+               // Spacer(Modifier.width(16.dp))
+//                Column(Modifier.weight(0.1f)) {
+//                    IconButton({ expanded = !expanded }) {
+//                        Icon(
+//                            imageVector = Icons.Filled.ChevronRight,
+//                            contentDescription = null,
+//                            modifier = Modifier
+//                                .padding(end = 12.dp)
+//                                .size(24.dp),
+//                        )
+//                    }
+//                }
 
             }
             AnimatedVisibility(visible = expanded) {
-                Column() {
+                Column(modifier=Modifier.padding(start=5.dp)) {
                     Text(text = "Location: " + location)
                     Text(text = "Date: " + date)
                     Text(text = "Comment: " + comments)

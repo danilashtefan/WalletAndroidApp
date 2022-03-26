@@ -357,6 +357,7 @@ fun PeriodPicking(viewModel: ReportViewModel) {
         }, enabled = !viewModel.expandedCalendarMax.value) {
             Text(text = viewModel.minDatePicked.value.toString())
         }
+        Spacer(Modifier.width(12.dp))
         OutlinedButton(onClick = {
             viewModel.expandedCalendarMax.value = !viewModel.expandedCalendarMax.value
         }, enabled = !viewModel.expandedCalendarMin.value) {
