@@ -48,8 +48,8 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     //var transactionWalletsState = mutableStateOf((listOf(Wallet())))
     var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
     //This is only Category Name Displayed, not the actual Category name!!
-    var categoryNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("Category of transaction")
-    var typeFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf( "Type of transaction")
+    var categoryNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("Category")
+    var typeFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf( "Type")
     var walletNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("Wallet")
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null

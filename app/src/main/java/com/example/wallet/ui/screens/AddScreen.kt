@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -416,8 +417,8 @@ private fun DatePicker(viewModel: AddViewModel, padding: Int) {
     ) {
         OutlinedButton(onClick = {
             viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value
-        }) {
-            Text(text = viewModel.datePicked.value)
+        }, modifier= Modifier.width(160.dp)) {
+            Text(text = viewModel.datePicked.value,maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
 
     }
@@ -529,9 +530,9 @@ fun WalletSelectorTransactionAdd(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled) {
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(160.dp)) {
                 if (labelText != null) {
-                    Text(text = labelText)
+                    Text(text = labelText,maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
         }
@@ -570,9 +571,9 @@ fun CategorySelectorTransactionAdd(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled) {
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(160.dp)) {
                 if (labelText != null) {
-                    Text(text = labelText)
+                    Text(text = labelText,maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
         }
@@ -612,9 +613,9 @@ fun TypeSelectorTransactionAdd(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled) {
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(160.dp)) {
                 if (labelText != null) {
-                    Text(text = labelText)
+                    Text(text = labelText,maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
             }
         }
@@ -672,7 +673,7 @@ fun EditableFieldLocation(
 
             launcher.launch(intent)
 
-        }) {
+        }, modifier= Modifier.width(160.dp)) {
             Text(text = "Search location")
         }
 

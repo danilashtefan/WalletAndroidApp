@@ -25,6 +25,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -216,7 +217,7 @@ private fun DatePicker(viewModel: TransactionDetailsViewModel, padding: Int) {
     ) {
         OutlinedButton(onClick = {
             viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value
-        }) {
+        }, modifier= Modifier.width(160.dp)) {
             viewModel.datePicked.value?.let { Text(text = it) }
         }
 
@@ -313,8 +314,8 @@ private fun CategorySelctorTransactionDetails(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled) {
-                Text(text = labelText)
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(160.dp)) {
+                Text(text = labelText, overflow = TextOverflow.Ellipsis)
             }
         }
         AnimatedVisibility(visible = expanded) {
@@ -353,9 +354,9 @@ fun TypeSelectorTransactionDetails(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled) {
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled,modifier= Modifier.width(160.dp)) {
                 if (labelText != null) {
-                    Text(text = labelText)
+                    Text(text = labelText, overflow = TextOverflow.Ellipsis)
                 }
             }
         }
@@ -400,8 +401,8 @@ private fun WalletSelctorTransactionDetails(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled) {
-                Text(text = labelText)
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(160.dp)) {
+                Text(text = labelText,maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
         AnimatedVisibility(visible = expanded) {
@@ -450,12 +451,10 @@ private fun EditableFieldLocationTransactionDetails(
         horizontalArrangement = Arrangement.Center
     ) {
         OutlinedButton(onClick = {
-
             launcher.launch(intent)
-
-        }) {
+        }, modifier= Modifier.width(160.dp)) {
             var buttonText = viewModel.locationState.value
-            Text(buttonText)
+            Text(buttonText,maxLines = 1, overflow = TextOverflow.Ellipsis)
         }
 
     }

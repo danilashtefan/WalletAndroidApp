@@ -475,7 +475,7 @@ fun ReusableRow(
                     }
                 }
 
-                Spacer(Modifier.width(5.dp))
+                Spacer(Modifier.width(10.dp))
 
                // Spacer(Modifier.width(16.dp))
 //                Column(Modifier.weight(0.1f)) {
