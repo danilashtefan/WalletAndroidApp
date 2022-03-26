@@ -192,14 +192,6 @@ fun TransactionListSection(
                     }, buttonText = "Confirm")
                 }
 
-                OutlinedButton(
-                    onClick = { viewModel.showBudgetSetAlertDialog() },
-                    modifier = Modifier.wrapContentSize(
-                        Alignment.TopEnd
-                    )
-                ) {
-                    Text(text = "Set budget")
-                }
             }
         }
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
@@ -221,6 +213,18 @@ fun TransactionListSection(
             )
             SpinnerView(viewModel = viewModel)
         }
+Row(horizontalArrangement = Arrangement.Start,
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier.padding(start = 25.dp)){
+    OutlinedButton(
+        onClick = { viewModel.showBudgetSetAlertDialog() },
+        modifier = Modifier.wrapContentSize(
+            Alignment.Center
+        ).height(35.dp)
+    ) {
+        Text(text = "Set budget")
+    }
+}
     }
 }
 
