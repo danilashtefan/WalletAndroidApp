@@ -12,6 +12,7 @@ import com.example.wallet.model.response.login.RegisterResponse
 import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
 import com.example.wallet.model.response.transactions.SecondAPI.*
 import com.example.wallet.requests.*
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -23,21 +24,23 @@ class WalletWebService {
     init {
         val retrofit = Retrofit.Builder()
             //KAMORA
-            //.baseUrl("http://192.168.88.224:8080/api/")
+            //.baseUrl("https://192.168.88.224:8080/api/")
             //HOME
-            //.baseUrl("http://10.0.1.60:8080/api/")
+            //.baseUrl("https://10.0.1.60:8080/api/")
             //OFFICE
-            //baseUrl("http://192.168.0.116:8080/api/")
+            //baseUrl("https://192.168.0.116:8080/api/")
             //Iulia
             .baseUrl("http://192.168.1.67:8080/api/")
-            //.baseUrl("http://192.168.1.80:8080/api/")
-            //.baseUrl("http://152.66.156.198:8080/api/")
+            //.baseUrl("https://192.168.1.80:8080/api/")
+            //.baseUrl("https://152.66.156.198:8080/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
         api = retrofit.create(WalletAPI::class.java)
     }
+
+
 
     suspend fun login(loginRequest: LoginRequest): LoginResponse {
         return api.login(loginRequest)

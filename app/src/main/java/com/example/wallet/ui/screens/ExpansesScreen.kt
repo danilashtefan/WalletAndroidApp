@@ -181,7 +181,8 @@ fun TransactionListSection(
                 }, buttonText = "Confirm")
             }
 
-            OutlinedButton(onClick = { viewModel.showBudgetSetAlertDialog() }) {
+            OutlinedButton(onClick = { viewModel.showBudgetSetAlertDialog() }, modifier = Modifier.wrapContentSize(
+                Alignment.CenterEnd)) {
                 Text(text = "Set the budget")
             }
         }
@@ -425,7 +426,7 @@ fun ReusableRow(
                     Text(text = categoryName)
                 }
                 Spacer(Modifier.weight(0.4f))
-                Text("Press for details")
+                Text("Press for details"/*, textAlign = TextAlign.Center*/)
                 Spacer(Modifier.weight(0.3f))
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -447,7 +448,7 @@ fun ReusableRow(
                     )
                 }
                 Spacer(Modifier.width(16.dp))
-                IconButton({ println("Pressed") }) {
+                IconButton({expanded = !expanded }) {
                     Icon(
                         imageVector = Icons.Filled.ChevronRight,
                         contentDescription = null,
