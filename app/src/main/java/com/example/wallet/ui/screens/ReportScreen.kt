@@ -242,7 +242,7 @@ fun TopIncomeWallet(topIncomeWallet: TopWalletWithAmountResponse) {
     if (topIncomeWallet.wallet != null) {
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                "Top income wallet: ${topIncomeWallet.wallet.walletName}${topIncomeWallet.wallet.icon} + ${topIncomeWallet.incomeAmount} $",
+                "Top income wallet: ${topIncomeWallet.wallet.walletName}${topIncomeWallet.wallet.icon} + ${topIncomeWallet.incomeAmount} HUF",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
@@ -265,7 +265,7 @@ fun TopExpenseWallet(topExpenseWallet: TopWalletWithAmountResponse) {
 
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                "Top expense wallet: ${topExpenseWallet.wallet.walletName}${topExpenseWallet.wallet.icon} - ${topExpenseWallet.expenseAmount} $",
+                "Top expense wallet: ${topExpenseWallet.wallet.walletName}${topExpenseWallet.wallet.icon} - ${topExpenseWallet.expenseAmount} HUF",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
@@ -287,7 +287,7 @@ fun TopIncomeCategory(topIncomeCategory: TopExpenseCategoryWithAmountResponse) {
     if (topIncomeCategory.category != null) {
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                "Top income category: ${topIncomeCategory.category.expanseCategoryName}${topIncomeCategory.category.icon} + ${topIncomeCategory.incomeAmount} $",
+                "Top income category: ${topIncomeCategory.category.expanseCategoryName}${topIncomeCategory.category.icon} + ${topIncomeCategory.incomeAmount} HUF",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
@@ -308,7 +308,7 @@ fun TopExpenseCategory(topExpenseCategory: TopExpenseCategoryWithAmountResponse)
     if (topExpenseCategory.category != null) {
         Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
             Text(
-                "Top expense category: ${topExpenseCategory.category.expanseCategoryName}${topExpenseCategory.category.icon} - ${topExpenseCategory.expenseAmount} $",
+                "Top expense category: ${topExpenseCategory.category.expanseCategoryName}${topExpenseCategory.category.icon} - ${topExpenseCategory.expenseAmount} HUF",
                 style = MaterialTheme.typography.h6,
                 color = Color.White
             )
@@ -329,7 +329,7 @@ fun TopExpenseCategory(topExpenseCategory: TopExpenseCategoryWithAmountResponse)
 fun TopIncomeTransaction(income: SecondAllExpensesItem) {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
         Text(
-            "Top income transaction: ${income.name} - ${income.amount} $",
+            "Top income transaction: ${income.name} - ${income.amount} HUF",
             style = MaterialTheme.typography.h6,
             color = Color.White
         )
@@ -340,7 +340,7 @@ fun TopIncomeTransaction(income: SecondAllExpensesItem) {
 fun TopExpenseTransaction(expense: SecondAllExpensesItem) {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
         Text(
-            "Top expense transaction: ${expense.name} - ${expense.amount} $",
+            "Top expense transaction: ${expense.name} - ${expense.amount} HUF",
             style = MaterialTheme.typography.h6,
             color = Color.White
         )

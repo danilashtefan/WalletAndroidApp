@@ -42,15 +42,15 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     var amountFieldTemporaryValueBeforeSavingtoDB: String? = null
     var dateFieldTemporaryValueBeforeSavingtoDB: String = "Date"
     var commentsFieldTemporaryValueBeforeSavingtoDB: String? = ""
-    var locationFieldTemporaryValueBeforeSavingtoDB: String? = "No location"
+    var locationFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("No location")
     //var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
     var transactionCetegoriesState = mutableStateOf(emptyList<SecondAllExpenseCategoriesResponseItem>())
     //var transactionWalletsState = mutableStateOf((listOf(Wallet())))
     var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
     //This is only Category Name Displayed, not the actual Category name!!
-    var categoryNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("Category")
-    var typeFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf( "Type")
-    var walletNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("Wallet")
+    var categoryNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("None")
+    var typeFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf( "None")
+    var walletNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("None")
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
     var dataLoaded = mutableStateOf(false)
@@ -127,7 +127,7 @@ init{
             "amount" -> amountFieldTemporaryValueBeforeSavingtoDB = value
             "comments" -> commentsFieldTemporaryValueBeforeSavingtoDB = value
             "date" -> dateFieldTemporaryValueBeforeSavingtoDB = value
-            "location" -> locationFieldTemporaryValueBeforeSavingtoDB = value
+            "location" -> locationFieldTemporaryValueBeforeSavingtoDB.value = value
             "name" -> nameFieldTemporaryValueBeforeSavingtoDB = value
             "categoryName" -> categoryNameFieldTemporaryValueBeforeSavingtoDB.value = value
             "walletName" -> walletNameFieldTemporaryValueBeforeSavingtoDB.value = value
@@ -154,7 +154,7 @@ init{
             "amount" -> return amountFieldTemporaryValueBeforeSavingtoDB.toString()
             "comments" -> return commentsFieldTemporaryValueBeforeSavingtoDB
             "date" -> return dateFieldTemporaryValueBeforeSavingtoDB
-            "location" -> return locationFieldTemporaryValueBeforeSavingtoDB
+            "location" -> return locationFieldTemporaryValueBeforeSavingtoDB.value
             "name" -> return nameFieldTemporaryValueBeforeSavingtoDB
             "categoryName" -> return categoryNameFieldTemporaryValueBeforeSavingtoDB.value
             "walletName" -> return walletNameFieldTemporaryValueBeforeSavingtoDB.value
@@ -182,7 +182,7 @@ init{
                     amount = amountFieldTemporaryValueBeforeSavingtoDB?.toInt(),
                     date = dateFieldTemporaryValueBeforeSavingtoDB,
                     comments = commentsFieldTemporaryValueBeforeSavingtoDB,
-                    location = locationFieldTemporaryValueBeforeSavingtoDB,
+                    location = locationFieldTemporaryValueBeforeSavingtoDB.value,
                     type = typeFieldTemporaryValueBeforeSavingtoDB.value,
                     category = categoryLinkTemporaryValueBeforeSavingtoDB,
                     wallet = walletLinkTemporaryValueBeforeSavingtoDB,

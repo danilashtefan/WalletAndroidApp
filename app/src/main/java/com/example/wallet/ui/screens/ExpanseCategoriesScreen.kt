@@ -275,7 +275,7 @@ fun ReusableCategoryAndWalletRow(
                 Spacer(Modifier.weight(0.3f))
                 Spacer(Modifier.width(16.dp))
                 if(displayAmount){
-                    Text("$amount $")
+                    Text("$amount HUF")
                 }
                 IconButton(onClick = { navController.navigate(route) }) {
                     Icon(

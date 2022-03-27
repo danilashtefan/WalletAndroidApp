@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -107,6 +108,15 @@ fun TransactionDetailsScreen(
             field = nameFieldName,
             labelText = "Name",
             value = transaction.name,
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.notes),
+                    contentDescription = "wallet",
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+            },
             viewModel = viewModel
         )
         EditableFieldTransactionDetails(
@@ -114,6 +124,15 @@ fun TransactionDetailsScreen(
             field = amountFieldName,
             labelText = "Amount",
             value = transaction.amount,
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.wallet),
+                    contentDescription = "wallet",
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+            },
             viewModel = viewModel
         )
 //        EditableFieldTransactionDetails(
@@ -127,29 +146,55 @@ fun TransactionDetailsScreen(
             padding = 20,
             labelText = viewModel.typeFieldTemporaryValueBeforeSavingtoDB.value,
             optionsList = listOf("Expense", "Income"),
-            viewModel = viewModel
+            viewModel = viewModel,
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.category),
+                    contentDescription = "wallet",
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+            }
         )
         //InfoRow(20,"Category")
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Category: ")
-            CategorySelctorTransactionDetails(
-                padding = 20,
-                labelText = viewModel.categoryNameFieldTemporaryValueBeforeSavingtoDB.value,
-                optionsList = transactionsCategories,
-                viewModel = viewModel,
-                transactionId = transaction.id
-            )
+                CategorySelctorTransactionDetails(
+                    padding = 20,
+                    labelText = viewModel.categoryNameFieldTemporaryValueBeforeSavingtoDB.value,
+                    optionsList = transactionsCategories,
+                    viewModel = viewModel,
+                    transactionId = transaction.id,
+                    leadingIcon = {
+                        Image(
+                            painter = painterResource(id = R.drawable.infography),
+                            contentDescription = "wallet",
+                            modifier = Modifier
+                                .width(24.dp)
+                                .height(24.dp)
+                        )
+                    }
+                )
+
         }
 
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "Wallet: ")
-
             WalletSelctorTransactionDetails(
                 padding = 20,
                 labelText = viewModel.walletNameFieldTemporaryValueBeforeSavingtoDB.value,
                 optionsList = transactionsWallet,
                 viewModel = viewModel,
-                transactionId = transactionId
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.money),
+                        contentDescription = "wallet",
+                        modifier = Modifier
+                            .width(24.dp)
+                            .height(24.dp)
+                    )
+                },
+                transactionId = transactionId,
+
             )
 
         }
@@ -161,21 +206,47 @@ fun TransactionDetailsScreen(
 //            viewModel = viewModel
 //        )
 
-        DatePicker(viewModel = viewModel, padding = 20)
+        DatePicker(viewModel = viewModel, padding = 20, leadingIcon = {
+            Image(
+                painter = painterResource(id = R.drawable.calendar),
+                contentDescription = "wallet",
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(24.dp)
+            )
+        })
 
         EditableFieldTransactionDetails(
             20,
             field = commentsFieldName,
             labelText = "Comments",
             value = transaction.comments,
-            viewModel = viewModel
+            viewModel = viewModel,
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.thinking),
+                    contentDescription = "groceries",
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+            }
         )
         EditableFieldLocationTransactionDetails(
             20,
             field = locationFieldName,
             labelText = "Location",
             value = transaction.location,
-            viewModel = viewModel
+            viewModel = viewModel,
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.location),
+                    contentDescription = "groceries",
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+            }
         )
         Spacer(modifier = Modifier.size(20.dp))
         SaveButtonTransactionDetails(navController, fieldsOnTheScreen, viewModel)
@@ -207,7 +278,7 @@ private fun SaveButtonTransactionDetails(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun DatePicker(viewModel: TransactionDetailsViewModel, padding: Int) {
+private fun DatePicker(viewModel: TransactionDetailsViewModel, padding: Int,leadingIcon: @Composable () -> Unit) {
     Row(
         modifier = Modifier
             .padding(top = padding.dp)
@@ -217,8 +288,18 @@ private fun DatePicker(viewModel: TransactionDetailsViewModel, padding: Int) {
     ) {
         OutlinedButton(onClick = {
             viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value
-        }, modifier= Modifier.width(160.dp)) {
-            viewModel.datePicked.value?.let { Text(text = it) }
+        }, modifier= Modifier.width(200.dp)) {
+            Column(
+                Modifier
+                    .weight(1F)
+                    .wrapContentSize(Alignment.CenterStart)) {
+                leadingIcon()
+            }
+            Column( Modifier
+                .weight(4F)) {
+                viewModel.datePicked.value?.let { Text(text = it) }
+
+            }
         }
 
     }
@@ -294,6 +375,7 @@ fun ImageSection(transaction: SecondAllExpensesItem) {
     }
 }
 
+
 @OptIn(ExperimentalAnimationApi::class, androidx.compose.material.ExperimentalMaterialApi::class)
 @Composable
 private fun CategorySelctorTransactionDetails(
@@ -302,7 +384,8 @@ private fun CategorySelctorTransactionDetails(
     optionsList: List<SecondAllExpenseCategoriesResponseItem>,
     enabled: Boolean = true,
     viewModel: TransactionDetailsViewModel,
-    transactionId: Int
+    transactionId: Int,
+    leadingIcon: @Composable () -> Unit
 ) {
     Column() {
         var expanded by remember { mutableStateOf(false) }
@@ -313,9 +396,20 @@ private fun CategorySelctorTransactionDetails(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(200.dp)) {
+                Column(
+                    Modifier
+                        .weight(1F)
+                        .wrapContentSize(Alignment.CenterStart)) {
+                    leadingIcon()
+                }
+                Column( Modifier
+                    .weight(4F)) {
+                    if (labelText != null) {
+                        Text(text = "Category: $labelText", maxLines = 1,overflow = TextOverflow.Ellipsis)
+                    }
+                }
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(160.dp)) {
-                Text(text = labelText, overflow = TextOverflow.Ellipsis)
             }
         }
         AnimatedVisibility(visible = expanded) {
@@ -342,6 +436,7 @@ fun TypeSelectorTransactionDetails(
     optionsList: List<String>,
     enabled: Boolean = true,
     viewModel: TransactionDetailsViewModel,
+    leadingIcon: @Composable () -> Unit
 ) {
 
     Column() {
@@ -354,10 +449,23 @@ fun TypeSelectorTransactionDetails(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled,modifier= Modifier.width(160.dp)) {
-                if (labelText != null) {
-                    Text(text = labelText, overflow = TextOverflow.Ellipsis)
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled,modifier= Modifier.width(200.dp)) {
+
+                Column(
+                    Modifier
+                        .weight(1F)
+                        .wrapContentSize(Alignment.CenterStart)) {
+                    leadingIcon()
                 }
+                Column( Modifier
+                    .weight(4F)) {
+                    if (labelText != null) {
+                        if (labelText != null) {
+                            Text(text = "Type: $labelText", overflow = TextOverflow.Ellipsis)
+                        }
+                    }
+                }
+
             }
         }
         AnimatedVisibility(visible = expanded) {
@@ -389,7 +497,8 @@ private fun WalletSelctorTransactionDetails(
     optionsList: List<SecondAllWalletsResponseItem>,
     enabled: Boolean = true,
     viewModel: TransactionDetailsViewModel,
-    transactionId: Int
+    transactionId: Int,
+    leadingIcon: @Composable () -> Unit
 ) {
     Column() {
         var expanded by remember { mutableStateOf(false) }
@@ -401,8 +510,21 @@ private fun WalletSelctorTransactionDetails(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(160.dp)) {
-                Text(text = labelText,maxLines = 1, overflow = TextOverflow.Ellipsis)
+            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(200.dp)) {
+
+                Column(
+                    Modifier
+                        .weight(1F)
+                        .wrapContentSize(Alignment.CenterStart)) {
+                    leadingIcon()
+                }
+                Column( Modifier
+                    .weight(4F)) {
+                    if (labelText != null) {
+                        Text(text = "Wallet: $labelText",maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                }
+
             }
         }
         AnimatedVisibility(visible = expanded) {
@@ -430,6 +552,7 @@ private fun EditableFieldLocationTransactionDetails(
     viewModel: TransactionDetailsViewModel,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+    leadingIcon: @Composable () -> Unit
 ) {
     val listOfPlaces = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
     var context = LocalContext.current
@@ -452,9 +575,23 @@ private fun EditableFieldLocationTransactionDetails(
     ) {
         OutlinedButton(onClick = {
             launcher.launch(intent)
-        }, modifier= Modifier.width(160.dp)) {
-            var buttonText = viewModel.locationState.value
-            Text(buttonText,maxLines = 1, overflow = TextOverflow.Ellipsis)
+        }, modifier= Modifier.width(200.dp)) {
+
+            Column(
+                Modifier
+                    .weight(1F)
+                    .wrapContentSize(Alignment.CenterStart)
+            ) {
+                leadingIcon()
+            }
+            Column(
+                Modifier
+                    .weight(4F)
+            ) {
+                var buttonText = viewModel.locationState.value
+                Text("$buttonText",maxLines = 1, overflow = TextOverflow.Ellipsis)
+            }
+
         }
 
     }
@@ -468,7 +605,8 @@ private fun EditableFieldTransactionDetails(
     labelText: String,
     value: Any?,
     viewModel: TransactionDetailsViewModel,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    leadingIcon: @Composable () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -503,6 +641,9 @@ private fun EditableFieldTransactionDetails(
                    textForUpdate = textState.value.text
                 }
                 viewModel.updateTemporaryFieldValueBeforeSavingToDB(field, textForUpdate)
+            },
+            leadingIcon = {
+                leadingIcon()
             },
             label = { Text(labelText) },
             keyboardOptions = keyboardOptions
