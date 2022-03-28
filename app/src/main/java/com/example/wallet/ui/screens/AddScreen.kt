@@ -730,8 +730,8 @@ fun WalletSelectorTransactionAdd(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Spacer(modifier = Modifier.padding(3.dp))
-                            Text(option.walletName)
                             CategoryImage(option.icon, 30)
+                            Text(option.walletName)
                             Spacer(modifier = Modifier.padding(3.dp))
                         }
 
@@ -802,8 +802,8 @@ fun CategorySelectorTransactionAdd(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Spacer(modifier = Modifier.padding(3.dp))
-                            Text(option.expanseCategoryName)
                             CategoryImage(option.icon, 30)
+                            Text(option.expanseCategoryName)
                             Spacer(modifier = Modifier.padding(3.dp))
                         }
                     }
@@ -878,6 +878,12 @@ fun TypeSelectorTransactionAdd(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Spacer(modifier = Modifier.padding(3.dp))
+                            if(option.equals("Expense")){
+                                CategoryImage("\uD83D\uDED1", 30)
+
+                            }else{
+                                CategoryImage("\uD83D\uDFE2", 30)
+                            }
                             Text(option)
                             Spacer(modifier = Modifier.padding(3.dp))
                         }
