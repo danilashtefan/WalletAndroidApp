@@ -87,14 +87,54 @@ fun AddingSection(viewModel: AddViewModel, navController: NavHostController) {
     when (viewModel.whatToAddstate.value) {
         "" -> TransactionAddSection(viewModel, navController)
         "transaction" -> TransactionAddSection(viewModel, navController)
-        "category" -> CategoryAddSection(viewModel, navController)
-        "wallet" -> WalletAddSection(viewModel, navController)
+        "category" -> CategoryAddSection(viewModel, navController, leadingIconName = {
+            Image(
+                painter = painterResource(id = R.drawable.notes),
+                contentDescription = "wallet",
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(24.dp)
+            )
+        },
+            leadingIconType = {
+                Image(
+                    painter = painterResource(id = R.drawable.category),
+                    contentDescription = "wallet",
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+            })
+        "wallet" -> WalletAddSection(viewModel, navController, leadingIconName = {
+            Image(
+                painter = painterResource(id = R.drawable.notes),
+                contentDescription = "wallet",
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(24.dp)
+            )
+        },
+
+            leadingIconType = {
+                Image(
+                    painter = painterResource(id = R.drawable.category),
+                    contentDescription = "wallet",
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+            })
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WalletAddSection(viewModel: AddViewModel, navController: NavHostController) {
+fun WalletAddSection(
+    viewModel: AddViewModel,
+    navController: NavHostController,
+    leadingIconName: @Composable () -> Unit,
+    leadingIconType: @Composable () -> Unit
+) {
     var emoji = viewModel.iconWalletFieldTemporaryValueBeforeSavingtoDB
     var name = viewModel.nameWalletFieldTemporaryValueBeforeSavingtoDB
     var currency = viewModel.currencyWalletFieldTemporaryValueBeforeSavingtoDB
@@ -123,6 +163,7 @@ fun WalletAddSection(viewModel: AddViewModel, navController: NavHostController) 
                 TextField(
                     value = textState1.value,
                     singleLine = true,
+                    leadingIcon = { leadingIconName() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     onValueChange = {
                         textState1.value = it
@@ -136,9 +177,16 @@ fun WalletAddSection(viewModel: AddViewModel, navController: NavHostController) 
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                     ),
-                    label = { Text("Name") },
+
+                    label = {
+                        Text(
+                            "Name", color = Color.White,
+                            fontSize = 15.sp
+                        )
+                    },
                     maxLines = 1,
-                )
+
+                    )
 
                 var text2 = ""
                 if (text2 === null) {
@@ -149,6 +197,7 @@ fun WalletAddSection(viewModel: AddViewModel, navController: NavHostController) 
                     value = textState2.value,
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                    leadingIcon = { leadingIconType() },
                     onValueChange = {
                         textState2.value = it
                         viewModel.updateTemporaryFieldValueBeforeSavingToDB(
@@ -161,7 +210,12 @@ fun WalletAddSection(viewModel: AddViewModel, navController: NavHostController) 
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                     ),
-                    label = { Text("Type") },
+                    label = {
+                        Text(
+                            "Type", color = Color.White,
+                            fontSize = 15.sp
+                        )
+                    },
                     maxLines = 1
                 )
                 Spacer(modifier = Modifier.height(30.dp))
@@ -196,7 +250,12 @@ fun WalletAddSection(viewModel: AddViewModel, navController: NavHostController) 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CategoryAddSection(viewModel: AddViewModel, navController: NavHostController) {
+fun CategoryAddSection(
+    viewModel: AddViewModel,
+    navController: NavHostController,
+    leadingIconName: @Composable () -> Unit,
+    leadingIconType: @Composable () -> Unit
+) {
     var emoji = viewModel.iconCategoryFieldTemporaryValueBeforeSavingtoDB
     var name = viewModel.nameCategoryFieldTemporaryValueBeforeSavingtoDB
     var type = viewModel.typeCategoryFieldTemporaryValueBeforeSavingtoDB
@@ -239,6 +298,7 @@ fun CategoryAddSection(viewModel: AddViewModel, navController: NavHostController
                 TextField(
                     value = textState1.value,
                     singleLine = true,
+                    leadingIcon = { leadingIconName() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     onValueChange = {
                         textState1.value = it
@@ -250,9 +310,14 @@ fun CategoryAddSection(viewModel: AddViewModel, navController: NavHostController
                     textStyle = TextStyle(
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                     ),
-                    label = { Text("Name") },
+                    label = {
+                        Text(
+                            "Name", color = Color.White,
+                            fontSize = 15.sp
+                        )
+                    },
                     maxLines = 1,
                 )
 
@@ -264,6 +329,7 @@ fun CategoryAddSection(viewModel: AddViewModel, navController: NavHostController
                 TextField(
                     value = textState2.value,
                     singleLine = true,
+                    leadingIcon = { leadingIconType() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     onValueChange = {
                         textState2.value = it
@@ -275,9 +341,14 @@ fun CategoryAddSection(viewModel: AddViewModel, navController: NavHostController
                     textStyle = TextStyle(
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
+                        fontSize = 16.sp,
                     ),
-                    label = { Text("Type") },
+                    label = {
+                        Text(
+                            "Type", color = Color.White,
+                            fontSize = 15.sp
+                        )
+                    },
                     maxLines = 1
                 )
                 Spacer(modifier = Modifier.height(30.dp))
@@ -494,11 +565,14 @@ private fun DatePicker(viewModel: AddViewModel, padding: Int, leadingIcon: @Comp
             Column(
                 Modifier
                     .weight(1F)
-                    .wrapContentSize(Alignment.CenterStart)) {
+                    .wrapContentSize(Alignment.CenterStart)
+            ) {
                 leadingIcon()
             }
-            Column( Modifier
-                .weight(4F)) {
+            Column(
+                Modifier
+                    .weight(4F)
+            ) {
                 Text(
                     text = viewModel.datePicked.value,
                     maxLines = 1,
@@ -649,7 +723,18 @@ fun WalletSelectorTransactionAdd(
                     Card(onClick = {
                         viewModel.updateWalletLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option.walletName)
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Spacer(modifier = Modifier.padding(3.dp))
+                            Text(option.walletName)
+                            CategoryImage(option.icon, 30)
+                            Spacer(modifier = Modifier.padding(3.dp))
+                        }
+
                     }
                 }
 
@@ -711,7 +796,16 @@ fun CategorySelectorTransactionAdd(
                     Card(onClick = {
                         viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option.expanseCategoryName)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Spacer(modifier = Modifier.padding(3.dp))
+                            Text(option.expanseCategoryName)
+                            CategoryImage(option.icon, 30)
+                            Spacer(modifier = Modifier.padding(3.dp))
+                        }
                     }
                 }
 
@@ -778,7 +872,15 @@ fun TypeSelectorTransactionAdd(
                     Card(onClick = {
                         viewModel.updateTemporaryFieldValueBeforeSavingToDB("type", option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Spacer(modifier = Modifier.padding(3.dp))
+                            Text(option)
+                            Spacer(modifier = Modifier.padding(3.dp))
+                        }
                     }
                 }
 
@@ -879,7 +981,17 @@ fun EditableFieldTransactionAdd(
             leadingIcon = {
                 leadingIcon()
             },
-            label = { Text(labelText) },
+            label = {
+                Text(
+                    labelText, color = Color.White,
+                    fontSize = 15.sp
+                )
+            },
+            textStyle = TextStyle(
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+            ),
             keyboardOptions = keyboardOptions,
         )
         Spacer(modifier = Modifier.size(20.dp))

@@ -159,22 +159,22 @@ fun TransactionDetailsScreen(
         )
         //InfoRow(20,"Category")
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-                CategorySelctorTransactionDetails(
-                    padding = 20,
-                    labelText = viewModel.categoryNameFieldTemporaryValueBeforeSavingtoDB.value,
-                    optionsList = transactionsCategories,
-                    viewModel = viewModel,
-                    transactionId = transaction.id,
-                    leadingIcon = {
-                        Image(
-                            painter = painterResource(id = R.drawable.infography),
-                            contentDescription = "wallet",
-                            modifier = Modifier
-                                .width(24.dp)
-                                .height(24.dp)
-                        )
-                    }
-                )
+            CategorySelctorTransactionDetails(
+                padding = 20,
+                labelText = viewModel.categoryNameFieldTemporaryValueBeforeSavingtoDB.value,
+                optionsList = transactionsCategories,
+                viewModel = viewModel,
+                transactionId = transaction.id,
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.infography),
+                        contentDescription = "wallet",
+                        modifier = Modifier
+                            .width(24.dp)
+                            .height(24.dp)
+                    )
+                }
+            )
 
         }
 
@@ -195,7 +195,7 @@ fun TransactionDetailsScreen(
                 },
                 transactionId = transactionId,
 
-            )
+                )
 
         }
 //        EditableFieldTransactionDetails(
@@ -278,7 +278,11 @@ private fun SaveButtonTransactionDetails(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun DatePicker(viewModel: TransactionDetailsViewModel, padding: Int,leadingIcon: @Composable () -> Unit) {
+private fun DatePicker(
+    viewModel: TransactionDetailsViewModel,
+    padding: Int,
+    leadingIcon: @Composable () -> Unit
+) {
     Row(
         modifier = Modifier
             .padding(top = padding.dp)
@@ -288,15 +292,18 @@ private fun DatePicker(viewModel: TransactionDetailsViewModel, padding: Int,lead
     ) {
         OutlinedButton(onClick = {
             viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value
-        }, modifier= Modifier.width(200.dp)) {
+        }, modifier = Modifier.width(200.dp)) {
             Column(
                 Modifier
                     .weight(1F)
-                    .wrapContentSize(Alignment.CenterStart)) {
+                    .wrapContentSize(Alignment.CenterStart)
+            ) {
                 leadingIcon()
             }
-            Column( Modifier
-                .weight(4F)) {
+            Column(
+                Modifier
+                    .weight(4F)
+            ) {
                 viewModel.datePicked.value?.let { Text(text = it) }
 
             }
@@ -396,17 +403,28 @@ private fun CategorySelctorTransactionDetails(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(200.dp)) {
+            OutlinedButton(
+                onClick = { expanded = !expanded },
+                enabled = enabled,
+                modifier = Modifier.width(200.dp)
+            ) {
                 Column(
                     Modifier
                         .weight(1F)
-                        .wrapContentSize(Alignment.CenterStart)) {
+                        .wrapContentSize(Alignment.CenterStart)
+                ) {
                     leadingIcon()
                 }
-                Column( Modifier
-                    .weight(4F)) {
+                Column(
+                    Modifier
+                        .weight(4F)
+                ) {
                     if (labelText != null) {
-                        Text(text = "Category: $labelText", maxLines = 1,overflow = TextOverflow.Ellipsis)
+                        Text(
+                            text = "Category: $labelText",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 }
 
@@ -418,7 +436,16 @@ private fun CategorySelctorTransactionDetails(
                     Card(onClick = {
                         viewModel.updateCategoryLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option.expanseCategoryName)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Spacer(modifier = Modifier.padding(3.dp))
+                            Text(option.expanseCategoryName)
+                            CategoryImage(option.icon, 30)
+                            Spacer(modifier = Modifier.padding(3.dp))
+                        }
                     }
                 }
 
@@ -449,16 +476,23 @@ fun TypeSelectorTransactionDetails(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled,modifier= Modifier.width(200.dp)) {
+            OutlinedButton(
+                onClick = { expanded = !expanded },
+                enabled = enabled,
+                modifier = Modifier.width(200.dp)
+            ) {
 
                 Column(
                     Modifier
                         .weight(1F)
-                        .wrapContentSize(Alignment.CenterStart)) {
+                        .wrapContentSize(Alignment.CenterStart)
+                ) {
                     leadingIcon()
                 }
-                Column( Modifier
-                    .weight(4F)) {
+                Column(
+                    Modifier
+                        .weight(4F)
+                ) {
                     if (labelText != null) {
                         if (labelText != null) {
                             Text(text = "Type: $labelText", overflow = TextOverflow.Ellipsis)
@@ -478,7 +512,15 @@ fun TypeSelectorTransactionDetails(
                     Card(onClick = {
                         viewModel.updateTemporaryFieldValueBeforeSavingToDB("type", option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Spacer(modifier = Modifier.padding(3.dp))
+                            Text(option)
+                            Spacer(modifier = Modifier.padding(3.dp))
+                        }
                     }
                 }
 
@@ -510,18 +552,29 @@ private fun WalletSelctorTransactionDetails(
             horizontalArrangement = Arrangement.Center
         ) {
 
-            OutlinedButton(onClick = { expanded = !expanded }, enabled = enabled, modifier= Modifier.width(200.dp)) {
+            OutlinedButton(
+                onClick = { expanded = !expanded },
+                enabled = enabled,
+                modifier = Modifier.width(200.dp)
+            ) {
 
                 Column(
                     Modifier
                         .weight(1F)
-                        .wrapContentSize(Alignment.CenterStart)) {
+                        .wrapContentSize(Alignment.CenterStart)
+                ) {
                     leadingIcon()
                 }
-                Column( Modifier
-                    .weight(4F)) {
+                Column(
+                    Modifier
+                        .weight(4F)
+                ) {
                     if (labelText != null) {
-                        Text(text = "Wallet: $labelText",maxLines = 1, overflow = TextOverflow.Ellipsis)
+                        Text(
+                            text = "Wallet: $labelText",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     }
                 }
 
@@ -533,7 +586,16 @@ private fun WalletSelctorTransactionDetails(
                     Card(onClick = {
                         viewModel.updateWalletLinkValueBeforeSavingToDB(option)
                     }, modifier = Modifier.padding(7.dp)) {
-                        Text(option.walletName)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Spacer(modifier = Modifier.padding(3.dp))
+                            Text(option.walletName)
+                            CategoryImage(option.icon, 30)
+                            Spacer(modifier = Modifier.padding(3.dp))
+                        }
                     }
                 }
 
@@ -575,7 +637,7 @@ private fun EditableFieldLocationTransactionDetails(
     ) {
         OutlinedButton(onClick = {
             launcher.launch(intent)
-        }, modifier= Modifier.width(200.dp)) {
+        }, modifier = Modifier.width(200.dp)) {
 
             Column(
                 Modifier
@@ -589,7 +651,7 @@ private fun EditableFieldLocationTransactionDetails(
                     .weight(4F)
             ) {
                 var buttonText = viewModel.locationState.value
-                Text("$buttonText",maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text("$buttonText", maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
 
         }
@@ -635,17 +697,27 @@ private fun EditableFieldTransactionDetails(
             enabled = enabled,
             onValueChange = {
                 textState.value = it
-               if(textState.value.text.equals("") && field.equals("amount")){
+                if (textState.value.text.equals("") && field.equals("amount")) {
                     textForUpdate = "0"
-                }else{
-                   textForUpdate = textState.value.text
+                } else {
+                    textForUpdate = textState.value.text
                 }
                 viewModel.updateTemporaryFieldValueBeforeSavingToDB(field, textForUpdate)
             },
             leadingIcon = {
                 leadingIcon()
             },
-            label = { Text(labelText) },
+            textStyle = TextStyle(
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+            ),
+            label = {
+                Text(
+                    labelText, color = Color.White,
+                    fontSize = 15.sp
+                )
+            },
             keyboardOptions = keyboardOptions
         )
     }

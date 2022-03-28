@@ -5,6 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -140,8 +145,10 @@ fun text_field(
             .background(color = MaterialTheme.colors.TextFieldColor)
     )
     var TextFieldPasswordState = remember { mutableStateOf("") }
+    var passwordVisibility: Boolean by remember { mutableStateOf(false) }
     TextField(
         value = TextFieldPasswordState.value,
+        visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
         onValueChange = { newInput ->
             TextFieldPasswordState.value = newInput
             viewModel.updateViewModelFieldState("password", TextFieldPasswordState.value)
@@ -151,6 +158,18 @@ fun text_field(
                 painter = painterResource(id = R.drawable.ic_password),
                 contentDescription = "password"
             )
+        },
+        trailingIcon = {
+            val image = if (passwordVisibility)
+                Icons.Filled.Visibility
+            else Icons.Filled.VisibilityOff
+
+            // Please provide localized description for accessibility services
+            val description = if (passwordVisibility) "Hide password" else "Show password"
+
+            IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                Icon(imageVector = image, description)
+            }
         },
         label = { Text(text = "Password", color = MaterialTheme.colors.TextFieldTextColor) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),

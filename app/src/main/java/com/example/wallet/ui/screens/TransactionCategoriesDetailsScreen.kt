@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.wallet.R
 import com.example.wallet.helpers.EmojiProvider
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
@@ -81,6 +83,13 @@ fun TransactionCategoriesDetailsScreen(
                         value = textState1.value,
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        leadingIcon={Image(
+                            painter = painterResource(id = R.drawable.notes),
+                            contentDescription = "wallet",
+                            modifier = Modifier
+                                .width(24.dp)
+                                .height(24.dp)
+                        )},
                         onValueChange = {
                             textState1.value = it
                             viewModel.updateTemporaryFieldValueBeforeSavingToDB(
@@ -91,9 +100,10 @@ fun TransactionCategoriesDetailsScreen(
                         textStyle = TextStyle(
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                         ),
-                        label = { Text("Name") },
+                        label = { Text("Name",color = Color.White,
+                            fontSize = 15.sp) },
                         maxLines = 1,
                     )
 
@@ -106,6 +116,15 @@ fun TransactionCategoriesDetailsScreen(
                         value = textState2.value,
                         singleLine = true,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        leadingIcon={
+                            Image(
+                                painter = painterResource(id = R.drawable.category),
+                                contentDescription = "wallet",
+                                modifier = Modifier
+                                    .width(24.dp)
+                                    .height(24.dp)
+                            )
+                        },
                         onValueChange = {
                             textState2.value = it
                             viewModel.updateTemporaryFieldValueBeforeSavingToDB(
@@ -116,9 +135,10 @@ fun TransactionCategoriesDetailsScreen(
                         textStyle = TextStyle(
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
+                            fontSize = 16.sp,
                         ),
-                        label = { Text("Type") },
+                        label = { Text("Type",color = Color.White,
+                            fontSize = 15.sp) },
                         maxLines = 1
                     )
                     Spacer(modifier = Modifier.height(30.dp))
