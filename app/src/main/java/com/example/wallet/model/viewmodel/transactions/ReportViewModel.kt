@@ -11,6 +11,7 @@ import com.example.wallet.model.CategoryWrapperWithColor
 import com.example.wallet.model.WalletWrapperWithColor
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
+import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
 import com.example.wallet.model.response.transactions.SecondAPI.*
 import kotlinx.coroutines.*
@@ -117,6 +118,8 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
 
             allWallets.value = wrappedWalletsWithExpenses
 
+            topExpense.value = getTopExpenseTransaction();
+            topIncome.value = getTopIncomeTransaction();
             topExpenseCategory.value = getTopExpenseCategory() //Need to filter by time
             topIncomeCategory.value = getTopIncomeCategory() //Need to filter by time
             topExpenseWallet.value = getTopExpenseWallet() //Need to filter by time
@@ -221,7 +224,13 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
         return WalletRepository.getTopIncomeWallet(authToken, minDatePicked.value, maxDatePicked.value)
     }
 
+    suspend fun getTopExpenseTransaction():SecondAllExpensesItem{
+        return TransactionsRepository.getTopExpenseTransaction(authToken, minDatePicked.value, maxDatePicked.value)
+    }
 
+    suspend fun getTopIncomeTransaction():SecondAllExpensesItem{
+        return TransactionsRepository.getTopIncomeTransaction(authToken, minDatePicked.value, maxDatePicked.value)
+    }
 
 
 

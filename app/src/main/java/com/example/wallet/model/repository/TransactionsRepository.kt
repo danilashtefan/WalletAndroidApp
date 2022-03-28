@@ -79,5 +79,12 @@ object TransactionsRepository {
         return service.deleteTransactionFromDb(expenseId, authToken)
     }
 
+    suspend fun getTopExpenseTransaction(authToken: String?, minDate: String, maxDate: String):SecondAllExpensesItem{
+        return service.getTopExpenseTransaction(authToken,minDate,maxDate)
+    }
+
+    suspend fun getTopIncomeTransaction(authToken: String?, minDate: String, maxDate: String):SecondAllExpensesItem{
+        return service.getTopIncomeTransaction(authToken,minDate,maxDate)
+    }
 
 }
