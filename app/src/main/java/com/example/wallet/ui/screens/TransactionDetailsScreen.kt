@@ -103,8 +103,9 @@ fun TransactionDetailsScreen(
         }
         LogoTransactionDetailsSection()
         ImageSection(transaction)
+        TypeOfElementToAddOrEditText("Edit transaction")
         EditableFieldTransactionDetails(
-            padding = 100,
+            padding = 50,
             field = nameFieldName,
             labelText = "Name",
             value = transaction.name,

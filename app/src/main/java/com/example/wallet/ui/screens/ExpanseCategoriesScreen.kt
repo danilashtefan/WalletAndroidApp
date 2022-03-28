@@ -119,13 +119,14 @@ fun DetailsSection(
     navController: NavHostController
 
 ) {
+
     when (viewModel.whatToSeeState.value) {
-        "category" -> CategoriesListSection(
+        "wallet" -> WalletsListSection(viewModel, transactionWallets, navController)
+        else -> CategoriesListSection(
             viewModel,
             transactionsCategories,
             navController = navController
         )
-        "wallet" -> WalletsListSection(viewModel, transactionWallets, navController)
     }
 }
 
@@ -135,29 +136,30 @@ fun CategoriesListSection(
     transactionsCategories: List<SecondAllExpenseCategoriesResponseItem>,
     navController: NavHostController
 ) {
-
-
-    LazyColumn(modifier = Modifier.padding(16.dp)) {
-        items(transactionsCategories) { category ->
-            val categoryId = category.id
-            ReusableCategoryAndWalletRow(
-                route = "categoryStatistics/$categoryId",
-                icon = category.icon,
-                name = category.expanseCategoryName,
-                amount = 0,
-                displayAmount = false,
-                type = category.type,
-                id = categoryId,
-                editClickAction = {
-                    navController.navigate("categoriesDetails/$categoryId")
-                },
-                deleteClickAction = {
-                    Log.d("INFO", "Delete button pressed")
-                    viewModel.categoryToDelete.value = category
-                    viewModel.deleteCategoryDialogShow()
-                },
-                navController = navController
-            )
+    Column(){
+        TypeOfElementToAddOrEditText(text = "List of categories")
+        LazyColumn(modifier = Modifier.padding(16.dp)) {
+            items(transactionsCategories) { category ->
+                val categoryId = category.id
+                ReusableCategoryAndWalletRow(
+                    route = "categoryStatistics/$categoryId",
+                    icon = category.icon,
+                    name = category.expanseCategoryName,
+                    amount = 0,
+                    displayAmount = false,
+                    type = category.type,
+                    id = categoryId,
+                    editClickAction = {
+                        navController.navigate("categoriesDetails/$categoryId")
+                    },
+                    deleteClickAction = {
+                        Log.d("INFO", "Delete button pressed")
+                        viewModel.categoryToDelete.value = category
+                        viewModel.deleteCategoryDialogShow()
+                    },
+                    navController = navController
+                )
+            }
         }
     }
 }
@@ -169,6 +171,7 @@ fun WalletsListSection(
     transactionsWallets: List<SecondAllWalletsResponseItem>,
     navController: NavHostController
 ) {
+    TypeOfElementToAddOrEditText(text = "List of wallets")
     LazyColumn(modifier = Modifier.padding(16.dp)) {
         items(transactionsWallets) { wallet ->
             val walletId = wallet.id

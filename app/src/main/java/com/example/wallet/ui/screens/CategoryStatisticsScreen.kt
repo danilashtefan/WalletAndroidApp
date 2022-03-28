@@ -61,7 +61,6 @@ fun CategoryStatisticsScreen(
         return
     }
     Column() {
-
         LazyRow(modifier = Modifier.padding(start = 60.dp)) {
             items(listOfButtons) { element ->
                 OutlinedButton(onClick = {
