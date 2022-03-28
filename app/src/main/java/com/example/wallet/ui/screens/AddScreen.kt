@@ -405,13 +405,14 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
     )
 
     val location = viewModel.locationState
-
-
-    Column(Modifier.verticalScroll(rememberScrollState())) {
-        TypeOfElementToAddOrEditText("Add Transaction")
-        Spacer(modifier = Modifier.padding(bottom = 20.dp))
+    TypeOfElementToAddOrEditText("Add Transaction")
+    Column(
+        Modifier.verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.padding(bottom = 50.dp))
         EditableFieldTransactionAdd(
-            padding = 30,
+            padding = 0,
             field = nameFieldName,
             labelText = "Name",
             value = "",
@@ -547,6 +548,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
         )
 
     }
+
 }
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -878,10 +880,10 @@ fun TypeSelectorTransactionAdd(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Spacer(modifier = Modifier.padding(3.dp))
-                            if(option.equals("Expense")){
+                            if (option.equals("Expense")) {
                                 CategoryImage("\uD83D\uDED1", 30)
 
-                            }else{
+                            } else {
                                 CategoryImage("\uD83D\uDFE2", 30)
                             }
                             Text(option)
@@ -1000,8 +1002,6 @@ fun EditableFieldTransactionAdd(
             ),
             keyboardOptions = keyboardOptions,
         )
-        Spacer(modifier = Modifier.size(20.dp))
-
     }
 }
 

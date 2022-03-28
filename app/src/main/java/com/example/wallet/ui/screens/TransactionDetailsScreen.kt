@@ -92,7 +92,7 @@ fun TransactionDetailsScreen(
         return;
     }
 
-    Column(Modifier.verticalScroll(rememberScrollState())) {
+    Column(Modifier.verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
         var showIncorrectDataAlertDialog = viewModel.showIncorrectDataAlertDialog.value
         if (showIncorrectDataAlertDialog) {
             OneButtonAlertDialogComponent(
