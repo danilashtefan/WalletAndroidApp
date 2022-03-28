@@ -2,20 +2,23 @@ package com.example.wallet.api
 
 import android.util.Log
 import com.example.wallet.helpers.LinkBuilder
-import com.example.wallet.model.AllExpansesResponse
-import com.example.wallet.model.Expanse
-import com.example.wallet.model.response.AllExpanseCategoriesResponse
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.SingleTransactionWalletResponse
 import com.example.wallet.model.response.login.LoginResponse
 import com.example.wallet.model.response.login.RegisterResponse
-import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
 import com.example.wallet.model.response.transactions.SecondAPI.*
 import com.example.wallet.requests.*
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
+import java.security.SecureRandom
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 
 class WalletWebService {
@@ -30,14 +33,54 @@ class WalletWebService {
             //OFFICE
             //baseUrl("https://192.168.0.116:8080/api/")
             //Iulia
-            .baseUrl("http://192.168.1.67:8080/api/")
+            .baseUrl("https://192.168.1.67:8080/api/")
             //.baseUrl("https://192.168.1.80:8080/api/")
             //.baseUrl("https://152.66.156.198:8080/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
+            .client(getUnsafeOkHttpClient())
             .build()
 
         api = retrofit.create(WalletAPI::class.java)
+    }
+
+    private fun getUnsafeOkHttpClient(): OkHttpClient? {
+        return try {
+            // Create a trust manager that does not validate certificate chains
+            val trustAllCerts = arrayOf<TrustManager>(
+                object : X509TrustManager {
+                    @Throws(CertificateException::class)
+                    override fun checkClientTrusted(
+                        chain: Array<X509Certificate>,
+                        authType: String
+                    ) {
+                    }
+
+                    @Throws(CertificateException::class)
+                    override fun checkServerTrusted(
+                        chain: Array<X509Certificate>,
+                        authType: String
+                    ) {
+                    }
+
+                    override fun getAcceptedIssuers(): Array<X509Certificate> {
+                        return arrayOf()
+                    }
+                }
+            )
+
+            // Install the all-trusting trust manager
+            val sslContext = SSLContext.getInstance("SSL")
+            sslContext.init(null, trustAllCerts, SecureRandom())
+            // Create an ssl socket factory with our all-trusting manager
+            val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
+            val builder = OkHttpClient.Builder()
+            builder.sslSocketFactory(sslSocketFactory)
+            builder.hostnameVerifier { hostname, session -> true }
+            builder.build()
+        } catch (e: Exception) {
+            throw RuntimeException(e)
+        }
     }
 
 

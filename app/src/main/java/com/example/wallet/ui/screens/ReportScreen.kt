@@ -329,7 +329,7 @@ fun TopExpenseCategory(topExpenseCategory: TopExpenseCategoryWithAmountResponse)
 fun TopIncomeTransaction(income: SecondAllExpensesItem) {
     Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
         Text(
-            "Top income transaction: ${income.name}${income.category.icon} - ${income.amount} HUF",
+            "Top income transaction: ${income.name}${income.category.icon} + ${income.amount} HUF",
             style = MaterialTheme.typography.h6,
             color = Color.White
         )
