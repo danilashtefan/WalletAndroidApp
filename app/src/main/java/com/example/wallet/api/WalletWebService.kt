@@ -29,11 +29,11 @@ class WalletWebService {
             //KAMORA
             //.baseUrl("https://192.168.88.224:8080/api/")
             //HOME
-            //.baseUrl("https://10.0.1.60:8080/api/")
+            .baseUrl("https://10.0.1.19:8080/api/")
             //OFFICE
             //baseUrl("https://192.168.0.116:8080/api/")
             //Iulia
-            .baseUrl("https://192.168.1.67:8080/api/")
+            //.baseUrl("https://192.168.1.67:8080/api/")
             //.baseUrl("https://192.168.1.80:8080/api/")
             //.baseUrl("https://152.66.156.198:8080/api/")
             .addConverterFactory(GsonConverterFactory.create())

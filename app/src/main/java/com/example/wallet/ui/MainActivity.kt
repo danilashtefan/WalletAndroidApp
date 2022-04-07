@@ -86,7 +86,7 @@ fun BottomBar(navController: NavHostController, bottomBarState: MutableState<Boo
             BottomNavigationBar(
                 items = listOf(
                     BottomNavigationItem(
-                        "Expenses",
+                        "Transactions",
                         route = "expanses",
                         icon = Icons.Default.Money
                     ),
