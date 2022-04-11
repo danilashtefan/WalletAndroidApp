@@ -6,7 +6,7 @@ import com.example.wallet.model.repository.DataStorePreferenceRepository
 
 
 
-public class ExpensesViewModelFactory(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
+class ExpensesViewModelFactory(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ExpansesViewModel::class.java)) {

@@ -1,18 +1,15 @@
 package com.example.wallet.model.viewmodel.transactions
 
 import android.util.Log
-import androidx.compose.runtime.*
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.wallet.helpers.LinkBuilder
-import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
-import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.SecondAPI.*
-import com.example.wallet.model.response.transactions.Wallet
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +22,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     ViewModel() {
 
     // private val walletRepository: WalletRepository = WalletRepository()
-    private var transactionId: Int = 0;
+    private var transactionId: Int = 0
     var dataLoaded = mutableStateOf(false)
 
     //var transactionCetegoriesState = mutableStateOf((listOf(ExpanseCategory())))
@@ -104,12 +101,12 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
 
     fun chooseCategory(category: String) {
         val transaction =
-            TransactionsRepository.updateExpenseCategory(category, this.transactionId);
+            TransactionsRepository.updateExpenseCategory(category, this.transactionId)
         this.transaction.value = transaction
     }
 
     fun updateField(field: String, value: String?) {
-        val transaction = TransactionsRepository.updateField(field, value, this.transactionId);
+        val transaction = TransactionsRepository.updateField(field, value, this.transactionId)
         this.transaction.value = transaction
     }
 
@@ -170,7 +167,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
 
     fun setTransactionId(transactionId: Int) {
         if (transactionId === this.transactionId) {
-            return;
+            return
         }
         this.transactionId = transactionId
         val transaction = TransactionsRepository.getExpense(this.transactionId)
@@ -207,7 +204,7 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
             transactionWalletsState.value = transactionWallets
             val transactionCategories = getFilteredTransactionCategories()
             transactionCetegoriesState.value = transactionCategories
-            dataLoaded.value = true;
+            dataLoaded.value = true
         }
     }
 

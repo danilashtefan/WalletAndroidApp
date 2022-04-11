@@ -1,16 +1,12 @@
 package com.example.wallet.model.repository
 
 import com.example.wallet.api.WalletWebService
-import com.example.wallet.model.AllExpansesResponse
-import com.example.wallet.model.Expanse
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import com.example.wallet.requests.AddOrEditTransactionRequest
-import java.lang.Exception
 
 object TransactionsRepository {
     private val service: WalletWebService = WalletWebService()
-    var expense = AllExpansesResponse()
     var expenseFiltered = SecondAllExpensesResponse()
 
     suspend fun getFilteredExpanses(authToken: String?): SecondAllExpensesResponse {
@@ -59,10 +55,10 @@ object TransactionsRepository {
                 }
 
                 //PATCH All the changes to the Database when user wants them to be saved
-                return expense;
+                return expense
             }
         }
-        throw Exception("No expense found!");
+        throw Exception("No expense found!")
     }
 
 

@@ -68,7 +68,7 @@ class WalletsDetailsViewModel(private val dataStorePreferenceRepository: DataSto
 
     fun setWalletId(walletId: Int) {
         if (walletId === this.walletId) {
-            return;
+            return
         }
         this.walletId = walletId
         val wallet = WalletRepository.getWallet(this.walletId)
@@ -78,7 +78,7 @@ class WalletsDetailsViewModel(private val dataStorePreferenceRepository: DataSto
         this.typeFieldTemporaryValueBeforeSavingtoDB = wallet.currency
         this.iconFieldTemporaryValueBeforeSavingtoDB = wallet.icon
 
-        dataLoaded.value = true;
+        dataLoaded.value = true
 
     }
 

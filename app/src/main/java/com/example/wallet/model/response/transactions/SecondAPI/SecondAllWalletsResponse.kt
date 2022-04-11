@@ -8,5 +8,4 @@ data class SecondAllWalletsResponseItem(
     val username: String = "",
     val walletName: String = "",
     val icon:String = "\uD83D\uDCB0"
-) {
-}
+)

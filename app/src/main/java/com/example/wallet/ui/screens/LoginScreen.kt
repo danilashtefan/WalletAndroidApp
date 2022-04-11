@@ -181,7 +181,7 @@ fun text_field(
 
 @Composable
 fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
-    Column() {
+    Column {
         Button(
             onClick = {
                 var result = viewModel.login(

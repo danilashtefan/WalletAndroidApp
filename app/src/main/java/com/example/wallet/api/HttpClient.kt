@@ -1,4 +1,3 @@
 package com.example.wallet.api
 
-class HttpClient {
-}
+class HttpClient

@@ -2,11 +2,10 @@ package com.example.wallet.model.repository
 
 import com.example.wallet.api.WalletWebService
 import com.example.wallet.model.response.SingleTransactionWalletResponse
-import com.example.wallet.model.response.transactions.AllTransactionWalletsResponse
-import com.example.wallet.model.response.transactions.SecondAPI.*
-import com.example.wallet.requests.AddOrEditCategoryRequest
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
+import com.example.wallet.model.response.transactions.SecondAPI.TopWalletWithAmountResponse
 import com.example.wallet.requests.AddOrEditWalletRequest
-import java.lang.Exception
 
 object WalletRepository {
     private val service: WalletWebService = WalletWebService()

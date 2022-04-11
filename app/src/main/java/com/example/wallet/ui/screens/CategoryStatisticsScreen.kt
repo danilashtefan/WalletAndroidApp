@@ -60,7 +60,7 @@ fun CategoryStatisticsScreen(
     while (!dataLoaded) {
         return
     }
-    Column() {
+    Column {
         LazyRow(modifier = Modifier.padding(start = 60.dp)) {
             items(listOfButtons) { element ->
                 OutlinedButton(onClick = {
@@ -118,7 +118,7 @@ fun TransactionStatisticsRow(
     editClickAction: () -> Unit,
     deleteClickAction: () -> Unit
 ) {
-    Row() {
+    Row {
         Spacer(
             Modifier
                 .size(10.dp, 20.dp)
@@ -224,7 +224,7 @@ fun <T> StatementBody(
     totalAmount: Int,
     list:@Composable () -> Unit
 ) {
-    Column() {
+    Column {
         Box(Modifier.padding(16.dp)) {
             val accountsProportion = transactions.extractProportions { amounts(it) }
             val circleColors = transactions.map { colors(it) }

@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 
 class TransactionCategoriesDetailsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
     ViewModel() {
-    private var categoryId: Int = 0;
+    private var categoryId: Int = 0
     var dataLoaded = mutableStateOf(false)
     var category = mutableStateOf(SecondAllExpenseCategoriesResponseItem())
     var nameFieldTemporaryValueBeforeSavingtoDB: String? = null
@@ -66,7 +66,7 @@ class TransactionCategoriesDetailsViewModel(private val dataStorePreferenceRepos
 
     fun setCategoryId(categoryId: Int) {
         if (categoryId === this.categoryId) {
-            return;
+            return
         }
         this.categoryId = categoryId
         val category = ExpanseCategoriesRepository.getCategory(this.categoryId)
@@ -77,7 +77,7 @@ class TransactionCategoriesDetailsViewModel(private val dataStorePreferenceRepos
         this.typeFieldTemporaryValueBeforeSavingtoDB = category.type
         this.iconFieldTemporaryValueBeforeSavingtoDB = category.icon
 
-            dataLoaded.value = true;
+            dataLoaded.value = true
 
     }
 

@@ -52,7 +52,7 @@ fun TransactionCategoriesDetailsScreen(
     var category = viewModel.category.value
 
     if (dataLoaded === false) {
-        return;
+        return
     }
 
     Column(Modifier.verticalScroll(rememberScrollState())) {

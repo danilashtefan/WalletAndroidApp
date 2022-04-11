@@ -55,7 +55,7 @@ fun WalletsDetailsScreen(
     var wallet = viewModel.wallet.value
 
     if (dataLoaded === false) {
-        return;
+        return
     }
 
     Column(Modifier.verticalScroll(rememberScrollState())) {

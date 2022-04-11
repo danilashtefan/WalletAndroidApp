@@ -118,8 +118,8 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
 
             allWallets.value = wrappedWalletsWithExpenses
 
-            topExpense.value = getTopExpenseTransaction();
-            topIncome.value = getTopIncomeTransaction();
+            topExpense.value = getTopExpenseTransaction()
+            topIncome.value = getTopIncomeTransaction()
             topExpenseCategory.value = getTopExpenseCategory() //Need to filter by time
             topIncomeCategory.value = getTopIncomeCategory() //Need to filter by time
             topExpenseWallet.value = getTopExpenseWallet() //Need to filter by time
@@ -145,7 +145,7 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
             totalWalletsExpenses.value = walletExpenseAmountTemp
             totalWalletsIncomes.value = walletIncomeAmountTemp
 
-            dataLoaded.value = true;
+            dataLoaded.value = true
         }
     }
 

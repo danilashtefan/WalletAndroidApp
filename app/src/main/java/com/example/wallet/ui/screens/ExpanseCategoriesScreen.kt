@@ -52,7 +52,7 @@ fun ExpanseCategoriesScreen(
     val transactionsWallets = viewModel.transactionWalletsState.value
 
     if (!dataLoaded) {
-        return;
+        return
     }
 
     Column(
@@ -136,7 +136,7 @@ fun CategoriesListSection(
     transactionsCategories: List<SecondAllExpenseCategoriesResponseItem>,
     navController: NavHostController
 ) {
-    Column(){
+    Column {
         TypeOfElementToAddOrEditText(text = "List of categories")
         LazyColumn(modifier = Modifier.padding(16.dp)) {
             items(transactionsCategories) { category ->
@@ -293,8 +293,8 @@ fun ReusableCategoryAndWalletRow(
             }
 
             AnimatedVisibility(visible = expanded) {
-                Column() {
-                    Row() {
+                Column {
+                    Row {
                         OutlinedButton(onClick = { editClickAction.invoke() }) {
                             Text(text = "Edit")
                         }

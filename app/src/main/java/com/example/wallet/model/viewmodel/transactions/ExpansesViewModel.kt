@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.wallet.model.Expanse
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
@@ -173,10 +172,10 @@ class ExpansesViewModel(
     fun getTransaction(transactionId: Int): SecondAllExpensesItem {
         for (tx in transactionState.value) {
             if (tx.id === transactionId) {
-                return tx;
+                return tx
             }
         }
-        throw Exception("No transaction found!");
+        throw Exception("No transaction found!")
     }
 
     fun deleteExpense(expanse: SecondAllExpensesItem) {

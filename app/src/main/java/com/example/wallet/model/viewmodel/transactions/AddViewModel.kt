@@ -3,32 +3,24 @@ package com.example.wallet.model.viewmodel.transactions
 import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
-import com.example.wallet.model.response.ExpanseCategory
-import com.example.wallet.model.response.transactions.SecondAPI.*
-import com.example.wallet.model.response.transactions.Wallet
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponse
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
 import com.example.wallet.requests.AddOrEditCategoryRequest
 import com.example.wallet.requests.AddOrEditTransactionRequest
 import com.example.wallet.requests.AddOrEditWalletRequest
-import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.*
 
 class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) : ViewModel() {
     var userName = ""
@@ -102,7 +94,7 @@ init{
         val transactionWallets = getFilteredWallets()
         transactionCetegoriesState.value = transactionCategories
         transactionWalletsState.value = transactionWallets
-        dataLoaded.value = true;
+        dataLoaded.value = true
     }
 
 }

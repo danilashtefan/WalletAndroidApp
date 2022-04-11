@@ -69,7 +69,7 @@ fun ExpansesScreen(
     viewModel.updateBudgetLeft()
 
     if (!dataLoaded) {
-        return;
+        return
     }
 
     Column(
@@ -98,7 +98,7 @@ fun TransactionListSection(
     budgetLeft: Int
 ) {
 
-    Column() {
+    Column {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             LogoSection(pictureSize = 90)
             Spacer(modifier = Modifier.padding(5.dp))
@@ -231,7 +231,7 @@ Row(horizontalArrangement = Arrangement.Start,
 
 @Composable
 fun LogoSection(pictureSize: Int) {
-    Row() {
+    Row {
         Image(
             painter = painterResource(id = R.drawable.wallet_no_background_cropped),
             contentDescription = "",
@@ -320,7 +320,7 @@ fun ExpanseSection(
                 date = expanse.date,
                 location = expanse.location,
                 amount = expanse.amount,
-                comments = expanse.comments as String,
+                comments = expanse.comments,
                 type = expanse.type,
                 editClickAction = {
                     navController.navigate("transactionDetails/$expanseId")
@@ -352,8 +352,7 @@ fun SpinnerView(viewModel: ExpansesViewModel) {
     }
     val context = LocalContext.current
 
-    Column(
-    ) {
+    Column {
 
         Spacer(modifier = Modifier.height(5.dp))
         Column {
@@ -447,7 +446,7 @@ fun ReusableRow(
                     Text(text = categoryName,maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 //Spacer(Modifier.weight(0.4f))
-               Column(/*Modifier.weight(2f).wrapContentSize(Alignment.Center)*/) {
+               Column {
                     Text("Press for details")
                 }
 
@@ -498,7 +497,7 @@ fun ReusableRow(
                     Text(text = "Comment: " + comments)
                     Text(text = "Type: " + type)
                     Text(text = "Wallet: " + walletName)
-                    Row() {
+                    Row {
                         OutlinedButton(onClick = { editClickAction.invoke() }) {
                             Text(text = "Edit")
                         }
@@ -520,7 +519,7 @@ fun CategoryImage(categoryIcon: String, size: Int) {
 
 @Composable
 fun Emoji(emojiCode: String, size: Int) {
-    Box() {
+    Box {
         Canvas(modifier = Modifier
             .size(40.dp)
             .align(Alignment.Center), onDraw = {

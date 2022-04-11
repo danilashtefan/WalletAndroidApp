@@ -57,7 +57,7 @@ fun ReportScreen(navController: NavHostController) {
     var totalWalletsIncomes = viewModel.totalWalletsIncomes.value
 
     if (!dataLoaded) {
-        return;
+        return
     }
 
     LazyColumn(
@@ -216,7 +216,7 @@ private fun CategoryAndWalletStatisticsRow(
     deleteClickAction: () -> Unit,
     navController: NavHostController
 ) {
-    Row() {
+    Row {
         Spacer(
             Modifier
                 .size(10.dp, 20.dp)

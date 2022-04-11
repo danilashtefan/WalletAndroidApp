@@ -1,6 +1,5 @@
 package com.example.wallet.ui.screens
 
-import android.text.Editable
 import android.util.Log
 import android.widget.CalendarView
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -26,7 +25,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -34,19 +32,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.R
 import com.example.wallet.model.repository.DataStorePreferenceRepository
-import com.example.wallet.model.response.ExpanseCategory
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
-import com.example.wallet.model.response.transactions.Wallet
-import com.example.wallet.model.viewmodel.transactions.AddViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModel
 import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewModelFactory
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import java.util.*
-import kotlin.collections.ArrayList
 
 @Composable
 fun TransactionDetailsScreen(
@@ -89,7 +83,7 @@ fun TransactionDetailsScreen(
 
 
     if (dataLoaded === false) {
-        return;
+        return
     }
 
     Column(Modifier.verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -305,7 +299,7 @@ private fun DatePicker(
                 Modifier
                     .weight(4F)
             ) {
-                viewModel.datePicked.value?.let { Text(text = it) }
+                viewModel.datePicked.value.let { Text(text = it) }
 
             }
         }
@@ -395,7 +389,7 @@ private fun CategorySelctorTransactionDetails(
     transactionId: Int,
     leadingIcon: @Composable () -> Unit
 ) {
-    Column() {
+    Column {
         var expanded by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
@@ -467,7 +461,7 @@ fun TypeSelectorTransactionDetails(
     leadingIcon: @Composable () -> Unit
 ) {
 
-    Column() {
+    Column {
         var expanded by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
@@ -549,7 +543,7 @@ private fun WalletSelctorTransactionDetails(
     transactionId: Int,
     leadingIcon: @Composable () -> Unit
 ) {
-    Column() {
+    Column {
         var expanded by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier

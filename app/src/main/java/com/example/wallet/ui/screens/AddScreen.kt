@@ -62,7 +62,7 @@ fun AddScreen(
     val listOfButtons = listOf<String>("Transaction", "Category", "Wallet")
     var dataLoaded = viewModel.dataLoaded.value
     if (dataLoaded === false) {
-        return;
+        return
     }
     Column(
         modifier = Modifier
@@ -683,7 +683,7 @@ fun WalletSelectorTransactionAdd(
     viewModel: AddViewModel,
     leadingIcon: @Composable () -> Unit
 ) {
-    Column() {
+    Column {
         var expanded by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
@@ -756,7 +756,7 @@ fun CategorySelectorTransactionAdd(
     viewModel: AddViewModel,
     leadingIcon: @Composable () -> Unit
 ) {
-    Column() {
+    Column {
         var expanded by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
@@ -828,7 +828,7 @@ fun TypeSelectorTransactionAdd(
     leadingIcon: @Composable () -> Unit
 ) {
 
-    Column() {
+    Column {
         var expanded by remember { mutableStateOf(false) }
         Row(
             modifier = Modifier
