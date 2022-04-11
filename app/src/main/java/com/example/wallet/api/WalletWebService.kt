@@ -36,6 +36,8 @@ class WalletWebService {
             //.baseUrl("https://192.168.1.67:8080/api/")
             //.baseUrl("https://192.168.1.80:8080/api/")
             //.baseUrl("https://152.66.156.198:8080/api/")
+                //EV Point
+            //.baseUrl("https://192.168.0.109:8080/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .client(getUnsafeOkHttpClient())
