@@ -12,7 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.repository.DataStorePreferenceRepository
@@ -26,6 +29,8 @@ private const val DividerLengthInDegrees = 1.8f
 fun WalletStatisticsScreen(
     navController: NavHostController,
     walletId: Int,
+    walletName: String,
+    walletIcon: String,
     dataStorePreferenceRepository: DataStorePreferenceRepository
 ) {
     val viewModel: WalletStatisticsViewModel = viewModel(
@@ -41,24 +46,22 @@ fun WalletStatisticsScreen(
     var expenseItems = viewModel.expanseState.value
     var incomeItems = viewModel.incomeState.value
     var dataLoaded = viewModel.dataLoaded.value
-    val walletName = viewModel.walletName
     val listOfButtons = listOf<String>("Expense", "Income")
 
     while (!dataLoaded) {
         return
     }
     Column()
-        {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ){
-                Text(
-                    "Wallet ${walletName.value}", color = Color.White,
-                    style = MaterialTheme.typography.h6
+    {
+        Row(modifier = Modifier.fillMaxWidth().padding(top = 15.dp), horizontalArrangement = Arrangement.Center) {
+            Text(
+                text = "Wallet: $walletIcon $walletName", style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp,
+                    color = Color.White
                 )
-            }
+            )
+        }
         LazyRow(modifier = Modifier.padding(start = 60.dp)) {
             items(listOfButtons) { element ->
                 OutlinedButton(onClick = {

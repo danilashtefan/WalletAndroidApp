@@ -21,7 +21,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.model.repository.DataStorePreferenceRepository
@@ -39,6 +43,8 @@ private const val DividerLengthInDegrees = 1.8f
 fun CategoryStatisticsScreen(
     navController: NavHostController,
     categoryId: Int,
+    categoryName: String,
+    categoryIcon: String,
     dataStorePreferenceRepository: DataStorePreferenceRepository
 ) {
 
@@ -60,7 +66,17 @@ fun CategoryStatisticsScreen(
     while (!dataLoaded) {
         return
     }
+
     Column {
+        Row(modifier = Modifier.fillMaxWidth().padding(top = 15.dp), horizontalArrangement = Arrangement.Center) {
+            Text(
+                text = "Category: $categoryIcon $categoryName", style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 25.sp,
+                    color = Color.White
+                )
+            )
+        }
         LazyRow(modifier = Modifier.padding(start = 60.dp)) {
             items(listOfButtons) { element ->
                 OutlinedButton(onClick = {
@@ -83,24 +99,26 @@ fun CategoryStatisticsScreen(
             colors = { item -> item.color },
             amounts = { item -> item.transaction.amount.toFloat() },
             totalAmount = totalAmount,
-            list = { LazyColumn(modifier = Modifier.padding(12.dp)) {
-                items(transactionsToShow) { item ->
-                    val itemId = item.transaction.id
-                    TransactionStatisticsRow(
-                        color = item.color,
-                        categoryIcon = item.transaction.categoryIcon,
-                        categoryName = item.transaction.categoryName,
-                        walletName = item.transaction.walletName,
-                        date = item.transaction.date,
-                        location = item.transaction.location,
-                        amount = item.transaction.amount,
-                        comments = item.transaction.comments,
-                        type = item.transaction.type,
-                        editClickAction = { navController.navigate("transactionDetails/$itemId") }) {
+            list = {
+                LazyColumn(modifier = Modifier.padding(12.dp)) {
+                    items(transactionsToShow) { item ->
+                        val itemId = item.transaction.id
+                        TransactionStatisticsRow(
+                            color = item.color,
+                            categoryIcon = item.transaction.categoryIcon,
+                            categoryName = item.transaction.categoryName,
+                            walletName = item.transaction.walletName,
+                            date = item.transaction.date,
+                            location = item.transaction.location,
+                            amount = item.transaction.amount,
+                            comments = item.transaction.comments,
+                            type = item.transaction.type,
+                            editClickAction = { navController.navigate("transactionDetails/$itemId") }) {
 
+                        }
                     }
                 }
-            }})
+            })
     }
 }
 
@@ -122,7 +140,8 @@ fun TransactionStatisticsRow(
         Spacer(
             Modifier
                 .size(10.dp, 20.dp)
-                .background(color = color))
+                .background(color = color)
+        )
         ReusableRow(
             categoryIcon = categoryIcon,
             categoryName = categoryName,
@@ -222,7 +241,7 @@ fun <T> StatementBody(
     colors: (T) -> Color,
     amounts: (T) -> Float,
     totalAmount: Int,
-    list:@Composable () -> Unit
+    list: @Composable () -> Unit
 ) {
     Column {
         Box(Modifier.padding(16.dp)) {
@@ -249,7 +268,7 @@ fun <T> StatementBody(
                 )
             }
         }
-            list()
+        list()
 
     }
 

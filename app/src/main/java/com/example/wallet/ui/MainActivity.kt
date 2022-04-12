@@ -104,7 +104,8 @@ fun BottomBar(navController: NavHostController, bottomBarState: MutableState<Boo
                         "Report",
                         route = "report",
                         icon = Icons.Filled.PieChart
-                    )),
+                    )
+                ),
 
                 navController = navController,
                 onItemClick = {
@@ -146,30 +147,46 @@ fun UsersApplication(navController: NavHostController) {
         }
 
         composable(
-            "categoryStatistics/{categoryId}",
+            "categoryStatistics/{categoryId}/{categoryName}/{categoryIcon}",
             arguments = listOf(navArgument("categoryId") {
                 type = NavType.IntType
-            })
+            },
+                navArgument("categoryName") {
+                    type = NavType.StringType
+                },
+                navArgument("categoryIcon") {
+                    type = NavType.StringType
+                })
         ) { navBackStackEntry ->
             navBackStackEntry.arguments?.let {
                 CategoryStatisticsScreen(
                     navController,
                     categoryId = it.getInt("categoryId"),
-                    DataStorePreferenceRepository(LocalContext.current)
+                    categoryName = it.getString("categoryName")!!,
+                    categoryIcon = it.getString("categoryIcon")!!,
+                    dataStorePreferenceRepository = DataStorePreferenceRepository(LocalContext.current)
                 )
             }
         }
 
         composable(
-            "walletStatistics/{walletId}",
+            "walletStatistics/{walletId}/{walletName}/{walletIcon}",
             arguments = listOf(navArgument("walletId") {
                 type = NavType.IntType
-            })
+            },
+                navArgument("walletName") {
+                    type = androidx.navigation.NavType.StringType
+                },
+                navArgument("walletIcon") {
+                    type = NavType.StringType
+                })
         ) { navBackStackEntry ->
             navBackStackEntry.arguments?.let {
                 WalletStatisticsScreen(
                     navController,
                     walletId = it.getInt("walletId"),
+                    walletName = it.getString("walletName")!!,
+                    walletIcon = it.getString("walletIcon")!!,
                     DataStorePreferenceRepository(LocalContext.current)
                 )
             }

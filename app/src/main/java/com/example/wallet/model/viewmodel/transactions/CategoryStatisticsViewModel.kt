@@ -10,6 +10,7 @@ import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.repository.ExpanseCategoriesRepository
 import com.example.wallet.model.repository.TransactionsRepository
 import com.example.wallet.model.repository.WalletRepository
+import com.example.wallet.model.response.transactions.SecondAPI.Category
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +35,8 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
     var totalAmount = mutableStateOf(0)
     var expenseAmount = mutableStateOf(0)
     var incomeAmount = mutableStateOf(0)
+
+    var category = mutableStateOf(Category())
 
     var username: String = ""
     var authToken = ""
@@ -106,7 +109,7 @@ class CategoryStatisticsViewModel(private val dataStorePreferenceRepository: Dat
     }
 
     suspend fun getFilteredExpenses(): SecondAllExpensesResponse {
-        Log.d("INFO","getFiltered expenses is called")
+        Log.d("INFO","getFiltered transactions is called")
         return TransactionsRepository.getCategoryFilteredExpenses(authToken = authToken, categoryId = categoryId)
 
     }

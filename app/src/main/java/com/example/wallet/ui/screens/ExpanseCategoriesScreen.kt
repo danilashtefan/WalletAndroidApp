@@ -142,7 +142,7 @@ fun CategoriesListSection(
             items(transactionsCategories) { category ->
                 val categoryId = category.id
                 ReusableCategoryAndWalletRow(
-                    route = "categoryStatistics/$categoryId",
+                    route = "categoryStatistics/$categoryId/${category.expanseCategoryName}/${category.icon}",
                     icon = category.icon,
                     name = category.expanseCategoryName,
                     amount = 0,
@@ -177,7 +177,7 @@ fun WalletsListSection(
             val walletId = wallet.id
             ReusableCategoryAndWalletRow(
                 icon = wallet.icon,
-                route = "walletStatistics/$walletId",
+                route = "walletStatistics/$walletId/${wallet.walletName}/${wallet.icon}",
                 name = wallet.walletName,
                 amount = 0,
                 displayAmount = false,
