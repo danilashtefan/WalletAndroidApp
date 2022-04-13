@@ -23,16 +23,18 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
         mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
     var whatToSeeState = mutableStateOf("")
     var dataLoaded = mutableStateOf(false)
-    var transactionCetegoriesState = mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
+    var transactionCetegoriesState =
+        mutableStateOf((emptyList<SecondAllExpenseCategoriesResponseItem>()))
     var transactionWalletsState = mutableStateOf(emptyList<SecondAllWalletsResponseItem>())
-    var userName = ""
     var authToken = ""
     var categoryToDelete = mutableStateOf(SecondAllExpenseCategoriesResponseItem())
-    var walletToDelete =  mutableStateOf(SecondAllWalletsResponseItem())
+    var walletToDelete = mutableStateOf(SecondAllWalletsResponseItem())
 
     var showCategoryAlertDialog = mutableStateOf(false)
     var showWalletAlertDialog = mutableStateOf(false)
-    var dialogText = mutableStateOf("By deleting this element you delete all the transactions associated with it")
+    var dialogText =
+        mutableStateOf("By deleting this element you delete all the transactions associated with it")
+
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Network exception in Expense Categories screen: $exception")
@@ -48,31 +50,14 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
                 .collect {
                     Log.d("TOKEN", "Access token on add screen: $it")
                     authToken = it
+                    val transactionCategories = getFilteredTransactionCategories()
+                    val transactionWallets = getFilteredWallets()
+                    transactionCetegoriesState.value = transactionCategories
+                    transactionWalletsState.value = transactionWallets
+                    dataLoaded.value = true
                 }
         }
 
-        viewModelScope.launch(handler + Dispatchers.IO) {
-            dataStorePreferenceRepository.getUsername.catch {
-                Log.d(
-                    "ERROR",
-                    "Could not get Username from Data Store on Expense Categories screen"
-                )
-            }
-                .collect {
-                    Log.d("TOKEN", "Username on Add Screen: $it")
-                    userName = it
-                }
-        }
-
-        viewModelScope.launch(handler + Dispatchers.IO) {
-            Thread.sleep(500)
-            val transactionCategories = getFilteredTransactionCategories()
-            val transactionWallets = getFilteredWallets()
-            transactionCetegoriesState.value = transactionCategories
-            transactionWalletsState.value = transactionWallets
-            dataLoaded.value = true
-
-        }
     }
 
     suspend fun getFilteredTransactionCategories(): SecondAllExpenseCategoriesResponse {
@@ -85,11 +70,13 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
         return listOfWallets
     }
 
-    fun deleteCategoryDialogShow(){
+    fun deleteCategoryDialogShow() {
         showCategoryAlertDialog.value = true
     }
-    fun deleteCategory(category : SecondAllExpenseCategoriesResponseItem){
-        transactionCetegoriesState.value = transactionCetegoriesState.value.toMutableList().also{it.remove(category)}
+
+    fun deleteCategory(category: SecondAllExpenseCategoriesResponseItem) {
+        transactionCetegoriesState.value =
+            transactionCetegoriesState.value.toMutableList().also { it.remove(category) }
 
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while deleting the category : $exception")
@@ -103,12 +90,13 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
         }
     }
 
-    fun deleteWalletDialogShow(){
+    fun deleteWalletDialogShow() {
         showWalletAlertDialog.value = true
     }
 
-    fun deleteWallet(wallet : SecondAllWalletsResponseItem){
-        transactionWalletsState.value = transactionWalletsState.value.toMutableList().also{it.remove(wallet)}
+    fun deleteWallet(wallet: SecondAllWalletsResponseItem) {
+        transactionWalletsState.value =
+            transactionWalletsState.value.toMutableList().also { it.remove(wallet) }
 
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d("EXCEPTION", "Thread exception while deleting the wallet : $exception")
