@@ -50,6 +50,7 @@ import com.example.wallet.ui.theme.PurpleBasic
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 @Composable
@@ -631,10 +632,11 @@ private fun SaveButtonTransactionAdd(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
-            val addResult = viewModel.addTransactionToDb()
-            Thread.sleep(500)
-            if (addResult) {
-                navController.navigate("expanses")
+            runBlocking {
+                val addResult = viewModel.addTransactionToDb()
+                if (addResult) {
+                    navController.navigate("expanses")
+                }
             }
         }) {
             Text(text = "Add transaction")

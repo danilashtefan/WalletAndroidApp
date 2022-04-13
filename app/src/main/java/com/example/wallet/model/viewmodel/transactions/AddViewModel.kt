@@ -183,7 +183,6 @@ init{
             )
         }
         return true
-
     }
 
     fun addCategoryToDb(){
