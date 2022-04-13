@@ -32,6 +32,7 @@ import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpense
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.viewmodel.transactions.*
 import com.example.wallet.ui.theme.PurpleBasic
+import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -179,9 +180,10 @@ private fun SaveButtonCategoryEdit(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(onClick = {
-            viewModel.editCategoryInDb()
-            Thread.sleep(500)
-            navController.navigate("expanses")
+            runBlocking {
+                viewModel.editCategoryInDb()
+                navController.navigate("expanses")
+            }
         }) {
             Text(text = "Edit category")
         }

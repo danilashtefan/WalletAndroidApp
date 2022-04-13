@@ -650,9 +650,10 @@ private fun SaveButtonCategoryAdd(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(onClick = {
-            viewModel.addCategoryToDb()
-            Thread.sleep(500)
-            navController.navigate("expanses")
+            runBlocking {
+                viewModel.addCategoryToDb()
+                navController.navigate("expanses")
+            }
         }) {
             Text(text = "Add category")
         }
@@ -666,9 +667,10 @@ private fun SaveButtonWalletAdd(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(onClick = {
-            viewModel.addWalletToDb()
-            Thread.sleep(500)
-            navController.navigate("expanses")
+            runBlocking {
+                viewModel.addWalletToDb()
+                navController.navigate("expanses")
+            }
         }) {
             Text(text = "Add wallet")
         }

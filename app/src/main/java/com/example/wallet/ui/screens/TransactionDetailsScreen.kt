@@ -334,22 +334,6 @@ private fun EditCalendarDatePicker(viewModel: TransactionDetailsViewModel) {
 }
 
 
-@Composable
-private fun DeleteButtonTransactionDetails(
-    navController: NavHostController,
-    expenseId: Int,
-    viewModel: TransactionDetailsViewModel
-) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-        OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
-            viewModel.deleteTransaction(expenseId)
-            Thread.sleep(500)
-            navController.navigate("expanses")
-        }) {
-            Text(text = "Delete transaction", color = Color.Red)
-        }
-    }
-}
 
 
 @Composable
