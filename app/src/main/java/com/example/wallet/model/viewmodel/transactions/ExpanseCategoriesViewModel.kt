@@ -102,7 +102,6 @@ class ExpanseCategoriesViewModel(private val dataStorePreferenceRepository: Data
 
         viewModelScope.launch(handler + Dispatchers.IO) {
             //authTokenJob.join()
-            Thread.sleep(500)
             Log.d("INFO", "Auth token for delete is $authToken")
             WalletRepository.deleteWallet(wallet.id, authToken)
         }

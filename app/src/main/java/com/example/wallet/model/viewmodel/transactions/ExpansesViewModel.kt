@@ -64,54 +64,56 @@ class ExpansesViewModel(
                 .collect {
                     Log.d("TOKEN", "Access token on all expense screen: $it")
                     authToken = it
+                    fetchExpensesToTheScreen()
                 }
         }
-
-        viewModelScope.launch(handler + Dispatchers.IO) {
-            while (authToken.equals("")) {
-                Log.d("INFO", "Access token is not set up yet")
-            }
-            var expanses = getFilteredExpenses()
-            for (transaction in expanses) {
-                val transactionCategoryNameAndIdAndIcon =
-                    getAndSetCategoriesForTransactions(transaction.id)
-                transaction.categoryName = transactionCategoryNameAndIdAndIcon.first
-                transaction.categoryId = transactionCategoryNameAndIdAndIcon.second
-                transaction.categoryIcon = transactionCategoryNameAndIdAndIcon.third
-                val transactionWalletNameAndId = getAndSetWalletForTransactions(authToken,transaction.id)
-                transaction.walletName = transactionWalletNameAndId.first
-                transaction.walletId = transactionWalletNameAndId.second
-            }
-            transactionState.value = expanses
-            var totalExpensesTemp = 0
-            var totalIncomeTemp = 0
-            for (expense in expanses) {
-                if (expense.type.equals("Expense")) {
-                    totalExpensesTemp += expense.amount
-                    expanseState.value += expense
-                }
-                if (expense.type.equals("Income")) {
-                    totalIncomeTemp += expense.amount
-                    incomeState.value += expense
-                }
-            }
-            totalExpenses.value = totalExpensesTemp
-            totalIncome.value = totalIncomeTemp
-
-            dataStorePreferenceRepository.getBudget.
-            catch { Log.d("ERROR","Could not get Budget from Data Store on Expenses screen") }
-                .collect{
-                    budgetSet.value = it.toInt()
-                    budgetLeft.value = budgetSet.value - abs(totalExpenses.value)
-                    if (budgetLeft.value < 0){
-                        showLowBudgetAlertDialog.value = true
-                    }
-                    Log.d("INFO","Budget left on Expenses screen: ${budgetLeft.value} ")
-                }
-        }
-
 
         dataLoaded.value = true
+    }
+
+    private suspend fun ExpansesViewModel.fetchExpensesToTheScreen() {
+        var expanses = getFilteredExpenses()
+        for (transaction in expanses) {
+            val transactionCategoryNameAndIdAndIcon =
+                getAndSetCategoriesForTransactions(transaction.id)
+            transaction.categoryName = transactionCategoryNameAndIdAndIcon.first
+            transaction.categoryId = transactionCategoryNameAndIdAndIcon.second
+            transaction.categoryIcon = transactionCategoryNameAndIdAndIcon.third
+            val transactionWalletNameAndId =
+                getAndSetWalletForTransactions(authToken, transaction.id)
+            transaction.walletName = transactionWalletNameAndId.first
+            transaction.walletId = transactionWalletNameAndId.second
+        }
+        transactionState.value = expanses
+        var totalExpensesTemp = 0
+        var totalIncomeTemp = 0
+        for (expense in expanses) {
+            if (expense.type.equals("Expense")) {
+                totalExpensesTemp += expense.amount
+                expanseState.value += expense
+            }
+            if (expense.type.equals("Income")) {
+                totalIncomeTemp += expense.amount
+                incomeState.value += expense
+            }
+        }
+        totalExpenses.value = totalExpensesTemp
+        totalIncome.value = totalIncomeTemp
+
+        dataStorePreferenceRepository.getBudget.catch {
+            Log.d(
+                "ERROR",
+                "Could not get Budget from Data Store on Expenses screen"
+            )
+        }
+            .collect {
+                budgetSet.value = it.toInt()
+                budgetLeft.value = budgetSet.value - abs(totalExpenses.value)
+                if (budgetLeft.value < 0) {
+                    showLowBudgetAlertDialog.value = true
+                }
+                Log.d("INFO", "Budget left on Expenses screen: ${budgetLeft.value} ")
+            }
     }
 
     fun dismissLowBudgetAlertDialog(){
