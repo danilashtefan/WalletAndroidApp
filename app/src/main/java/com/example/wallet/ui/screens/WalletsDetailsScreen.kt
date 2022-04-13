@@ -35,6 +35,7 @@ import com.example.wallet.model.viewmodel.transactions.TransactionCategoriesDeta
 import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModel
 import com.example.wallet.model.viewmodel.transactions.WalletsDetailsViewModelFactory
 import com.example.wallet.ui.theme.PurpleBasic
+import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -188,9 +189,10 @@ private fun SaveButtonWalletEdit(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(onClick = {
-            viewModel.editWalletInDb()
-            Thread.sleep(500)
-            navController.navigate("expanses")
+            runBlocking {
+                viewModel.editWalletInDb()
+                navController.navigate("expanses")
+            }
         }) {
             Text(text = "Edit wallet")
         }

@@ -80,7 +80,7 @@ fun ExpanseCategoriesScreen(
                 dismissButtonText = "CANCEL",
                 confirmButtonText = "CONFIRM",
                 onConfirm = {
-                    viewModel.showCategoryAlertDialog.value = false
+                    viewModel.showWalletAlertDialog.value = false
                     viewModel.deleteWallet(viewModel.walletToDelete.value)}
             )
         }

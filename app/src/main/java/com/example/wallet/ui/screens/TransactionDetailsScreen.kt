@@ -40,6 +40,7 @@ import com.example.wallet.model.viewmodel.transactions.TransactionDetailsViewMod
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.Autocomplete
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 @Composable
@@ -258,13 +259,15 @@ private fun SaveButtonTransactionDetails(
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
-            for (field in fieldsOnTheScreen) {
-                viewModel.updateField(field, viewModel.getFieldToUpdateInDB(field))
-            }
-            val editResult = viewModel.updateTransactionInDb()
-            Thread.sleep(500)
-            if (editResult) {
-                navController.navigate("expanses")
+            runBlocking {
+                for (field in fieldsOnTheScreen) {
+                    viewModel.updateField(field, viewModel.getFieldToUpdateInDB(field))
+                }
+                val editResult = viewModel.updateTransactionInDb()
+                if (editResult) {
+                    navController.navigate("expanses")
+                }
+
             }
 
         }) {
@@ -332,8 +335,6 @@ private fun EditCalendarDatePicker(viewModel: TransactionDetailsViewModel) {
         }
     )
 }
-
-
 
 
 @Composable
