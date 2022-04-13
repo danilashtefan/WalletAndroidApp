@@ -191,7 +191,9 @@ fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
                     )
                 )
                 if (result.equals("Success")) {
-                    navController.navigate("expanses")
+                    navController.navigate("expanses"){
+                        popUpTo("login"){ inclusive = true }
+                    }
                 }
 
             }, modifier = Modifier

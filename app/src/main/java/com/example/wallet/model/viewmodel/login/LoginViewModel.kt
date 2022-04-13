@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.net.ConnectException
 import java.util.prefs.Preferences
 
@@ -40,7 +41,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
 
     }
 
-    fun login(loginRequest: LoginRequest): String {
+    fun login(loginRequest: LoginRequest): String = runBlocking{
 
         val handler = CoroutineExceptionHandler { _, exception ->
             if (exception is retrofit2.HttpException) {
@@ -54,7 +55,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
         }
 
         if (!username.equals("") and !password.equals("")) {
-            viewModelScope.launch(handler + Dispatchers.IO) {
+            val getAuthRes = viewModelScope.launch(handler + Dispatchers.IO) {
                 var tokens = loginRepository.login(loginRequest)
                 dataStorePreferenceRepository.setTokens(tokens.access_token, tokens.refresh_token)
                 dataStorePreferenceRepository.setUsername(username)
@@ -65,15 +66,15 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
                 }
             }
             //Sleep is to wait for the server's response about the authentication
-            Thread.sleep(1000)
+            getAuthRes.join()
             if (authResult) {
-                return "Success"
+                return@runBlocking "Success"
             }
         } else {
             dialogText.value = "Username or password are too short"
             showAlertDialog.value = true
         }
-        return "Failed"
+        return@runBlocking "Failed"
     }
 
     fun register(registerRequest: RegisterRequest) {
