@@ -52,10 +52,9 @@ fun TransactionDetailsScreen(
         factory = TransactionDetailsViewModelFactory(
             DataStorePreferenceRepository(
                 LocalContext.current
-            )
+            ), transactionId = transactionId
         )
     ) //ViewModel is bound to a composable
-    viewModel.setTransactionId(transactionId)
     var dataLoaded = viewModel.dataLoaded.value
     var transaction = viewModel.transaction.value
     val transactionsCategories = viewModel.transactionCetegoriesState.value
@@ -86,7 +85,10 @@ fun TransactionDetailsScreen(
         return
     }
 
-    Column(Modifier.verticalScroll(rememberScrollState()), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        Modifier.verticalScroll(rememberScrollState()),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         var showIncorrectDataAlertDialog = viewModel.showIncorrectDataAlertDialog.value
         if (showIncorrectDataAlertDialog) {
             OneButtonAlertDialogComponent(
@@ -513,10 +515,10 @@ fun TypeSelectorTransactionDetails(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Spacer(modifier = Modifier.padding(3.dp))
-                            if(option.equals("Expense")){
+                            if (option.equals("Expense")) {
                                 CategoryImage("\uD83D\uDED1", 30)
 
-                            }else{
+                            } else {
                                 CategoryImage("\uD83D\uDFE2", 30)
                             }
                             Text(option)

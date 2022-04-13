@@ -18,7 +18,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class TransactionDetailsViewModel(private val dataStorePreferenceRepository: DataStorePreferenceRepository) :
+class TransactionDetailsViewModel(
+    private val dataStorePreferenceRepository: DataStorePreferenceRepository,
+    private val incomingTransactionId: Int
+) :
     ViewModel() {
 
     // private val walletRepository: WalletRepository = WalletRepository()
@@ -39,9 +42,9 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var locationFieldTemporaryValueBeforeSavingtoDB: String? = ""
 
     //This is only Category Name Displayed, not the actual Category name!!
-    var categoryNameFieldTemporaryValueBeforeSavingtoDB : MutableState<String> = mutableStateOf("")
-    var typeFieldTemporaryValueBeforeSavingtoDB : MutableState<String> = mutableStateOf("")
-    var walletNameFieldTemporaryValueBeforeSavingtoDB : MutableState<String> = mutableStateOf("")
+    var categoryNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("")
+    var typeFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("")
+    var walletNameFieldTemporaryValueBeforeSavingtoDB: MutableState<String> = mutableStateOf("")
 
     var categoryLinkTemporaryValueBeforeSavingtoDB: String? = null
     var walletLinkTemporaryValueBeforeSavingtoDB: String? = null
@@ -56,19 +59,18 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     var locationState = mutableStateOf("Location is not specified")
 
     var showIncorrectDataAlertDialog = mutableStateOf(false)
-    var incorrectDataAlertDialogText = "Some of the fields are empty. Please, introduce:\n\n"+
-            "\u2022" + "Type\n" + "\u2022" + "Category\n" + "\u2022" + "Wallet\n" + "\u2022" + "Date\n"+"\u2022" +"Amount"
+    var incorrectDataAlertDialogText = "Some of the fields are empty. Please, introduce:\n\n" +
+            "\u2022" + "Type\n" + "\u2022" + "Category\n" + "\u2022" + "Wallet\n" + "\u2022" + "Date\n" + "\u2022" + "Amount"
 
-    var authTokenJob: Job
 
     init {
         val handler = CoroutineExceptionHandler { _, exception ->
             Log.d(
                 "EXCEPTION",
-                "Thread exception while getting username on the transaction details screen"
+                "Thread exception while getting token on the transaction details screen: $exception"
             )
         }
-        authTokenJob = viewModelScope.launch(handler + Dispatchers.IO) {
+       viewModelScope.launch(handler + Dispatchers.IO) {
             dataStorePreferenceRepository.getAccessToken.catch {
                 Log.d(
                     "ERROR",
@@ -78,19 +80,8 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
                 .collect {
                     authToken = it
                     Log.d("TOKEN", "Access token on transaction details screen: $authToken")
-                }
-        }
-
-        val usernameJob: Job = viewModelScope.launch(handler + Dispatchers.IO) {
-            dataStorePreferenceRepository.getUsername.catch {
-                Log.d(
-                    "ERROR",
-                    "Could not get Username from Data Store on Transaction details screen screen"
-                )
-            }
-                .collect {
-                    Log.d("TOKEN", "Username on Transaction details Screen: $it")
-                    username = it
+                    Thread.sleep(500)
+                    setTransactionId(incomingTransactionId)
                 }
         }
     }
@@ -110,12 +101,13 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
         this.transaction.value = transaction
     }
 
-    fun updateTransactionInDb():Boolean {
+    fun updateTransactionInDb(): Boolean {
 
-        if(typeFieldTemporaryValueBeforeSavingtoDB.value == "" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
+        if (typeFieldTemporaryValueBeforeSavingtoDB.value == "" || categoryLinkTemporaryValueBeforeSavingtoDB == null ||
             walletLinkTemporaryValueBeforeSavingtoDB == null ||
             dateFieldTemporaryValueBeforeSavingtoDB == "Date" ||
-            amountFieldTemporaryValueBeforeSavingtoDB == null){
+            amountFieldTemporaryValueBeforeSavingtoDB == null
+        ) {
             incorrectDataDialogShow()
             return false
         }
@@ -165,15 +157,10 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
     }
 
 
-    fun setTransactionId(transactionId: Int) {
-        if (transactionId === this.transactionId) {
-            return
-        }
+    suspend fun setTransactionId(transactionId: Int) {
         this.transactionId = transactionId
         val transaction = TransactionsRepository.getExpense(this.transactionId)
         this.transaction.value = transaction
-
-
         this.nameFieldTemporaryValueBeforeSavingtoDB = transaction.name
         this.amountFieldTemporaryValueBeforeSavingtoDB = transaction.amount.toString()
         this.typeFieldTemporaryValueBeforeSavingtoDB.value = transaction.type
@@ -192,20 +179,11 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
 
         this.locationState.value =
             if (transaction.location != null) transaction.location else "Location is not specified"
-
-
-        val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception setTransactionId")
-        }
-
-        viewModelScope.launch(handler + Dispatchers.IO) {
-            Thread.sleep(500)
-            val transactionWallets = getFilteredWallets()
-            transactionWalletsState.value = transactionWallets
-            val transactionCategories = getFilteredTransactionCategories()
-            transactionCetegoriesState.value = transactionCategories
-            dataLoaded.value = true
-        }
+        val transactionWallets = getFilteredWallets()
+        transactionWalletsState.value = transactionWallets
+        val transactionCategories = getFilteredTransactionCategories()
+        transactionCetegoriesState.value = transactionCategories
+        dataLoaded.value = true
     }
 
     fun updateCategoryLinkValueBeforeSavingToDB(category: SecondAllExpenseCategoriesResponseItem) {
@@ -255,17 +233,16 @@ class TransactionDetailsViewModel(private val dataStorePreferenceRepository: Dat
             Log.d("EXCEPTION", "Thread exception while deleting the transaction : $exception")
         }
         viewModelScope.launch(handler + Dispatchers.IO) {
-            //authTokenJob.join()
-            Thread.sleep(500)
             Log.d("INFO", "Auth token for delete is $authToken")
             TransactionsRepository.deleteTransaction(expenseId, authToken)
         }
     }
 
-    fun incorrectDataDialogShow(){
+    fun incorrectDataDialogShow() {
         showIncorrectDataAlertDialog.value = true
     }
-    fun incorrectDataDialogClose(){
+
+    fun incorrectDataDialogClose() {
         showIncorrectDataAlertDialog.value = false
     }
 
