@@ -70,7 +70,7 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
 
 init{
     val handler = CoroutineExceptionHandler { _, exception ->
-        Log.d("EXCEPTION", "Thread exception while fetching categories on Adding Screen")
+        Log.d("EXCEPTION", "Thread exception while fetching categories on Adding Screen: " + exception)
     }
     viewModelScope.launch(handler + Dispatchers.IO) {
         dataStorePreferenceRepository.getAccessToken.
@@ -164,7 +164,7 @@ init{
             return false
         }
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception when saving to DB")
+            Log.d("EXCEPTION", "Thread exception when saving to DB $exception")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
@@ -188,7 +188,7 @@ init{
     fun addCategoryToDb(){
 
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception when adding category to Db")
+            Log.d("EXCEPTION", "Thread exception when adding category to Db: $exception")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
@@ -209,7 +209,7 @@ init{
     fun addWalletToDb(){
 
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception when adding wallet to Db")
+            Log.d("EXCEPTION", "Thread exception when adding wallet to Db: $exception")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {

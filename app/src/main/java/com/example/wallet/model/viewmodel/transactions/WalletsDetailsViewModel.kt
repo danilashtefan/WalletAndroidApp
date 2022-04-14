@@ -93,7 +93,7 @@ class WalletsDetailsViewModel(private val dataStorePreferenceRepository: DataSto
 
     fun editWalletInDb() {
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception when adding category to Db")
+            Log.d("EXCEPTION", "Thread exception when adding category to Db: $exception")
         }
 
         viewModelScope.launch(handler + Dispatchers.IO) {
