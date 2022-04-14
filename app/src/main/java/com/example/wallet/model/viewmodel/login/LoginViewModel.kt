@@ -41,7 +41,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
 
     }
 
-    fun login(loginRequest: LoginRequest): String = runBlocking{
+    fun login(loginRequest: LoginRequest): Boolean = runBlocking{
 
         val handler = CoroutineExceptionHandler { _, exception ->
             if (exception is retrofit2.HttpException) {
@@ -65,16 +65,12 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
                     authResult = true
                 }
             }
-            //Sleep is to wait for the server's response about the authentication
             getAuthRes.join()
-            if (authResult) {
-                return@runBlocking "Success"
-            }
         } else {
             dialogText.value = "Username or password are too short"
             showAlertDialog.value = true
         }
-        return@runBlocking "Failed"
+        return@runBlocking authResult
     }
 
     fun register(registerRequest: RegisterRequest) {

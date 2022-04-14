@@ -190,7 +190,7 @@ fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
                         password = viewModel.password
                     )
                 )
-                if (result.equals("Success")) {
+                if (result) {
                     navController.navigate("expanses"){
                         popUpTo("login"){ inclusive = true }
                     }
