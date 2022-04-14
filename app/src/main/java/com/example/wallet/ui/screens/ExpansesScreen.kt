@@ -17,7 +17,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,7 +55,7 @@ fun ExpansesScreen(
             )
         )
     ) //ViewModel is bound to a composable
-    val expanses = viewModel.transactionState.value
+    val transactions = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
     val accessToken = viewModel.authToken
     var expenseItems = viewModel.expanseState.value
@@ -83,7 +82,7 @@ fun ExpansesScreen(
             budgetSet.value,
             budgetLeft.value
         )
-        ExpanseSection(expanses, navController, viewModel, sortBy.value)
+        TransactionsSection(transactions, navController, viewModel, sortBy.value)
     }
 
 }
@@ -266,7 +265,7 @@ private fun CalendarDatePicker(
 
 
 @Composable
-fun ExpanseSection(
+fun TransactionsSection(
     expanses: List<SecondAllExpensesItem>, navController: NavHostController,
     viewModel: ExpansesViewModel,
     sortBy: String
@@ -432,8 +431,8 @@ fun ReusableRow(
         backgroundColor = Color.White,
         modifier = Modifier.padding(6.dp)
     ) {
-        var expanded by remember { mutableStateOf(false) }
-        Column(Modifier.clickable { expanded = !expanded }) {
+        var expended by remember { mutableStateOf(false) }
+        Column(Modifier.clickable { expended = !expended }) {
             Row(
                 modifier = Modifier
                     .height(68.dp),
@@ -490,7 +489,7 @@ fun ReusableRow(
 //                }
 
             }
-            AnimatedVisibility(visible = expanded) {
+            AnimatedVisibility(visible = expended) {
                 Column(modifier=Modifier.padding(start=5.dp)) {
                     Text(text = "Location: " + location)
                     Text(text = "Date: " + date)

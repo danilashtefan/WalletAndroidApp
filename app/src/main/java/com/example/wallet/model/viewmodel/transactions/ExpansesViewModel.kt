@@ -72,8 +72,8 @@ class ExpansesViewModel(
     }
 
     private suspend fun ExpansesViewModel.fetchExpensesToTheScreen() {
-        var expanses = getFilteredExpenses()
-        for (transaction in expanses) {
+        var transactions = getFilteredExpenses()
+        for (transaction in transactions) {
             val transactionCategoryNameAndIdAndIcon =
                 getAndSetCategoriesForTransactions(transaction.id)
             transaction.categoryName = transactionCategoryNameAndIdAndIcon.first
@@ -84,10 +84,10 @@ class ExpansesViewModel(
             transaction.walletName = transactionWalletNameAndId.first
             transaction.walletId = transactionWalletNameAndId.second
         }
-        transactionState.value = expanses
+        transactionState.value = transactions
         var totalExpensesTemp = 0
         var totalIncomeTemp = 0
-        for (expense in expanses) {
+        for (expense in transactions) {
             if (expense.type.equals("Expense")) {
                 totalExpensesTemp += expense.amount
                 expanseState.value += expense

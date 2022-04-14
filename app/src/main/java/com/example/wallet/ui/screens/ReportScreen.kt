@@ -23,7 +23,6 @@ import com.example.wallet.model.CategoryWrapperWithColor
 import com.example.wallet.model.WalletWrapperWithColor
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.*
-import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.model.viewmodel.transactions.ReportViewModel
 import com.example.wallet.model.viewmodel.transactions.ReportViewModelFactory
 
@@ -75,10 +74,9 @@ fun ReportScreen(navController: NavHostController) {
             TopExpenseCategory(topExpenseCategory)
         }
         item { //PieChart of categories with respect to expenses
-            StatementBody(listOfButtons = ArrayList<String>(),
+            PieChartBase(
                 transactions = allCategories,
-                expenses = ArrayList<CategoryWrapperWithColor>(),
-                incomes = ArrayList<CategoryWrapperWithColor>(),
+
                 colors = { item -> item.color },
                 amounts = { item -> item.category.expenseAmount.toFloat() },
                 totalAmount = totalCategoriesExpenses,
@@ -107,10 +105,8 @@ fun ReportScreen(navController: NavHostController) {
             TopIncomeCategory(topIncomeCategory)
         }
         item {
-            StatementBody(listOfButtons = ArrayList<String>(),
+            PieChartBase(
                 transactions = allCategories,
-                expenses = ArrayList<CategoryWrapperWithColor>(),
-                incomes = ArrayList<CategoryWrapperWithColor>(),
                 colors = { item -> item.color },
                 amounts = { item -> item.category.incomeAmount.toFloat() },
                 totalAmount = totalCategoriesIncomes,
@@ -139,10 +135,8 @@ fun ReportScreen(navController: NavHostController) {
             TopExpenseWallet(topExpenseWallet)
         }
         item {
-            StatementBody(listOfButtons = ArrayList<String>(),
+            PieChartBase(
                 transactions = allWallets,
-                expenses = ArrayList<WalletWrapperWithColor>(),
-                incomes = ArrayList<WalletWrapperWithColor>(),
                 colors = { item -> item.color },
                 amounts = { item -> item.wallet.expenseAmount.toFloat() },
                 totalAmount = totalWalletsExpenses,
@@ -170,10 +164,7 @@ fun ReportScreen(navController: NavHostController) {
             TopIncomeWallet(topIncomeWallet)
         }
         item {
-            StatementBody(listOfButtons = ArrayList<String>(),
-                transactions = allWallets,
-                expenses = ArrayList<WalletWrapperWithColor>(),
-                incomes = ArrayList<WalletWrapperWithColor>(),
+            PieChartBase(transactions = allWallets,
                 colors = { item -> item.color },
                 amounts = { item -> item.wallet.incomeAmount.toFloat() },
                 totalAmount = totalWalletsIncomes,

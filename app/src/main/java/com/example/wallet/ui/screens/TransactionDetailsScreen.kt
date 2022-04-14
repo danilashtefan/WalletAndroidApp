@@ -230,7 +230,7 @@ fun TransactionDetailsScreen(
                 )
             }
         )
-        EditableFieldLocationTransactionDetails(
+        LocationTransactionDetails(
             20,
             field = locationFieldName,
             labelText = "Location",
@@ -594,7 +594,7 @@ private fun WalletSelctorTransactionDetails(
 }
 
 @Composable
-private fun EditableFieldLocationTransactionDetails(
+private fun LocationTransactionDetails(
     padding: Int,
     field: String,
     labelText: String,

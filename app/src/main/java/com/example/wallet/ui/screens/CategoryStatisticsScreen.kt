@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -92,10 +91,8 @@ fun CategoryStatisticsScreen(
             if (viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseItems else incomeItems
         var totalAmount =
             if (viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseAmount else incomeAmount
-        StatementBody(listOfButtons = listOfButtons,
+        PieChartBase(
             transactions = transactionsToShow,
-            expenses = expenseItems,
-            incomes = incomeItems,
             colors = { item -> item.color },
             amounts = { item -> item.transaction.amount.toFloat() },
             totalAmount = totalAmount,
@@ -233,11 +230,8 @@ fun <E> List<E>.extractProportions(selector: (E) -> Float): List<Float> {
 
 
 @Composable
-fun <T> StatementBody(
+fun <T> PieChartBase(
     transactions: List<T>,
-    listOfButtons: List<String>,
-    expenses: List<T>,
-    incomes: List<T>,
     colors: (T) -> Color,
     amounts: (T) -> Float,
     totalAmount: Int,
@@ -269,7 +263,6 @@ fun <T> StatementBody(
             }
         }
         list()
-
     }
 
 }

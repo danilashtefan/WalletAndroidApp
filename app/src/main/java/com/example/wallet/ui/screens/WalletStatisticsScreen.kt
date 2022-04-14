@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -77,10 +75,8 @@ fun WalletStatisticsScreen(
             if (viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseItems else incomeItems
         var totalAmount =
             if (viewModel.typeOfTransactionsToDisplay.value.equals("expense")) expenseAmount else incomeAmount
-        StatementBody(listOfButtons = listOfButtons,
+        PieChartBase(
             transactions = transactionsToShow,
-            expenses = expenseItems,
-            incomes = incomeItems,
             colors = { item -> item.color },
             amounts = { item -> item.transaction.amount.toFloat() },
             totalAmount = totalAmount,
