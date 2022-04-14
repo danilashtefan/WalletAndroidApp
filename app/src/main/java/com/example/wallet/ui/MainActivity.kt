@@ -1,6 +1,7 @@
 package com.example.wallet.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
@@ -41,7 +42,7 @@ import java.util.*
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Places.initialize(applicationContext, "AIzaSyBU6eLqByvGm88Ez8UxQR6NNVzfis4rudI")
+        Places.initialize(applicationContext, API_KEY.MAPS_API_KEY)
         setContent {
             WalletTheme {
                 val navController = rememberNavController()

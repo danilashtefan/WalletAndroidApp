@@ -49,6 +49,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
                 dialogText.value = "Login failed. Username and password are incorrect"
 
             } else if (exception is ConnectException) {
+                Log.d("EXCEPTION", "Thread exception while loging in: $exception")
                 dialogText.value = "Login failed. Failed to connect"
             }
             showAlertDialog.value = true
@@ -80,6 +81,7 @@ class LoginViewModel(private val dataStorePreferenceRepository: DataStorePrefere
                 dialogText.value = "Registration failed. Please, choose another username"
 
             } else if (exception is ConnectException) {
+                Log.d("EXCEPTION", "Thread exception while loging in: $exception")
                 dialogText.value = "Registration failed. Failed to connect"
             }
             showAlertDialog.value = true

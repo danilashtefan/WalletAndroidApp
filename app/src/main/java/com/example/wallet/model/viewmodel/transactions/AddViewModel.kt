@@ -62,7 +62,7 @@ class AddViewModel(private val dataStorePreferenceRepository: DataStorePreferenc
     var locationState = mutableStateOf("")
     var showIncorrectDataAlertDialog = mutableStateOf(false)
 
-    var incorrectDataAlertDialogText = "Some of the fields are empty. Please, introduce:\n\n"+
+    var incorrectDataAlertDialogText = "Some of the fields are empty. Please, enter:\n\n"+
             "\u2022" + "Type\n" + "\u2022" + "Category\n" + "\u2022" + "Wallet\n" + "\u2022" + "Date\n"+"\u2022" +"Amount"
 //var incorrectDataAlertDialogText = "Some text"
 
