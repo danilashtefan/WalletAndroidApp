@@ -634,6 +634,7 @@ private fun SaveButtonTransactionAdd(
         OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
             runBlocking {
                 val addResult = viewModel.addTransactionToDb()
+                Thread.sleep(100)
                 if (addResult) {
                     navController.navigate("expanses")
                 }
