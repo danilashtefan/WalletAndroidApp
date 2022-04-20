@@ -22,10 +22,8 @@ import org.junit.Rule
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
-
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
-
     @Test
     fun useAppContext() {
         // Context of the app under test.
