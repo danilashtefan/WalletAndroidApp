@@ -101,6 +101,8 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.4.0-alpha04"
 
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:4.6.0"
+    implementation 'com.squareup.okhttp3:okhttp:4.6.0'
+
 
 
     //Chart's library

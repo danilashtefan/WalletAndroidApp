@@ -25,22 +25,23 @@ import java.io.InputStreamReader
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@RunWith(AndroidJUnit4::class)
+
 class ExampleInstrumentedTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
-//    val server = MockWebServer()
-//
-//    @Before
-//    fun setUp() {
-//        server.start(8080)
-//    }
-//
-//    @After
-//    fun finally() {
-//        server.shutdown()
-//    }
+
+    val server = MockWebServer()
+
+    @Before
+    fun setUp() {
+        server.start(8080)
+    }
+
+    @After
+    fun finally() {
+        server.shutdown()
+    }
 
     @Test
     fun useAppContext() {
