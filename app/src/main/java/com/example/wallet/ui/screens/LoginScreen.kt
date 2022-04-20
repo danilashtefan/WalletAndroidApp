@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.R
+import com.example.wallet.helpers.Strings
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.viewmodel.login.LoginViewModel
 import com.example.wallet.model.viewmodel.login.LoginViewModelFactory
@@ -93,9 +95,7 @@ fun OneButtonAlertDialogComponent(
         title = { Text(text = "Wallet", color = Color.White) },
 
         text = bodyText,
-
         confirmButton = {
-
             TextButton(
                 onClick = onDismiss
             ) {
@@ -143,6 +143,7 @@ fun text_field(
         modifier = Modifier
             .padding(top = 0.dp)
             .background(color = MaterialTheme.colors.TextFieldColor)
+            .testTag(Strings.USERNAME_TEXTFIELD_TAG)
     )
     var TextFieldPasswordState = remember { mutableStateOf("") }
     var passwordVisibility: Boolean by remember { mutableStateOf(false) }
@@ -176,6 +177,7 @@ fun text_field(
         modifier = Modifier
             .padding(top = 25.dp)
             .background(color = MaterialTheme.colors.TextFieldColor)
+            .testTag(Strings.PASSWORD_TEXTFIELD_TAG)
     )
 }
 
@@ -191,8 +193,8 @@ fun SignIn(viewModel: LoginViewModel, navController: NavHostController) {
                     )
                 )
                 if (result) {
-                    navController.navigate("expanses"){
-                        popUpTo("login"){ inclusive = true }
+                    navController.navigate("expanses") {
+                        popUpTo("login") { inclusive = true }
                     }
                 }
 

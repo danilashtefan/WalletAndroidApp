@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id "org.jetbrains.kotlin.kapt" version "1.5.10"
 
 }
 
@@ -15,7 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "prieto.fernando.sample.webmock.MockTestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -40,6 +41,17 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/AL2.0'
+        exclude("META-INF/*")
     }
 }
 
@@ -90,7 +102,11 @@ dependencies {
 
     //Chart's library
     implementation('io.github.bytebeats:compose-charts:0.1.0')
-    //implementation ('com.github.tehras:charts:master-SNAPSHOT')
 
+    // For instrumented tests.
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.38.1'
+    // ...with Kotlin.
+    kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.38.1'
+    androidTestAnnotationProcessor 'com.google.dagger:hilt-android-compiler:2.38.1'
 
 }

@@ -296,6 +296,8 @@ fun TransactionsSection(
                 filteredTransactions.sortedBy { it.location } as MutableList<SecondAllExpensesItem>
             "Category" -> sortedTransactions =
                 filteredTransactions.sortedBy { it.categoryName } as MutableList<SecondAllExpensesItem>
+            "Wallet" -> sortedTransactions =
+                filteredTransactions.sortedBy { it.walletName } as MutableList<SecondAllExpensesItem>
             "Date" -> sortedTransactions =
                 filteredTransactions.sortedBy {
                     LocalDate.parse(

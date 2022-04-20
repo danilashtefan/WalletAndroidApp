@@ -5,4 +5,6 @@ object Strings {
     const val SUCCESSFUL_REGISTRATION = "User registered"
     const val FAILED_REGISTRATION = "Registration error"
     const val FAILED_LOGIN = "Login error"
+    const val USERNAME_TEXTFIELD_TAG = "usernameTextField"
+    const val PASSWORD_TEXTFIELD_TAG = "passwordTextField"
 }
