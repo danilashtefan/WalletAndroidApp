@@ -30,17 +30,17 @@ class ExampleInstrumentedTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
-    val server = MockWebServer()
-
-    @Before
-    fun setUp() {
-        server.start(8080)
-    }
-
-    @After
-    fun finally() {
-        server.shutdown()
-    }
+//    val server = MockWebServer()
+//
+//    @Before
+//    fun setUp() {
+//        server.start(8080)
+//    }
+//
+//    @After
+//    fun finally() {
+//        server.shutdown()
+//    }
 
     @Test
     fun useAppContext() {
@@ -74,7 +74,7 @@ class ExampleInstrumentedTest {
 
     @Test
     fun SuccessfulLogin() {
-        server.enqueue(MockResponse().setBody(readFileWithoutNewLineFromResources("expense_response.json")))
+        //server.enqueue(MockResponse().setBody(readFileWithoutNewLineFromResources("expense_response.json")))
         composeTestRule.onNodeWithTag(Strings.USERNAME_TEXTFIELD_TAG).performTextInput("jack")
         composeTestRule.onNodeWithTag(Strings.PASSWORD_TEXTFIELD_TAG).performTextInput("1234")
 
