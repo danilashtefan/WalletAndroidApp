@@ -1,0 +1,74 @@
+[
+  {
+    "id": 16,
+    "name": "Helerw",
+    "amount": 231,
+    "date": "2022-04-13",
+    "comments": "",
+    "location": "No location",
+    "type": "Income",
+    "username": "jack",
+    "category": {
+      "id": 6,
+      "expanseCategoryName": " Test cat",
+      "type": "qew",
+      "icon": "📺",
+      "username": "jack"
+    },
+    "wallet": {
+      "id": 8,
+      "walletName": "AA",
+      "currency": "",
+      "username": "jack",
+      "icon": "⌨️"
+    }
+  },
+  {
+    "id": 17,
+    "name": " New test",
+    "amount": 19894,
+    "date": "2022-04-01",
+    "comments": "",
+    "location": "199 W Kellogg Blvd, St Paul, MN 55102, USA",
+    "type": "Expense",
+    "username": "jack",
+    "category": {
+      "id": 4,
+      "expanseCategoryName": "Medicine",
+      "type": "Expense",
+      "icon": "💊",
+      "username": "jack"
+    },
+    "wallet": {
+      "id": 1,
+      "walletName": "SalaryTest",
+      "currency": "Income",
+      "username": "jack",
+      "icon": "💣"
+    }
+  },
+  {
+    "id": 18,
+    "name": "Test add",
+    "amount": 3,
+    "date": "2022-04-14",
+    "comments": "",
+    "location": "No location",
+    "type": "Expense",
+    "username": "jack",
+    "category": {
+      "id": 7,
+      "expanseCategoryName": "Test",
+      "type": "",
+      "icon": "⌚",
+      "username": "jack"
+    },
+    "wallet": {
+      "id": 8,
+      "walletName": "AA",
+      "currency": "",
+      "username": "jack",
+      "icon": "⌨️"
+    }
+  }
+]
