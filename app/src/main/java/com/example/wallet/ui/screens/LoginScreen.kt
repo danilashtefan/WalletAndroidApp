@@ -87,10 +87,12 @@ fun WelcomeText() {
 fun OneButtonAlertDialogComponent(
     onDismiss: () -> Unit,
     bodyText: @Composable () -> Unit,
-    buttonText: String
+    buttonText: String,
+    testTag:String = " "
 ) {
     val context = LocalContext.current
     AlertDialog(
+        modifier=Modifier.testTag(testTag),
         onDismissRequest = onDismiss,
         title = { Text(text = "Wallet", color = Color.White) },
 

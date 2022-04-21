@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -36,6 +37,7 @@ import androidx.navigation.NavHostController
 import com.example.wallet.model.viewmodel.transactions.ExpansesViewModel
 import com.example.wallet.R
 import com.example.wallet.helpers.DateFormatter
+import com.example.wallet.helpers.Strings
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
 import com.example.wallet.model.viewmodel.transactions.ExpensesViewModelFactory
@@ -122,6 +124,7 @@ fun TransactionListSection(
                 Text(text = viewModel.maxDatePicked.value.toString())
             }
         }
+
         AnimatedVisibility(visible = viewModel.expandedCalendarMin.value) {
             CalendarDatePicker(viewModel, "minimum")
         }
@@ -158,9 +161,11 @@ fun TransactionListSection(
                 val budgetSetTextState = remember { mutableStateOf(TextFieldValue("")) }
                 var budgetForUpdate = "0"
                 if (showLowBudgetAlertDialog) {
-                    OneButtonAlertDialogComponent(onDismiss = {
-                        viewModel.dismissLowBudgetAlertDialog()
-                    },
+                    OneButtonAlertDialogComponent(
+                        onDismiss = {
+                            viewModel.dismissLowBudgetAlertDialog()
+                        },
+                        testTag = Strings.EXCEED_BUDGET_TEXTFIELD_TAG,
                         bodyText = {
                             Text(
                                 viewModel.lowBugetDialogText.value,
@@ -178,6 +183,7 @@ fun TransactionListSection(
                     }, bodyText = {
                         TextField(
                             value = budgetSetTextState.value,
+                            modifier = Modifier.testTag(Strings.SET_BUDGET_TEXTFIELD_TAG),
                             onValueChange = {
                                 budgetSetTextState.value = it
                                 if (budgetSetTextState.value.text.equals("")) {
@@ -212,18 +218,22 @@ fun TransactionListSection(
             )
             SpinnerView(viewModel = viewModel)
         }
-Row(horizontalArrangement = Arrangement.Start,
-    verticalAlignment = Alignment.CenterVertically,
-    modifier = Modifier.padding(start = 25.dp)){
-    OutlinedButton(
-        onClick = { viewModel.showBudgetSetAlertDialog() },
-        modifier = Modifier.wrapContentSize(
-            Alignment.Center
-        ).height(35.dp)
-    ) {
-        Text(text = "Set budget")
-    }
-}
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 25.dp)
+        ) {
+            OutlinedButton(
+                onClick = { viewModel.showBudgetSetAlertDialog() },
+                modifier = Modifier
+                    .wrapContentSize(
+                        Alignment.Center
+                    )
+                    .height(35.dp)
+            ) {
+                Text(text = "Set budget")
+            }
+        }
     }
 }
 
@@ -444,15 +454,18 @@ fun ReusableRow(
                 Column(Modifier.weight(0.5f)) {
                     CategoryImage(categoryIcon, 30)
                     Spacer(Modifier.width(15.dp))
-                    Text(text = categoryName,maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(text = categoryName, maxLines = 1, overflow = TextOverflow.Ellipsis)
                 }
                 //Spacer(Modifier.weight(0.4f))
-               Column {
+                Column {
                     Text("Press for details")
                 }
 
                 //Spacer(Modifier.weight(0.3f))
-                Column(Modifier.weight(1f).wrapContentSize(Alignment.CenterEnd)) {
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .wrapContentSize(Alignment.CenterEnd)) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
@@ -477,7 +490,7 @@ fun ReusableRow(
 
                 Spacer(Modifier.width(10.dp))
 
-               // Spacer(Modifier.width(16.dp))
+                // Spacer(Modifier.width(16.dp))
 //                Column(Modifier.weight(0.1f)) {
 //                    IconButton({ expanded = !expanded }) {
 //                        Icon(
@@ -492,7 +505,7 @@ fun ReusableRow(
 
             }
             AnimatedVisibility(visible = expended) {
-                Column(modifier=Modifier.padding(start=5.dp)) {
+                Column(modifier = Modifier.padding(start = 5.dp)) {
                     Text(text = "Location: " + location)
                     Text(text = "Date: " + date)
                     Text(text = "Comment: " + comments)

@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "walletName": "SalaryTest",
+    "currency": "Income",
+    "username": "jack",
+    "icon": "💣"
+  },
+  {
+    "id": 8,
+    "walletName": "AA",
+    "currency": "",
+    "username": "jack",
+    "icon": "⌨️"
+  }
+]

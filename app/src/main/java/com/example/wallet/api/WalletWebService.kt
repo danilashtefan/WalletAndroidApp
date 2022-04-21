@@ -4,11 +4,13 @@ import android.util.Log
 import com.example.wallet.helpers.LinkBuilder
 import com.example.wallet.model.response.SingleExpanseCategoryResponse
 import com.example.wallet.model.response.SingleTransactionWalletResponse
+import com.example.wallet.model.response.TestResponse
 import com.example.wallet.model.response.login.LoginResponse
 import com.example.wallet.model.response.login.RegisterResponse
 import com.example.wallet.model.response.transactions.SecondAPI.*
 import com.example.wallet.requests.*
 import okhttp3.OkHttpClient
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
@@ -18,7 +20,7 @@ import java.util.*
 import javax.net.ssl.*
 
 
-class WalletWebService {
+class WalletWebService(baseUrl:String = "https://192.168.0.109:8080/api/") {
     private lateinit var api: WalletAPI
 
     init {
@@ -34,7 +36,7 @@ class WalletWebService {
             //.baseUrl("https://192.168.1.80:8080/api/")
             //.baseUrl("https://152.66.156.198:8080/api/")
                 //EV Point
-            .baseUrl("https://192.168.0.109:8080/api/")
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(getUnsafeOkHttpClient())
             .build()
@@ -278,6 +280,10 @@ class WalletWebService {
         return api.updateWalletInDb(id, walletData, authHeader)
     }
 
+    fun test():Call<TestResponse> {
+         return api.test()
+    }
+
 
     interface WalletAPI {
         @POST("login")
@@ -292,6 +298,9 @@ class WalletWebService {
             @Body categoryData: AddOrEditCategoryRequest,
             @Header("Authorization") authHeader: String
         )
+
+        @GET("test")
+        fun test():Call<TestResponse>
 
         @PATCH("wallets2/{id}")
         suspend fun updateWalletInDb(

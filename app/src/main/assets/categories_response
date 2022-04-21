@@ -1,0 +1,30 @@
+[
+  {
+    "id": 2,
+    "expanseCategoryName": "Shopping",
+    "type": "Expense",
+    "icon": "🎊",
+    "username": "jack"
+  },
+  {
+    "id": 4,
+    "expanseCategoryName": "Medicine",
+    "type": "Expense",
+    "icon": "💊",
+    "username": "jack"
+  },
+  {
+    "id": 6,
+    "expanseCategoryName": " Test cat",
+    "type": "qew",
+    "icon": "📺",
+    "username": "jack"
+  },
+  {
+    "id": 7,
+    "expanseCategoryName": "Test",
+    "type": "",
+    "icon": "⌚",
+    "username": "jack"
+  }
+]
