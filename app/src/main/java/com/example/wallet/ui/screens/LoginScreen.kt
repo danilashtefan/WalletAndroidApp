@@ -92,7 +92,7 @@ fun OneButtonAlertDialogComponent(
 ) {
     val context = LocalContext.current
     AlertDialog(
-        modifier=Modifier.testTag(testTag),
+        modifier = Modifier.testTag(testTag),
         onDismissRequest = onDismiss,
         title = { Text(text = "Wallet", color = Color.White) },
 

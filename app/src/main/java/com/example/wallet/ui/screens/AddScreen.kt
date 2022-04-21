@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -39,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.wallet.R
 import com.example.wallet.helpers.EmojiProvider
+import com.example.wallet.helpers.Strings
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpenseCategoriesResponseItem
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllWalletsResponseItem
@@ -74,7 +76,8 @@ fun AddScreen(
             OneButtonAlertDialogComponent(
                 onDismiss = { viewModel.incorrectDataDialogClose() },
                 bodyText = { Text(viewModel.incorrectDataAlertDialogText, color = Color.White) },
-                buttonText = "DISMISS"
+                buttonText = "DISMISS",
+                testTag = Strings.EMPTY_ADD_FILED
             )
         }
         LogoSection(pictureSize = 90)
@@ -164,6 +167,7 @@ fun WalletAddSection(
                 TextField(
                     value = textState1.value,
                     singleLine = true,
+                    modifier=Modifier.testTag(Strings.ADD_WALLET_NAME),
                     leadingIcon = { leadingIconName() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     onValueChange = {
@@ -274,21 +278,6 @@ fun CategoryAddSection(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(modifier = Modifier.height(35.dp))
-//                Box(Modifier.fillMaxWidth()) {
-//                    Canvas(modifier = Modifier
-//                        .size(50.dp)
-//                        .align(Alignment.Center), onDraw = {
-//                        drawCircle(color = Color.White)
-//                    })
-//                    if (emoji != null) {
-//                        Text(
-//                            text = emoji,
-//                            fontSize = 60.sp,
-//                            textAlign = TextAlign.Center,
-//                            modifier = Modifier.align(Alignment.Center)
-//                        )
-//                    }
-//                }
                 Spacer(modifier = Modifier.height(30.dp))
                 var text1 = ""
                 if (text1 === null) {
@@ -298,6 +287,7 @@ fun CategoryAddSection(
 
                 TextField(
                     value = textState1.value,
+                    modifier=Modifier.testTag(Strings.ADD_CATEGORY_NAME),
                     singleLine = true,
                     leadingIcon = { leadingIconName() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),

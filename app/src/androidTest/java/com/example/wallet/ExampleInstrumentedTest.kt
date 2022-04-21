@@ -1,16 +1,37 @@
 package com.example.wallet
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.example.wallet.api.WalletWebService
 import com.example.wallet.helpers.Strings
+import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.requests.LoginRequest
+import com.example.wallet.ui.BottomBar
 import com.example.wallet.ui.MainActivity
+import com.example.wallet.ui.UsersApplication
+import com.example.wallet.ui.screens.AddScreen
+import com.example.wallet.ui.theme.WalletTheme
 import kotlinx.coroutines.runBlocking
 import okhttp3.HttpUrl
+import okhttp3.internal.wait
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -132,10 +153,30 @@ class ExampleInstrumentedTest {
     }
 
     @Test
-    fun addTransaction(){
+    fun addCategory() {
         navigateToTheAllTransactionsScreen()
-        val navController = TestNavHostController(
-            ApplicationProvider.getApplicationContext())
+        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(1).performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithText("Category").performClick()
+        composeTestRule.onNodeWithTag(Strings.ADD_CATEGORY_NAME).performTextInput("Test category add")
+        composeTestRule.onNodeWithText("Add category").performClick()
+        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(2).performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithText("Test category add").assertExists()
+    }
+
+    @Test
+    fun addWallet(){
+        navigateToTheAllTransactionsScreen()
+        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(1).performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithText("Wallet").performClick()
+        composeTestRule.onNodeWithTag(Strings.ADD_WALLET_NAME).performTextInput("Test wallet add")
+        composeTestRule.onNodeWithText("Add wallet").performClick()
+        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(2).performClick()
+        composeTestRule.waitForIdle()
+        composeTestRule.onNodeWithText("Wallet").performClick()
+        composeTestRule.onNodeWithText("Test wallet add").assertExists()
     }
 
     @Test
@@ -174,7 +215,48 @@ class ExampleInstrumentedTest {
             }
             return builder.toString()
         } catch (e: IOException) {
-            throw e
+            throw e }
+    }
+
+
+    private fun customNavController(){
+        composeTestRule.setContent {
+            val navController = rememberNavController()
+            WalletTheme {
+                val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
+                when (navBackStackEntry?.destination?.route) {
+                    "login" -> {
+                        // Show BottomBar
+                        bottomBarState.value = false
+                    }
+                    else -> bottomBarState.value = true
+
+                }
+                Scaffold(
+                    bottomBar = {
+                        BottomBar(navController = navController, bottomBarState = bottomBarState)
+                    }
+                ) { innerPadding ->
+                    innerPadding.calculateTopPadding()
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(Color(0xFFBB87E4))
+                            .padding(innerPadding)
+                    ) {
+                        NavHost(navController = navController, startDestination = "add") {
+                            composable("add") {
+                                AddScreen(
+                                    navController = navController,
+                                    DataStorePreferenceRepository(LocalContext.current)
+                                )
+                            }
+                        }
+                    }
+                }
+
+            }
         }
     }
 }

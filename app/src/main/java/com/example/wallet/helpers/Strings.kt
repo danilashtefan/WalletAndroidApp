@@ -9,4 +9,8 @@ object Strings {
     const val PASSWORD_TEXTFIELD_TAG = "passwordTextField"
     const val SET_BUDGET_TEXTFIELD_TAG = "setBudget"
     const val EXCEED_BUDGET_TEXTFIELD_TAG = "exceedBudget"
+    const val BOTTOM_NAV_BAR = "bottomNavBar"
+    const val EMPTY_ADD_FILED = "emptyAddField"
+    const val ADD_CATEGORY_NAME = "addCategoryName"
+    const val ADD_WALLET_NAME = "addWalletName"
 }

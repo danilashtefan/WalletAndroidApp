@@ -24,10 +24,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.*
 import com.example.wallet.BuildConfig
+import com.example.wallet.helpers.Strings
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.ui.navigationBar.BottomNavigationBar
 import com.example.wallet.ui.navigationBar.BottomNavigationItem
@@ -84,7 +86,7 @@ fun BottomBar(navController: NavHostController, bottomBarState: MutableState<Boo
     AnimatedVisibility(
         visible = bottomBarState.value,
         content = {
-            BottomNavigationBar(
+            BottomNavigationBar(modifier=Modifier.testTag(Strings.BOTTOM_NAV_BAR),
                 items = listOf(
                     BottomNavigationItem(
                         "Transactions",
@@ -119,7 +121,6 @@ fun BottomBar(navController: NavHostController, bottomBarState: MutableState<Boo
 @Composable
 fun UsersApplication(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "login") {
-
         composable("login") {
             LoginScreen(navController, DataStorePreferenceRepository(LocalContext.current))
         }
