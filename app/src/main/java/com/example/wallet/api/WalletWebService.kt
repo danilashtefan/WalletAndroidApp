@@ -20,7 +20,7 @@ import java.util.*
 import javax.net.ssl.*
 
 
-class WalletWebService(baseUrl:String = "https://192.168.0.109:8080/api/") {
+class WalletWebService(baseUrl:String = "https://10.0.1.19:8080/api/") {
     private lateinit var api: WalletAPI
 
     init {
@@ -28,7 +28,7 @@ class WalletWebService(baseUrl:String = "https://192.168.0.109:8080/api/") {
             //KAMORA
             //.baseUrl("https://192.168.88.224:8080/api/")
             //HOME
-            //.baseUrl("https://10.0.1.19:8080/api/")
+            .baseUrl(baseUrl)
             //OFFICE
             //baseUrl("https://192.168.0.116:8080/api/")
             //Iulia
@@ -36,7 +36,7 @@ class WalletWebService(baseUrl:String = "https://192.168.0.109:8080/api/") {
             //.baseUrl("https://192.168.1.80:8080/api/")
             //.baseUrl("https://152.66.156.198:8080/api/")
                 //EV Point
-            .baseUrl(baseUrl)
+            //.baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(getUnsafeOkHttpClient())
             .build()

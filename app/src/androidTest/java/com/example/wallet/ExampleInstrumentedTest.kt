@@ -97,7 +97,7 @@ class ExampleInstrumentedTest {
 
 
     @Test
-    fun deserializeTransactions(){
+    fun deserializeTransactions() {
         server.enqueue(MockResponse().setBody(readStringFromFile("transactions_response")))
         runBlocking {
             var response = api.getFilteredExpanses("test_header")
@@ -106,7 +106,7 @@ class ExampleInstrumentedTest {
     }
 
     @Test
-    fun deserializeWallets(){
+    fun deserializeWallets() {
         server.enqueue(MockResponse().setBody(readStringFromFile("wallets_response")))
 
         runBlocking {
@@ -116,9 +116,8 @@ class ExampleInstrumentedTest {
     }
 
     @Test
-    fun deserializeCategories(){
+    fun deserializeCategories() {
         server.enqueue(MockResponse().setBody(readStringFromFile("categories_response")))
-
         runBlocking {
             var response = api.getFilteredExpenseCategories("test_header")
             assertNotNull(response)
@@ -133,13 +132,14 @@ class ExampleInstrumentedTest {
         composeTestRule.onNodeWithText("Sign In").performClick()
         //Check also deserialization of response
         runBlocking {
-            var response = api.login(LoginRequest("abc","abc"))
+            var response = api.login(LoginRequest("abc", "abc"))
             if (response != null) {
                 assertEquals("Test_access", response.access_token)
                 assertEquals("Test_refresh", response.refresh_token)
             }
         }
-        composeTestRule.onNodeWithText("Login failed. Username and password are incorrect").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Login failed. Username and password are incorrect")
+            .assertIsDisplayed()
 
     }
 
@@ -155,32 +155,57 @@ class ExampleInstrumentedTest {
     @Test
     fun addCategory() {
         navigateToTheAllTransactionsScreen()
-        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(1).performClick()
-        composeTestRule.waitForIdle()
+        navigateToAddScreen()
         composeTestRule.onNodeWithText("Category").performClick()
-        composeTestRule.onNodeWithTag(Strings.ADD_CATEGORY_NAME).performTextInput("Test category add")
+        composeTestRule.onNodeWithTag(Strings.ADD_CATEGORY_NAME)
+            .performTextInput("Test category add")
         composeTestRule.onNodeWithText("Add category").performClick()
-        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(2).performClick()
-        composeTestRule.waitForIdle()
+        navigateToStatisticsScreen()
         composeTestRule.onNodeWithText("Test category add").assertExists()
     }
 
     @Test
-    fun addWallet(){
+    fun addWallet() {
         navigateToTheAllTransactionsScreen()
-        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(1).performClick()
-        composeTestRule.waitForIdle()
+        navigateToAddScreen()
         composeTestRule.onNodeWithText("Wallet").performClick()
         composeTestRule.onNodeWithTag(Strings.ADD_WALLET_NAME).performTextInput("Test wallet add")
         composeTestRule.onNodeWithText("Add wallet").performClick()
-        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(2).performClick()
-        composeTestRule.waitForIdle()
+        navigateToStatisticsScreen()
         composeTestRule.onNodeWithText("Wallet").performClick()
         composeTestRule.onNodeWithText("Test wallet add").assertExists()
     }
 
+    private fun navigateToStatisticsScreen() {
+        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(2).performClick()
+        composeTestRule.waitForIdle()
+    }
+
+    private fun navigateToAddScreen() {
+        composeTestRule.onNodeWithTag(Strings.BOTTOM_NAV_BAR).onChild().onChildAt(1).performClick()
+        composeTestRule.waitForIdle()
+    }
+
+
+
+
     @Test
-    fun setBudget(){
+    fun navigationBetweenScreens(){
+        navigateToTheAllTransactionsScreen()
+        navigateToAddScreen()
+        composeTestRule.onNodeWithText("Wallet").performClick()
+        composeTestRule.onNodeWithTag(Strings.ADD_WALLET_NAME).assertExists()
+        composeTestRule.onNodeWithText("Category").performClick()
+        composeTestRule.onNodeWithTag(Strings.ADD_CATEGORY_NAME).assertExists()
+        navigateToStatisticsScreen()
+        composeTestRule.onNodeWithText("Wallet").assertExists()
+        composeTestRule.onNodeWithText("Category").assertExists()
+
+
+    }
+
+    @Test
+    fun setBudget() {
         navigateToTheAllTransactionsScreen()
         composeTestRule.onNodeWithText("Set budget").performClick()
         composeTestRule.onNodeWithTag(Strings.SET_BUDGET_TEXTFIELD_TAG).performTextInput("999999")
@@ -189,7 +214,7 @@ class ExampleInstrumentedTest {
     }
 
     @Test
-    fun exceedBudget(){
+    fun exceedBudget() {
         navigateToTheAllTransactionsScreen()
         composeTestRule.onNodeWithText("Set budget").performClick()
         composeTestRule.onNodeWithTag(Strings.SET_BUDGET_TEXTFIELD_TAG).performTextInput("1")
@@ -215,48 +240,8 @@ class ExampleInstrumentedTest {
             }
             return builder.toString()
         } catch (e: IOException) {
-            throw e }
-    }
-
-
-    private fun customNavController(){
-        composeTestRule.setContent {
-            val navController = rememberNavController()
-            WalletTheme {
-                val bottomBarState = rememberSaveable { (mutableStateOf(true)) }
-                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                when (navBackStackEntry?.destination?.route) {
-                    "login" -> {
-                        // Show BottomBar
-                        bottomBarState.value = false
-                    }
-                    else -> bottomBarState.value = true
-
-                }
-                Scaffold(
-                    bottomBar = {
-                        BottomBar(navController = navController, bottomBarState = bottomBarState)
-                    }
-                ) { innerPadding ->
-                    innerPadding.calculateTopPadding()
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(Color(0xFFBB87E4))
-                            .padding(innerPadding)
-                    ) {
-                        NavHost(navController = navController, startDestination = "add") {
-                            composable("add") {
-                                AddScreen(
-                                    navController = navController,
-                                    DataStorePreferenceRepository(LocalContext.current)
-                                )
-                            }
-                        }
-                    }
-                }
-
-            }
+            throw e
         }
     }
+
 }

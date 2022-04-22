@@ -110,7 +110,7 @@ fun TransactionListSection(
             )
         }
 
-        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp)) {
+        Row(horizontalArrangement = Arrangement.Start, modifier = Modifier.padding(start = 25.dp).testTag(Strings.REPORT_SCREEN)) {
             Text(text = "Period: ", style = MaterialTheme.typography.h6, color = Color.White)
             OutlinedButton(onClick = {
                 viewModel.expandedCalendarMin.value = !viewModel.expandedCalendarMin.value

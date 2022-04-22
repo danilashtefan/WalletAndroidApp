@@ -167,7 +167,7 @@ fun WalletAddSection(
                 TextField(
                     value = textState1.value,
                     singleLine = true,
-                    modifier=Modifier.testTag(Strings.ADD_WALLET_NAME),
+                    modifier = Modifier.testTag(Strings.ADD_WALLET_NAME),
                     leadingIcon = { leadingIconName() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                     onValueChange = {
@@ -190,8 +190,7 @@ fun WalletAddSection(
                         )
                     },
                     maxLines = 1,
-
-                    )
+                )
 
                 var text2 = ""
                 if (text2 === null) {
@@ -287,7 +286,7 @@ fun CategoryAddSection(
 
                 TextField(
                     value = textState1.value,
-                    modifier=Modifier.testTag(Strings.ADD_CATEGORY_NAME),
+                    modifier = Modifier.testTag(Strings.ADD_CATEGORY_NAME),
                     singleLine = true,
                     leadingIcon = { leadingIconName() },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
@@ -398,7 +397,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
     val location = viewModel.locationState
     TypeOfElementToAddOrEditText("Add Transaction")
     Column(
-        Modifier.verticalScroll(rememberScrollState()),
+        Modifier.verticalScroll(rememberScrollState()).testTag(Strings.ADD_TRANSACTION_SCREEN),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.padding(bottom = 50.dp))
@@ -408,6 +407,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             labelText = "Name",
             value = "",
             viewModel = viewModel,
+            testTag = Strings.ADD_TRANSACTION_NAME,
             leadingIcon = {
                 Image(
                     painter = painterResource(id = R.drawable.notes),
@@ -424,6 +424,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             labelText = "Amount",
             value = "",
             viewModel = viewModel,
+            testTag = Strings.ADD_TRANSACTION_AMOUNT,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             leadingIcon = {
                 Image(
@@ -442,6 +443,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             labelText = viewModel.typeFieldTemporaryValueBeforeSavingtoDB.value,
             optionsList = listOf("Expense", "Income"),
             viewModel = viewModel,
+            testTag = Strings.ADD_TRANSACTION_TYPE,
             leadingIcon = {
                 Image(
                     painter = painterResource(id = R.drawable.category),
@@ -459,6 +461,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             labelText = viewModel.categoryNameFieldTemporaryValueBeforeSavingtoDB.value,
             optionsList = viewModel.transactionCetegoriesState.value,
             viewModel = viewModel,
+            testTag = Strings.ADD_TRANSACTION_CATEGORY,
             leadingIcon = {
                 Image(
                     painter = painterResource(id = R.drawable.infography),
@@ -474,6 +477,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             padding = 20,
             labelText = viewModel.walletNameFieldTemporaryValueBeforeSavingtoDB.value,
             optionsList = viewModel.transactionWalletsState.value,
+            testTag = Strings.ADD_TRANSACTION_WALLET,
             viewModel = viewModel,
             leadingIcon = {
                 Image(
@@ -486,15 +490,17 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             }
         )
 
-        DatePicker(viewModel = viewModel, padding = 20, leadingIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.calendar),
-                contentDescription = "wallet",
-                modifier = Modifier
-                    .width(24.dp)
-                    .height(24.dp)
-            )
-        })
+        DatePicker(viewModel = viewModel, padding = 20,
+            testTag = Strings.ADD_TRANSACTION_DATE,
+            leadingIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.calendar),
+                    contentDescription = "wallet",
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+                )
+            })
 
         EditableFieldTransactionAdd(
             padding = 20,
@@ -502,6 +508,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             labelText = "Comments",
             value = "",
             viewModel = viewModel,
+            testTag = Strings.ADD_TRANSACTION_COMMENTS,
             leadingIcon = {
                 Image(
                     painter = painterResource(id = R.drawable.thinking),
@@ -520,6 +527,7 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
             value = "",
             viewModel = viewModel,
             location = location.value,
+            testTag = Strings.ADD_TRANSACTION_LOCATION,
             leadingIcon = {
                 Image(
                     painter = painterResource(id = R.drawable.location),
@@ -544,7 +552,12 @@ fun TransactionAddSection(viewModel: AddViewModel, navController: NavHostControl
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-private fun DatePicker(viewModel: AddViewModel, padding: Int, leadingIcon: @Composable () -> Unit) {
+private fun DatePicker(
+    viewModel: AddViewModel,
+    padding: Int,
+    leadingIcon: @Composable () -> Unit,
+    testTag: String = ""
+) {
     Row(
         modifier = Modifier
             .padding(top = padding.dp)
@@ -554,7 +567,7 @@ private fun DatePicker(viewModel: AddViewModel, padding: Int, leadingIcon: @Comp
     ) {
         OutlinedButton(onClick = {
             viewModel.expandedCalendar.value = !viewModel.expandedCalendar.value
-        }, modifier = Modifier.width(200.dp)) {
+        }, modifier = Modifier.width(200.dp).testTag(testTag)) {
             Column(
                 Modifier
                     .weight(1F)
@@ -618,7 +631,8 @@ fun TypeOfElementToAddOrEditText(text: String) {
 private fun SaveButtonTransactionAdd(
     fieldsOnTheScreen: ArrayList<String>,
     viewModel: AddViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    testTag: String = ""
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
         OutlinedButton(modifier = Modifier.padding(bottom = 20.dp), onClick = {
@@ -676,7 +690,8 @@ fun WalletSelectorTransactionAdd(
     optionsList: List<SecondAllWalletsResponseItem>,
     enabled: Boolean = true,
     viewModel: AddViewModel,
-    leadingIcon: @Composable () -> Unit
+    leadingIcon: @Composable () -> Unit,
+    testTag: String = ""
 ) {
     Column {
         var expanded by remember { mutableStateOf(false) }
@@ -691,7 +706,7 @@ fun WalletSelectorTransactionAdd(
             OutlinedButton(
                 onClick = { expanded = !expanded },
                 enabled = enabled,
-                modifier = Modifier.width(200.dp)
+                modifier = Modifier.width(200.dp).testTag(testTag)
             ) {
                 Column(
                     Modifier
@@ -749,7 +764,8 @@ fun CategorySelectorTransactionAdd(
     optionsList: List<SecondAllExpenseCategoriesResponseItem>,
     enabled: Boolean = true,
     viewModel: AddViewModel,
-    leadingIcon: @Composable () -> Unit
+    leadingIcon: @Composable () -> Unit,
+    testTag: String = ""
 ) {
     Column {
         var expanded by remember { mutableStateOf(false) }
@@ -764,7 +780,7 @@ fun CategorySelectorTransactionAdd(
             OutlinedButton(
                 onClick = { expanded = !expanded },
                 enabled = enabled,
-                modifier = Modifier.width(200.dp)
+                modifier = Modifier.width(200.dp).testTag(testTag)
             ) {
                 Column(
                     Modifier
@@ -820,7 +836,8 @@ fun TypeSelectorTransactionAdd(
     optionsList: List<String>,
     enabled: Boolean = true,
     viewModel: AddViewModel,
-    leadingIcon: @Composable () -> Unit
+    leadingIcon: @Composable () -> Unit,
+    testTag: String = ""
 ) {
 
     Column {
@@ -836,7 +853,7 @@ fun TypeSelectorTransactionAdd(
             OutlinedButton(
                 onClick = { expanded = !expanded },
                 enabled = enabled,
-                modifier = Modifier.width(200.dp)
+                modifier = Modifier.width(200.dp).testTag(testTag)
             ) {
                 Column(
                     Modifier
@@ -903,7 +920,8 @@ fun EditableFieldLocation(
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
     location: String,
-    leadingIcon: @Composable () -> Unit
+    leadingIcon: @Composable () -> Unit,
+    testTag: String = ""
 ) {
     val listOfPlaces = Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.NAME)
     var context = LocalContext.current
@@ -926,7 +944,7 @@ fun EditableFieldLocation(
     ) {
         OutlinedButton(onClick = {
             launcher.launch(intent)
-        }, modifier = Modifier.width(200.dp)) {
+        }, modifier = Modifier.width(200.dp).testTag(testTag)) {
             Column(
                 Modifier
                     .weight(1F)
@@ -959,7 +977,8 @@ fun EditableFieldTransactionAdd(
     viewModel: AddViewModel,
     enabled: Boolean = true,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
-    leadingIcon: @Composable () -> Unit
+    leadingIcon: @Composable () -> Unit,
+    testTag: String = ""
 ) {
     Row(
         modifier = Modifier
@@ -975,6 +994,7 @@ fun EditableFieldTransactionAdd(
         val textState = remember { mutableStateOf(TextFieldValue(text)) }
 
         TextField(
+            modifier = Modifier.testTag(testTag),
             value = textState.value,
             enabled = enabled,
             onValueChange = {
