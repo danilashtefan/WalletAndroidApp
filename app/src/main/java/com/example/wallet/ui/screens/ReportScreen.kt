@@ -91,7 +91,7 @@ fun ReportScreen(navController: NavHostController) {
                                 name = item.category.category.expanseCategoryName,
                                 type = item.category.category.type,
                                 id = itemId,
-                                route = "categoryStatistics/$itemId",
+                                route = "categoryStatistics/$itemId/${item.category.category.expanseCategoryName}/${item.category.category.icon}",
                                 editClickAction = { navController.navigate("categoriesDetails/$itemId") },
                                 deleteClickAction = { },
                                 navController = navController
@@ -121,7 +121,7 @@ fun ReportScreen(navController: NavHostController) {
                                 name = item.category.category.expanseCategoryName,
                                 type = item.category.category.type,
                                 id = itemId,
-                                route = "categoryStatistics/$itemId",
+                                route = "categoryStatistics/$itemId/${item.category.category.expanseCategoryName}/${item.category.category.icon}",
                                 editClickAction = { navController.navigate("categoriesDetails/$itemId") },
                                 deleteClickAction = { },
                                 navController = navController
@@ -151,7 +151,7 @@ fun ReportScreen(navController: NavHostController) {
                                 name = item.wallet.wallet.walletName,
                                 type = item.wallet.wallet.currency,
                                 id = itemId,
-                                route = "walletStatistics/$itemId",
+                                route = "walletStatistics/$itemId/${item.wallet.wallet.walletName}/${item.wallet.wallet.icon}",
                                 editClickAction = { navController.navigate("walletsDetails/$itemId") },
                                 deleteClickAction = { },
                                 navController = navController
@@ -179,7 +179,7 @@ fun ReportScreen(navController: NavHostController) {
                                 name = item.wallet.wallet.walletName,
                                 type = item.wallet.wallet.currency,
                                 id = itemId,
-                                route = "walletStatistics/$itemId",
+                                route = "walletStatistics/$itemId/${item.wallet.wallet.walletName}/${item.wallet.wallet.icon}",
                                 editClickAction = { navController.navigate("walletsDetails/$itemId") },
                                 deleteClickAction = { },
                                 navController = navController
