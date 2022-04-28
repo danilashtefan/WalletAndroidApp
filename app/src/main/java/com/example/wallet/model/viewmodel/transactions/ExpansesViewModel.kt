@@ -48,11 +48,14 @@ class ExpansesViewModel(
 
 
     init {
-        if (budgetLeft.value < 0){
+        if (budgetLeft.value < 0) {
             showLowBudgetAlertDialog.value = true
         }
         val handler = CoroutineExceptionHandler { _, exception ->
-            Log.d("EXCEPTION", "Thread exception while fetching expanses to the initial screen: $exception")
+            Log.d(
+                "EXCEPTION",
+                "Thread exception while fetching expanses to the initial screen: $exception"
+            )
         }
         viewModelScope.launch(handler + Dispatchers.IO) {
             dataStorePreferenceRepository.getAccessToken.catch {
@@ -84,21 +87,9 @@ class ExpansesViewModel(
             transaction.walletName = transactionWalletNameAndId.first
             transaction.walletId = transactionWalletNameAndId.second
         }
+
         transactionState.value = transactions
-        var totalExpensesTemp = 0
-        var totalIncomeTemp = 0
-        for (expense in transactions) {
-            if (expense.type.equals("Expense")) {
-                totalExpensesTemp += expense.amount
-                expanseState.value += expense
-            }
-            if (expense.type.equals("Income")) {
-                totalIncomeTemp += expense.amount
-                incomeState.value += expense
-            }
-        }
-        totalExpenses.value = totalExpensesTemp
-        totalIncome.value = totalIncomeTemp
+        calculateAmounts(transactions)
 
         dataStorePreferenceRepository.getBudget.catch {
             Log.d(
@@ -112,6 +103,21 @@ class ExpansesViewModel(
             }
     }
 
+    fun calculateAmounts(transactions: SecondAllExpensesResponse) {
+        var totalExpensesTemp = 0
+        var totalIncomeTemp = 0
+        for (transaction in transactions) {
+            if (transaction.type.equals("Expense")) {
+                totalExpensesTemp += transaction.amount
+            }
+            if (transaction.type.equals("Income")) {
+                totalIncomeTemp += transaction.amount
+            }
+        }
+        totalExpenses.value = totalExpensesTemp
+        totalIncome.value = totalIncomeTemp
+    }
+
     private fun updateBudgetLeft_() {
         budgetLeft.value = budgetSet.value - abs(totalExpenses.value)
         if (budgetLeft.value < 0) {
@@ -123,14 +129,15 @@ class ExpansesViewModel(
         budgetSet.value = it.toInt()
     }
 
-    fun dismissLowBudgetAlertDialog(){
+    fun dismissLowBudgetAlertDialog() {
         showLowBudgetAlertDialog.value = false
         setUserAknowledgedAboutLowBudgetValue()
     }
 
-    fun setUserAknowledgedAboutLowBudgetValue(){
+    fun setUserAknowledgedAboutLowBudgetValue() {
         userAknowledgedAboutLowBudget.value = true
     }
+
     fun showBudgetSetAlertDialog() {
         showBudgetSetDialog.value = true
     }
@@ -165,7 +172,8 @@ class ExpansesViewModel(
 
     // Method to get the category of particular expanse
     suspend fun getAndSetCategoriesForTransactions(expanseId: Int): Triple<String, Int, String> {
-        val categoryResponse = ExpanseCategoriesRepository.getCategoryForExpanse(authToken,expanseId)
+        val categoryResponse =
+            ExpanseCategoriesRepository.getCategoryForExpanse(authToken, expanseId)
         return Triple(
             categoryResponse.expanseCategoryName,
             categoryResponse.id,
@@ -173,8 +181,11 @@ class ExpansesViewModel(
         )
     }
 
-    suspend fun getAndSetWalletForTransactions(authToken: String, expanseId: Int): Pair<String, Int> {
-        val walletResponse = WalletRepository.getWalletForExpanse(authToken,expanseId)
+    suspend fun getAndSetWalletForTransactions(
+        authToken: String,
+        expanseId: Int
+    ): Pair<String, Int> {
+        val walletResponse = WalletRepository.getWalletForExpanse(authToken, expanseId)
         return Pair(walletResponse.walletName, walletResponse.id)
     }
 

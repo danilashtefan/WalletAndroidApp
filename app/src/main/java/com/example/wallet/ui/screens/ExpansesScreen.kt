@@ -40,6 +40,7 @@ import com.example.wallet.helpers.DateFormatter
 import com.example.wallet.helpers.Strings
 import com.example.wallet.model.repository.DataStorePreferenceRepository
 import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesItem
+import com.example.wallet.model.response.transactions.SecondAPI.SecondAllExpensesResponse
 import com.example.wallet.model.viewmodel.transactions.ExpensesViewModelFactory
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -287,11 +288,6 @@ fun TransactionsSection(
         ).parse(viewModel.maxDatePicked.value)
 
     }
-//    for (transaction in filteredTransactions) {
-//        if (transaction.type.equals("Expense")) {
-//            transaction.amount *= -1
-//        }
-//    }
     val dateStrToLocalDate: (String) -> LocalDate = {
         LocalDate.parse(it, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
     }
