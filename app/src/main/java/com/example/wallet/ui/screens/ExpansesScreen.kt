@@ -59,9 +59,6 @@ fun ExpansesScreen(
     ) //ViewModel is bound to a composable
     val transactions = viewModel.transactionState.value
     var dataLoaded = viewModel.dataLoaded.value
-    val accessToken = viewModel.authToken
-    var expenseItems = viewModel.expanseState.value
-    var incomeItems = viewModel.incomeState.value
     val totalExpenses = viewModel.totalExpenses
     val totalIncome = viewModel.totalIncome
     val budgetSet = viewModel.budgetSet
@@ -349,8 +346,6 @@ private fun sortByDate(filteredTransactions: List<SecondAllExpensesItem>): List<
     val listOfExpenses = filteredTransactions.filterNot { it.type.equals("Income") }
 
     return listOfIncomes.sortedByDescending { it.amount } as MutableList<SecondAllExpensesItem> + listOfExpenses.sortedBy { it.amount } as MutableList<SecondAllExpensesItem>
-
-
 }
 
 

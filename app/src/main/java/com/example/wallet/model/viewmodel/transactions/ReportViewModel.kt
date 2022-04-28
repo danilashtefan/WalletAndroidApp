@@ -76,7 +76,7 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
             Log.d("EXCEPTION", "Thread exception while fetching to the report screen: $exception")
         }
        // dataLoaded.value = false
-        val dataFetchingJob: Job = viewModelScope.launch(handler + Dispatchers.IO) {
+        val dataFetchingJob: Job = viewModelScope.launch(handler + Dispatchers.Main) {
             while (authToken.equals("")) {
                 Log.d("INFO", "Access token is not set up yet")
             }
@@ -148,54 +148,6 @@ class ReportViewModel(private val dataStorePreferenceRepository: DataStorePrefer
             dataLoaded.value = true
         }
     }
-
-//    fun reLoadScreen(){
-//        filterCategories()
-//    }
-
-//    private fun filterCategories() {
-//        val tempFilteredCategories = allCategories.map { it.copy() }
-//        for (category in tempFilteredCategories.map{it.copy()}) {
-//            var filteredExpenses = category.category.expenses.filter {
-//                SimpleDateFormat("yyyy-MM-dd").parse(DateFormatter.formatDate(it.date)) >= SimpleDateFormat(
-//                    "yyyy-MM-dd"
-//                ).parse(minDatePicked.value) &&
-//                        SimpleDateFormat("yyyy-MM-dd").parse(DateFormatter.formatDate(it.date)) <= SimpleDateFormat(
-//                    "yyyy-MM-dd"
-//                ).parse(maxDatePicked.value)
-//            }
-//            category.category.expenses = filteredExpenses
-//        }
-//
-//        for(category in tempFilteredCategories){
-//            var expenses = category.category.expenses
-//            var totalExpensesAmount = 0
-//            var totalIncomesAmount = 0
-//
-//            for(expense in expenses){
-//                if(expense.type.equals("Expense")){
-//                    totalExpensesAmount += expense.amount
-//                } else if(expense.type.equals("Income")){
-//                    totalIncomesAmount += expense.amount
-//                }
-//            }
-//            category.category.incomeAmount = totalIncomesAmount
-//            category.category.expenseAmount = totalExpensesAmount
-//        }
-//        filteredAllCategories.value = tempFilteredCategories.map { it.copy() }
-//
-//        var categoryExpenseAmountTemp = 0
-//        var categoryIncomeAmountTemp = 0
-//
-//        for (category in filteredAllCategories.value) {
-//            categoryExpenseAmountTemp += category.category.expenseAmount
-//            categoryIncomeAmountTemp += category.category.incomeAmount
-//        }
-//        totalCategoriesExpenses.value = categoryExpenseAmountTemp
-//        totalCategoriesIncomes.value = categoryIncomeAmountTemp
-//
-//    }
-
 
 
     suspend fun getCategoriesWithExpenses():List<TopExpenseCategoryWithAmountResponse>{

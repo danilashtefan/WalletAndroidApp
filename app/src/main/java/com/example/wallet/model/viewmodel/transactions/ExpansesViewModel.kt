@@ -107,13 +107,20 @@ class ExpansesViewModel(
             )
         }
             .collect {
-                budgetSet.value = it.toInt()
-                budgetLeft.value = budgetSet.value - abs(totalExpenses.value)
-                if (budgetLeft.value < 0) {
-                    showLowBudgetAlertDialog.value = true
-                }
-                Log.d("INFO", "Budget left on Expenses screen: ${budgetLeft.value} ")
+                updateBudgetSet(it)
+                updateBudgetLeft_()
             }
+    }
+
+    private fun updateBudgetLeft_() {
+        budgetLeft.value = budgetSet.value - abs(totalExpenses.value)
+        if (budgetLeft.value < 0) {
+            showLowBudgetAlertDialog.value = true
+        }
+    }
+
+    private fun updateBudgetSet(it: String) {
+        budgetSet.value = it.toInt()
     }
 
     fun dismissLowBudgetAlertDialog(){
