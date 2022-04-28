@@ -317,7 +317,7 @@ fun TransactionsSection(
                 } as MutableList<SecondAllExpensesItem>
             "Amount" -> {
                 sortedTransactions =
-                    filteredTransactions.sortedBy { it.amount } as MutableList<SecondAllExpensesItem>
+                    sortByDate(filteredTransactions)
             }
         }
     }
@@ -343,6 +343,16 @@ fun TransactionsSection(
         }
     }
 }
+
+private fun sortByDate(filteredTransactions: List<SecondAllExpensesItem>): List<SecondAllExpensesItem> {
+    val listOfIncomes = filteredTransactions.filterNot { it.type.equals("Expense") }
+    val listOfExpenses = filteredTransactions.filterNot { it.type.equals("Income") }
+
+    return listOfIncomes.sortedByDescending { it.amount } as MutableList<SecondAllExpensesItem> + listOfExpenses.sortedBy { it.amount } as MutableList<SecondAllExpensesItem>
+
+
+}
+
 
 @SuppressLint("UnusedTransitionTargetStateParameter")
 @Composable

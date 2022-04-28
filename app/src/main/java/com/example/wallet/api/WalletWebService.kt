@@ -20,23 +20,12 @@ import java.util.*
 import javax.net.ssl.*
 
 
-class WalletWebService(baseUrl:String = "https://10.0.1.19:8080/api/") {
+class WalletWebService(baseUrl: String = "https://192.168.0.109:8080/api/") {
     private lateinit var api: WalletAPI
 
     init {
         val retrofit = Retrofit.Builder()
-            //KAMORA
-            //.baseUrl("https://192.168.88.224:8080/api/")
-            //HOME
             .baseUrl(baseUrl)
-            //OFFICE
-            //baseUrl("https://192.168.0.116:8080/api/")
-            //Iulia
-            //.baseUrl("https://192.168.1.67:8080/api/")
-            //.baseUrl("https://192.168.1.80:8080/api/")
-            //.baseUrl("https://152.66.156.198:8080/api/")
-                //EV Point
-            //.baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .client(getUnsafeOkHttpClient())
             .build()
@@ -280,8 +269,8 @@ class WalletWebService(baseUrl:String = "https://10.0.1.19:8080/api/") {
         return api.updateWalletInDb(id, walletData, authHeader)
     }
 
-    fun test():Call<TestResponse> {
-         return api.test()
+    fun test(): Call<TestResponse> {
+        return api.test()
     }
 
 
@@ -300,7 +289,7 @@ class WalletWebService(baseUrl:String = "https://10.0.1.19:8080/api/") {
         )
 
         @GET("test")
-        fun test():Call<TestResponse>
+        fun test(): Call<TestResponse>
 
         @PATCH("wallets2/{id}")
         suspend fun updateWalletInDb(
