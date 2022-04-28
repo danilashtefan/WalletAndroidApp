@@ -108,7 +108,6 @@ class ExampleInstrumentedTest {
     @Test
     fun deserializeWallets() {
         server.enqueue(MockResponse().setBody(readStringFromFile("wallets_response")))
-
         runBlocking {
             var response = api.getFilteredWallets("test_header")
             assertNotNull(response)
