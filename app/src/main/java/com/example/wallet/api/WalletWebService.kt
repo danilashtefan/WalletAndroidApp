@@ -20,7 +20,7 @@ import java.util.*
 import javax.net.ssl.*
 
 
-class WalletWebService(baseUrl: String = "https://192.168.0.109:8080/api/") {
+class WalletWebService(baseUrl: String = "https://192.168.1.66:8080/api/") {
     private lateinit var api: WalletAPI
 
     init {
