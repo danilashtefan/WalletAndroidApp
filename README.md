@@ -1,3 +1,2 @@
 # WalletAndroidApp
-https://user-images.githubusercontent.com/57729718/170880494-10e211ce-e23d-4594-9de2-356660bd98c4.mp4
-
+<iframe src="https://giphy.com/embed/HhnLVOWdRw4nspwJ7z" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/HhnLVOWdRw4nspwJ7z">via GIPHY</a></p>
