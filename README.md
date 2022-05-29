@@ -1,2 +1,4 @@
 # WalletAndroidApp
-<iframe src="https://giphy.com/embed/HhnLVOWdRw4nspwJ7z" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/HhnLVOWdRw4nspwJ7z">via GIPHY</a></p>
+ <p align="center">
+ <img  src="https://media.giphy.com/media/l9Bfiw24mBBIlxIXvW/giphy.gif" width="650" height="350"/></p>
+ </p>  
