@@ -65,6 +65,10 @@ It is hard to show the whole app's potential, so only some of the functionalitie
 The architectural pattern for the server-side part of the `Wallet` application plays a significant role in the application performance and fulfillment of the requirements. The most advantageous architectural pattern for the backend part of the `Wallet` application is the `N-tier pattern`. It provides the separation of components according to their functions. `3 tiers` are the most optimal number because more tiers would introduce unnecessary complexity. The components and their relation are represented on the following diagram:     
 
 <p align="center">
- <img  src="https://user-images.githubusercontent.com/57729718/177005358-e9452fd0-4cd8-43fd-981f-a6af396456d0.png" width="1000" /></p>
+ <img  src="https://user-images.githubusercontent.com/57729718/177006991-2f5d0a83-1922-4267-ab0e-6829996b94f0.png" width="1000" /></p>
  </p>  
+* The Presentation layer (Controller) is responsible for processing the incoming HTTP requests, validating the input, and passing the information to the Service layer
 
+* Service layer is responsible for further data processing and contains the business logic
+
+* Data layer communicates with the database and contains all the data manupulation logic
