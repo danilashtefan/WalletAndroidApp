@@ -16,5 +16,12 @@ Money is an integral part of the life of almost every person. After the research
  <p align="center">
  <img  src="https://user-images.githubusercontent.com/57729718/177005163-e53e1c4e-99fe-4244-9046-64023cf8ab90.png" width="1000" /></p>
  </p>  
+ 
+ ## System architecture ⚙️
+The `Wallet` is a full-stack application that is based on the client-server architecture. The diagram below demonstrates the high-level architecture of the system. 
 
-
+<p align="center">
+ <img  src="https://user-images.githubusercontent.com/57729718/177005358-e9452fd0-4cd8-43fd-981f-a6af396456d0.png" width="1000" /></p>
+ </p>  
+ 
+ This architecture fully meets the application requirements and will provide efficient operation. Each component is isolated and independent from the other, giving the system the necessary level of maintainability. All the system components have their responsibilities.
