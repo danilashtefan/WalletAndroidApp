@@ -61,14 +61,23 @@ It is hard to show the whole app's potential, so only some of the functionalitie
 
 <img src="https://user-images.githubusercontent.com/57729718/177006598-52743b7b-fe2f-46d4-b7a2-40850dd7b271.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/57729718/177006608-19b398a5-17c7-44ec-bf48-a207f0f783c0.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/57729718/177006609-0184f2b7-d002-4db0-af58-e28b435df2eb.gif" width="30%"></img> 
 
-## What is behind the beautiful UI? (Server and database)
+## What is behind the beautiful UI? (Server and database) 🧠📑
 The architectural pattern for the server-side part of the `Wallet` application plays a significant role in the application performance and fulfillment of the requirements. The most advantageous architectural pattern for the backend part of the `Wallet` application is the `N-tier pattern`. It provides the separation of components according to their functions. `3 tiers` are the most optimal number because more tiers would introduce unnecessary complexity. The components and their relation are represented on the following diagram:     
 
 <p align="center">
  <img  src="https://user-images.githubusercontent.com/57729718/177006991-2f5d0a83-1922-4267-ab0e-6829996b94f0.png" width="1000" /></p>
- </p>  
-* The Presentation layer (Controller) is responsible for processing the incoming HTTP requests, validating the input, and passing the information to the Service layer
+ </p> 
+ 
+* The `Presentation layer (Controller)` is responsible for processing the incoming HTTP requests, validating the input, and passing the information to the Service layer
 
-* Service layer is responsible for further data processing and contains the business logic
+* `Service layer` is responsible for further data processing and contains the business logic
 
-* Data layer communicates with the database and contains all the data manupulation logic
+* `Data layer` communicates with the database and contains all the data manupulation logic
+
+## Possible improvements ⬆️📉
+- Minimize the validity of access token and use the refresh token scope of which is to get the new pair of tokens when the validity of the current one is expired
+- Increase the tests’ quality and coverage
+- Refactoring
+- Adding functionalities
+
+
