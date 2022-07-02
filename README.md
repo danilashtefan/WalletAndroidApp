@@ -77,7 +77,8 @@ The architectural pattern for the server-side part of the `Wallet` application p
 ## Possible improvements ⬆️📉
  <p align="center">
  <img  src="https://user-images.githubusercontent.com/57729718/177007405-780cff8f-3a31-424c-84c0-8f025da9fe2e.gif" width="500" /></p>
- </p> 
+ </p>
+ 
 * Minimize the validity of access token and use the refresh token scope of which is to get the new pair of tokens when the validity of the current one is expired
 * Increase the tests’ quality and coverage
 * Refactoring
