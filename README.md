@@ -43,7 +43,7 @@ The `Wallet` is a full-stack application that is based on the client-server arch
 
 ## Client side structure 🏗️🏛️
 * The limitation of mobile devices resources and hindered vertical scalability were also taken into the consideration during the comparison of different possible solutions. 
-* The separation of concerns principle is crucial since the processes of your application are under the control of the Operating System and due to the resource’s limitation Android OS may kill some of the processes for optimization. T
+* The separation of concerns principle is crucial since the processes of your application are under the control of the Operating System and due to the resource’s limitation Android OS may kill some of the processes for optimization.
 * UI should contain as less logic, as possible and should be driven by the data. Thereby, the interface will be much more responsive, and the user experience will be improved.
 
 <h3 align = "center">
