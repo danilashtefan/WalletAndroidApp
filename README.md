@@ -39,3 +39,22 @@ The `Wallet` is a full-stack application that is based on the client-server arch
 - [x] User can generate the in app reports about his money flow
 - [x] Wallet should be maintainable and scalable
 - [x] Wallet should be responsive and secure the data
+
+## Client side structure 🏗️🏛️
+* The limitation of mobile devices resources and hindered vertical scalability were also taken into the consideration during the comparison of different possible solutions. 
+* The separation of concerns principle is crucial since the processes of your application are under the control of the Operating System and due to the resource’s limitation Android OS may kill some of the processes for optimization. T
+* UI should contain as less logic, as possible and should be driven by the data. Thereby, the interface will be much more responsive, and the user experience will be improved.
+
+<h3 align = "center">
+To follow the best practices above the MVVM design pattern was chosen for this project.
+</h3>
+
+
+<p align="center">
+ <img  src="https://user-images.githubusercontent.com/57729718/177005857-8f7bccb6-0fcf-426c-8ce6-a84f377f673a.png" width="1000" /></p>
+ </p>
+ 
+ ## 
+
+ 
+
