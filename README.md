@@ -54,7 +54,12 @@ To follow the best practices above the MVVM design pattern was chosen for this p
  <img  src="https://user-images.githubusercontent.com/57729718/177005857-8f7bccb6-0fcf-426c-8ce6-a84f377f673a.png" width="1000" /></p>
  </p>
  
- ## 
+ ## DEMO 💪🎇
+ <h3 align = "center">
+It is hard to show the whole app's potential, so only some of the functionalities are included 🙂
+</h3>
 
- 
+ <p align="center">
+ <img  src="https://user-images.githubusercontent.com/57729718/177006202-ddc8bbd1-a71b-40b2-a19d-0d0f3bf980dc.gif" width="250" height="500"/></p>
+ </p> 
 
