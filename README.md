@@ -56,7 +56,7 @@ To follow the best practices above the MVVM design pattern was chosen for this p
  
  ## DEMO 💪🎇
  <h3 align = "center">
-It is hard to show the whole app's potential, so only some of the functionalities are included 🙂
+It is hard to show the whole app's potential, so only some of the functionalities are presented 🙂
 </h3>
 
 <img src="https://user-images.githubusercontent.com/57729718/177006598-52743b7b-fe2f-46d4-b7a2-40850dd7b271.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/57729718/177006608-19b398a5-17c7-44ec-bf48-a207f0f783c0.gif" width="30%"></img> <img src="https://user-images.githubusercontent.com/57729718/177006609-0184f2b7-d002-4db0-af58-e28b435df2eb.gif" width="30%"></img> 
@@ -75,9 +75,13 @@ The architectural pattern for the server-side part of the `Wallet` application p
 * `Data layer` communicates with the database and contains all the data manupulation logic
 
 ## Possible improvements ⬆️📉
+ <p align="center">
+ <img  src="https://user-images.githubusercontent.com/57729718/177007405-780cff8f-3a31-424c-84c0-8f025da9fe2e.gif" width="500" /></p>
+ </p> 
 - Minimize the validity of access token and use the refresh token scope of which is to get the new pair of tokens when the validity of the current one is expired
 - Increase the tests’ quality and coverage
 - Refactoring
 - Adding functionalities
+
 
 
