@@ -25,3 +25,17 @@ The `Wallet` is a full-stack application that is based on the client-server arch
  </p>  
  
  This architecture fully meets the application requirements and will provide efficient operation. Each component is isolated and independent from the other, giving the system the necessary level of maintainability. All the system components have their responsibilities.
+ 
+ ## User stories (What the app does)
+ <p align="center">
+ <img  src="https://user-images.githubusercontent.com/57729718/177005577-d71def14-d79a-49a3-bccd-704ec318110e.gif" width="500" /></p>
+ </p>  
+ 
+- [x] User can register and login to the application     
+- [x] User can see the list of all transactions he entered into the application, as well as data about his total income, expense and budget    
+- [x] User can filter transactions by time and sort them by different parameters (location, date, wallet, category, etc.)        
+- [x] User can add the records to the application      
+- [x] User can see, edit and delete his records
+- [x] User can generate the in app reports about his money flow
+- [x] Wallet should be maintainable and scalable
+- [x] Wallet should be responsive and secure the data
