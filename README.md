@@ -26,7 +26,7 @@ The `Wallet` is a full-stack application that is based on the client-server arch
  
  This architecture fully meets the application requirements and will provide efficient operation. Each component is isolated and independent from the other, giving the system the necessary level of maintainability. All the system components have their responsibilities.
  
- ## User stories (What the app does)
+ ## User stories (What the app does) 👨
  <p align="center">
  <img  src="https://user-images.githubusercontent.com/57729718/177005577-d71def14-d79a-49a3-bccd-704ec318110e.gif" width="500" /></p>
  </p>  
